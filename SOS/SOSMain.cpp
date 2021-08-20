@@ -7,17 +7,85 @@
 #pragma comment(lib,"winmm.lib")
 using namespace std;
 
+class User {
+private:
+	int day;
+	int food;
+	int water;
+	int energy;
+	int rice;
+	int bottle;
+	static int cnt;
+public:
+	User(int level) {
+		food = 100 - ((level - 1) * 10);
+		water = 100 - ((level - 1) * 10);
+		energy = 100 - ((level - 1) * 10);
+		rice = level;
+		bottle = level;
+		switch (level) {
+		case 1: day = 30; break;
+		case 2: day = 50; break;
+		case 3: day = 100; break;
+		}
+	}
+	void play() {
+		while(day > 0){
+			cout << "\t" << ++cnt << "일차, " << endl;
+			cout << "\n\n";
+			cout << "\t[메뉴]\t[가방]" << endl;
+			char check = tolower(_getch());
+			system("cls");
+			switch(check){
+			case 'i': Bag(); break;
+			case 'o': Info(); break;
+			case 'p': Map(); break;
+			}
+		}
+	}
+	void Bag() {
+
+	}
+	void Info() {
+
+	}
+	void Map() {
+		cout << "\n\n\n";
+		cout << "   ------&&역-------&&역-------&&역-------&&역-------&&역-------&&역-----" << endl;
+		cout << "   |									|" << endl;
+		cout << "   |									|" << endl;
+		cout << "  &&역						                       &&역" << endl;
+		cout << "   |									|" << endl;
+		cout << "   |									|" << endl;
+		cout << "  &&역						                       &&역" << endl;
+		cout << "   |									|" << endl;
+		cout << "   |									|" << endl;
+		cout << "   ------&&역-------&&역-------&&역-------&&역-------&&역-------&&역-----" << endl;
+		cout << "\n\n현재 역 : " << "&&역" << endl;
+		_getch();
+	}
+};
+
+int User::cnt = 0;
+
 void Intro();
 int Menu();
+int Level();
 
 int main() {
+	
 	int num = 0;
 	while(num != 3) {
 		num = Menu();
 		switch (num){
-		case 1:system("cls"); 
+		case 1: {
+			system("cls");
 			Intro();
+			int level = Level();
+			User u(level);
+			u.play();
 			break;
+		}
 		case 2: break;
 		case 3: break;
 		default: cout << "\n						 << 입력 오류 >>\n" << endl;
@@ -34,7 +102,6 @@ int main() {
 }
 
 void Intro() {
-	
 	const char* story[11];
 	story[0] = "2052년 2월 13일, 그날의 퇴근길은 유독 지하철에 사람이 없었던 날이었다.";
 	story[1] = "이상함을 느끼는 것도 잠시 ..."; 
@@ -48,22 +115,18 @@ void Intro() {
 	story[9] = "외부에서 누군가 발견할 때 까지 이곳에서 버텨야 한다.";
 	story[10] = "금방 나갈 수 있겠지...";
 
-	for(int i = 0; i < sizeof(story); i++){
+	for(int i = 0; i < sizeof(story)/sizeof(char*); i++){
 		PlaySound(TEXT("Typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 		cout << "\n\n\n\n\n" << "			  ";
 		for (int j = 0; j < strlen(story[i]); j++) {
-			Sleep(100);
+			Sleep(50);
 			cout << story[i][j];
 		}
-		cout << endl;
-		cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 		PlaySound(NULL, 0, 0);
-		system("pause");
+		if (tolower(_getch()) == 's') break;
 		system("cls");
 	}
-	
-	
-	
+	system("cls");
 }
 int Menu() {
 	PlaySound(TEXT("main.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
@@ -94,4 +157,22 @@ int Menu() {
 	cin >> num;
 	PlaySound(NULL, 0, 0);
 	return num;
+}
+
+int Level() {
+	int level;
+	cout << "\n\n\n\n\n";
+	cout << "					   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒" << endl;
+	cout << "					   ▒              ▒" << endl;
+	cout << "					   ▒  난이도 설정 ▒" << endl;
+	cout << "					   ▒              ▒" << endl;
+	cout << "					   ▒   1. 쉬움    ▒" << endl;
+	cout << "					   ▒   2. 보통    ▒" << endl;
+	cout << "					   ▒   3. 어려움  ▒" << endl;
+	cout << "					   ▒              ▒" << endl;
+	cout << "					   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒" << endl << endl;
+	cout << endl << "					       ☞  ";
+	cin >> level;
+	system("cls");
+	return level;
 }
