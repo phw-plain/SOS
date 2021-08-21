@@ -23,7 +23,19 @@
     <Media Include="main.wav">
       <Filter>리소스 파일</Filter>
     </Media>
-    <Media Include="Typing.wav">
+    <Media Include="typing.wav">
+      <Filter>리소스 파일</Filter>
+    </Media>
+    <Media Include="alarm_clock.wav">
+      <Filter>리소스 파일</Filter>
+    </Media>
+    <Media Include="phone_vibration.wav">
+      <Filter>리소스 파일</Filter>
+    </Media>
+    <Media Include="alarm1.wav">
+      <Filter>리소스 파일</Filter>
+    </Media>
+    <Media Include="alarm2.wav">
       <Filter>리소스 파일</Filter>
     </Media>
   </ItemGroup>

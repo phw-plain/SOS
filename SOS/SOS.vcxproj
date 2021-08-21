@@ -142,8 +142,12 @@
     <ClCompile Include="SOSMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="alarm1.wav" />
+    <Media Include="alarm2.wav" />
+    <Media Include="alarm_clock.wav" />
     <Media Include="main.wav" />
-    <Media Include="Typing.wav" />
+    <Media Include="phone_vibration.wav" />
+    <Media Include="typing.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
