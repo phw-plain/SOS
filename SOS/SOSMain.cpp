@@ -31,9 +31,7 @@ public:
 	}
 	void play() {
 		while(day > 0){
-			cout << "\t" << ++cnt << "일차, " << endl;
-			cout << "\n\n";
-			cout << "\t[메뉴]\t[가방]" << endl;
+			Phone();
 			char check = tolower(_getch());
 			system("cls");
 			switch(check){
@@ -64,6 +62,39 @@ public:
 		cout << "\n\n현재 역 : " << "&&역" << endl;
 		_getch();
 	}
+	void Phone() {
+		cout << "	   << 핸드폰 >>" << endl;
+		cout << "_________________________________" << endl;
+		cout << "|	   			|" << endl;
+		cout << "|-------------------------------|" << endl;
+		cout << "|	     2052년  2월 13일	|" << endl;
+		cout << "|				|" << endl;
+		cout << "|    ________       ________ 	|" << endl;
+		cout << "|   |        |     |	    |	|" << endl;
+		cout << "|   |  가방  |     |  지도  |	|" << endl;
+		cout << "|   |________|     |________|	|" << endl;
+		cout << "|				|" << endl;
+		cout << "|				|" << endl;
+		cout << "|    ________			|" << endl;
+		cout << "|   |        |			|" << endl;
+		cout << "|   |  상태  |			|" << endl;
+		cout << "|   |________|			|" << endl;
+		cout << "|				|" << endl;
+		cout << "|				|" << endl;
+		cout << "|   ________________________/|	|" << endl;
+		cout << "|  |			     |	|" << endl;
+		cout << "|  | 1일차,                  |	|" << endl;
+		cout << "|  | 언제쯤 나갈 수 있을까.. |	|" << endl;
+		cout << "|  |_________________________|	|" << endl;
+		cout << "|				|" << endl;
+		cout << "|				|" << endl;
+		cout << "|-------------------------------|" << endl;
+		cout << "|	        ○		|" << endl;
+		cout << "|_______________________________|" << endl;
+		cout << endl << "1. 잠자기" << endl;
+		cout << "2. 이동하기" << endl;
+
+	}
 };
 
 int User::cnt = 0;
@@ -73,7 +104,6 @@ int Menu();
 int Level();
 
 int main() {
-	
 	int num = 0;
 	while(num != 3) {
 		num = Menu();
