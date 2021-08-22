@@ -33,7 +33,7 @@ public:
 		while(day > 0){
 			Phone();
 			char check = tolower(_getch());
-			::system("cls");
+			system("cls");
 			switch(check){
 			case 'i': Bag(); break;
 			case 'o': Info(); break;
@@ -137,6 +137,13 @@ void Intro() {
 	story[1] = "앞으로 당신은 외부와의 연결이 끊긴 지하철에서 생존해야 합니다."; 
 	story[2] = "배고픔, 수분, 에너지가 일정 범위로 내려가면 당신은 사망합니다.";
 
+	const char* story_y[1];
+	story_y[0] = "Y버튼을 누르자 알수없는 빛에 휩싸였다...";
+
+	const char* story_n[3];
+	story_n[0] = "N버튼을 누르자 화면이 멈췄다...";
+	story_n[1] = "핸드폰이 고장났나?";
+	story_n[2] = "이것저것 누르다보니 알수없는 빛이 주위를 에워쌌다..";
 	char yn;
 
 	for(int i = 0; i < sizeof(story)/sizeof(char*); i++){
@@ -151,7 +158,7 @@ void Intro() {
 				break;
 			}
 			case 1: {
-				PlaySound(TEXT("alarm1"), 0, SND_FILENAME | SND_ASYNC);
+				PlaySound(TEXT("alarm1.wav"), 0, SND_FILENAME | SND_ASYNC);
 				cout << "_________________________________" << endl;
 				cout << "| SOS   			|" << endl;
 				cout << "|-------------------------------|" << endl;
@@ -177,9 +184,9 @@ void Intro() {
 				cout << "|-------------------------------|" << endl;
 				cout << "|	        ○		|" << endl;
 				cout << "|_______________________________|" << endl;
-				Sleep(3000);
-				::system("cls");
-				PlaySound(TEXT("alarm1"), 0, SND_FILENAME | SND_ASYNC);
+				Sleep(2000);
+				system("cls");
+				PlaySound(TEXT("alarm1.wav"), 0, SND_FILENAME | SND_ASYNC);
 				cout << "_________________________________" << endl;
 				cout << "| SOS   			|" << endl;
 				cout << "|-------------------------------|" << endl;
@@ -205,29 +212,54 @@ void Intro() {
 				cout << "|-------------------------------|" << endl;
 				cout << "|	        ○		|" << endl;
 				cout << "|_______________________________|" << endl;
-				yn = tolower(_getch());
+				Sleep(2000);
 				break;
 			}
 			case 2: {
+				PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
+				if (yn == 'y') {
+					cout << "\n\n\n\n\n" << "			  ";
+					for (int j = 0; j < strlen(story_y[0]); j++) {
+						Sleep(50);
+						cout << story_y[0][j];
+					}
+				} else {
+					for (int k = 0; k < sizeof(story_n) / sizeof(char*); k++) {
+						cout << "\n\n\n\n\n" << "			  ";
+						PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
+						for (int j = 0; j < strlen(story_n[k]); j++) {
+							Sleep(50);
+							cout << story_n[k][j];
+						}
+						if (k < sizeof(story_n) / sizeof(char*)) {
+							PlaySound(NULL, 0, 0);
+							yn = tolower(_getch());
+							if (yn == 's') break;
+							system("cls");
+						}
+					}
+				}
 				break;
 			}
 			case 3: {
+				cout << "\n\n\n\n\n" << "			  ";
 				PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
-				for (int j = 0; j < strlen(story[i]); j++) {
-					Sleep(25);
-					cout << story[i][j];
+				for (int j = 0; j < strlen(story[i-2]); j++) {
+					Sleep(50);
+					cout << story[i-2][j];
 				}
 				break;
 			}
 		}
 		PlaySound(NULL, 0, 0);
-		if (tolower(_getch()) == 's') break;
-		::system("cls");
+		yn = tolower(_getch());
+		if (yn == 's') break;
+		system("cls");
 	}
-	::system("cls");
+	system("cls");
 }
 int Menu() {
-	PlaySound(TEXT("main.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
+	sndPlaySoundA("C:\\Users\\user\\Documents\\GitHub\\SOS\\SOS\\main.wav", SND_FILENAME | SND_ASYNC | SND_LOOP);
 	cout << endl << endl << endl;
 	cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
 	cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
@@ -248,7 +280,7 @@ int Menu() {
 	cout << "					       |		|" << endl;
 	cout << "					       ------------------" << endl;
 	cout << endl << endl << "					       ☞ ";
-	int num;
+	int num = 0;
 	cin >> num;
 	PlaySound(NULL, 0, 0);
 	return num;
@@ -268,6 +300,6 @@ int Level() {
 	cout << "					   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒" << endl << endl;
 	cout << endl << "					       ☞  ";
 	cin >> level;
-	::system("cls");
+	system("cls");
 	return level;
 }
