@@ -63,36 +63,35 @@ public:
 		_getch();
 	}
 	void Phone() {
-		cout << "	   << 핸드폰 >>" << endl;
-		cout << "_________________________________" << endl;
-		cout << "|	   			|" << endl;
-		cout << "|-------------------------------|" << endl;
-		cout << "|	     20XX년  2월 13일	|" << endl;
-		cout << "|				|" << endl;
-		cout << "|    ________       ________ 	|" << endl;
-		cout << "|   |        |     |	    |	|" << endl;
-		cout << "|   |  가방  |     |  지도  |	|" << endl;
-		cout << "|   |________|     |________|	|" << endl;
-		cout << "|				|" << endl;
-		cout << "|				|" << endl;
-		cout << "|    ________			|" << endl;
-		cout << "|   |        |			|" << endl;
-		cout << "|   |  상태  |			|" << endl;
-		cout << "|   |________|			|" << endl;
-		cout << "|				|" << endl;
-		cout << "|				|" << endl;
-		cout << "|   ________________________/|	|" << endl;
-		cout << "|  |			     |	|" << endl;
-		cout << "|  | 1일차,                  |	|" << endl;
-		cout << "|  | 언제쯤 나갈 수 있을까.. |	|" << endl;
-		cout << "|  |_________________________|	|" << endl;
-		cout << "|				|" << endl;
-		cout << "|				|" << endl;
-		cout << "|-------------------------------|" << endl;
-		cout << "|	        ○		|" << endl;
-		cout << "|_______________________________|" << endl;
-		cout << endl << "1. 잠자기" << endl;
-		cout << "2. 이동하기" << endl;
+		cout << "	_________________________________" << endl;
+		cout << "	|	   			|" << endl;
+		cout << "	|-------------------------------|" << endl;
+		cout << "	|	     20XX년  2월 13일	|" << endl;
+		cout << "	|				|" << endl;
+		cout << "	|    ________       ________ 	|" << endl;
+		cout << "	|   |        |     |	    |	|" << endl;
+		cout << "	|   |  가방  |     |  지도  |	|" << endl;
+		cout << "	|   |________|     |________|	|" << endl;
+		cout << "	|				|" << endl;
+		cout << "	|				|" << endl;
+		cout << "	|    ________			|" << endl;
+		cout << "	|   |        |			|" << endl;
+		cout << "	|   |  상태  |			|" << endl;
+		cout << "	|   |________|			|" << endl;
+		cout << "	|				|" << endl;
+		cout << "	|				|" << endl;
+		cout << "	|   ________________________/|	|" << endl;
+		cout << "	|  |			     |	|" << endl;
+		cout << "	|  | 1일차,                  |	|" << endl;
+		cout << "	|  | 언제쯤 나갈 수 있을까.. |	|" << endl;
+		cout << "	|  |_________________________|	|" << endl;
+		cout << "	|				|" << endl;
+		cout << "	|				|" << endl;
+		cout << "	|-------------------------------|" << endl;
+		cout << "	|	        ○		|" << endl;
+		cout << "	|_______________________________|" << endl;
+		cout << endl << "	1. 잠자기" << endl;
+		cout << "	2. 이동하기" << endl;
 
 	}
 };
@@ -155,6 +154,8 @@ void Intro() {
 					Sleep(50);
 					cout << story[i][j];
 				}
+				PlaySound(NULL, 0, 0);
+				yn = tolower(_getch());
 				break;
 			}
 			case 1: {
@@ -213,6 +214,8 @@ void Intro() {
 				cout << "|	        ○		|" << endl;
 				cout << "|_______________________________|" << endl;
 				Sleep(2000);
+				PlaySound(NULL, 0, 0);
+				yn = tolower(_getch());
 				break;
 			}
 			case 2: {
@@ -223,6 +226,8 @@ void Intro() {
 						Sleep(50);
 						cout << story_y[0][j];
 					}
+					PlaySound(NULL, 0, 0);
+					yn = tolower(_getch());
 				} else {
 					for (int k = 0; k < sizeof(story_n) / sizeof(char*); k++) {
 						cout << "\n\n\n\n\n" << "			  ";
@@ -241,25 +246,25 @@ void Intro() {
 				}
 				break;
 			}
-			case 3: {
+			case 3: case 4: {
 				cout << "\n\n\n\n\n" << "			  ";
 				PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 				for (int j = 0; j < strlen(story[i-2]); j++) {
 					Sleep(50);
 					cout << story[i-2][j];
 				}
+				PlaySound(NULL, 0, 0);
+				yn = tolower(_getch());
 				break;
 			}
 		}
-		PlaySound(NULL, 0, 0);
-		yn = tolower(_getch());
 		if (yn == 's') break;
 		system("cls");
 	}
 	system("cls");
 }
 int Menu() {
-	sndPlaySoundA("C:\\Users\\user\\Documents\\GitHub\\SOS\\SOS\\main.wav", SND_FILENAME | SND_ASYNC | SND_LOOP);
+	PlaySound(TEXT("main.wav"),0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	cout << endl << endl << endl;
 	cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
 	cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
@@ -289,15 +294,15 @@ int Menu() {
 int Level() {
 	int level;
 	cout << "\n\n\n\n\n";
-	cout << "					   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒" << endl;
-	cout << "					   ▒              ▒" << endl;
-	cout << "					   ▒  난이도 설정 ▒" << endl;
-	cout << "					   ▒              ▒" << endl;
-	cout << "					   ▒   1. 쉬움    ▒" << endl;
-	cout << "					   ▒   2. 보통    ▒" << endl;
-	cout << "					   ▒   3. 어려움  ▒" << endl;
-	cout << "					   ▒              ▒" << endl;
-	cout << "					   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒" << endl << endl;
+	cout << "					     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒" << endl;
+	cout << "					     ▒              ▒" << endl;
+	cout << "					     ▒  난이도 설정 ▒" << endl;
+	cout << "					     ▒              ▒" << endl;
+	cout << "					     ▒   1. 쉬움    ▒" << endl;
+	cout << "					     ▒   2. 보통    ▒" << endl;
+	cout << "					     ▒   3. 어려움  ▒" << endl;
+	cout << "					     ▒              ▒" << endl;
+	cout << "					     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒" << endl << endl;
 	cout << endl << "					       ☞  ";
 	cin >> level;
 	system("cls");
