@@ -61,6 +61,7 @@ public:
 		cout << "   ------&&역-------&&역-------&&역-------&&역-------&&역-------&&역-----" << endl;
 		cout << "\n\n현재 역 : " << "&&역" << endl;
 		_getch();
+		system("cls");
 	}
 	void Phone() {
 		cout << "	_________________________________" << endl;
@@ -264,46 +265,58 @@ void Intro() {
 	system("cls");
 }
 int Menu() {
+	char check[3] = { '>', ' ', ' ' };
+	int key=0, k=0;
 	PlaySound(TEXT("main.wav"),0, SND_FILENAME | SND_ASYNC | SND_LOOP);
-	cout << endl << endl << endl;
-	cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
-	cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
-	cout << "	■■					■■	    ■■			■■			" << endl;
-	cout << "	■■					■■	    ■■			■■			" << endl;
-	cout << "	■■■■■■■■			■■	    ■■			■■■■■■■■" << endl;
-	cout << "	■■■■■■■■			■■	    ■■			■■■■■■■■" << endl;
-	cout << "		    ■■			■■	    ■■				    ■■" << endl;
-	cout << "		    ■■			■■	    ■■				    ■■" << endl;
-	cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
-	cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
-	cout << endl << endl << "					       survival of subway" << endl << endl << endl;
-	cout << "					       ------------------" << endl;
-	cout << "					       |		|" << endl;
-	cout << "					       | 1. 게임 시작	|" << endl;
-	cout << "					       | 2. 게임 방법	|" << endl;
-	cout << "					       | 3. 게임 종료	|" << endl;
-	cout << "					       |		|" << endl;
-	cout << "					       ------------------" << endl;
-	cout << endl << endl << "					       ☞ ";
-	int num = 0;
-	cin >> num;
+	while (k!=13) { // 72 80
+		system("cls");
+		if (key != 2 && k == 80) {
+			check[key] = ' ';
+			check[++key] = '>';
+		}
+		else if (key != 0 && k == 72) {
+			check[key] = ' ';
+			check[--key] = '>';
+		}
+		cout << endl << endl << endl;
+		cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
+		cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
+		cout << "	■■					■■	    ■■			■■			" << endl;
+		cout << "	■■					■■	    ■■			■■			" << endl;
+		cout << "	■■■■■■■■			■■	    ■■			■■■■■■■■" << endl;
+		cout << "	■■■■■■■■			■■	    ■■			■■■■■■■■" << endl;
+		cout << "		    ■■			■■	    ■■				    ■■" << endl;
+		cout << "		    ■■			■■	    ■■				    ■■" << endl;
+		cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
+		cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
+		cout << endl << endl << "					       survival of subway" << endl << endl << endl;
+
+		cout << "					        ________________" << endl;
+		cout << "					       		" << endl;
+		cout << "					         "<< check[0] <<"  게임 시작	" << endl;
+		cout << "					         "<< check[1] <<"  게임 방법	" << endl;
+		cout << "					         "<< check[2] <<"  게임 종료	" << endl;
+		cout << "					        ________________" << endl;
+		k = _getch();
+	}
+	int num;
+	for (int i = 0; i < 3; i++) {
+		if (check[i] == '>') num = i + 1;
+	}
 	PlaySound(NULL, 0, 0);
 	return num;
 }
 
 int Level() {
 	int level;
-	cout << "\n\n\n\n\n";
-	cout << "					     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒" << endl;
-	cout << "					     ▒              ▒" << endl;
-	cout << "					     ▒  난이도 설정 ▒" << endl;
-	cout << "					     ▒              ▒" << endl;
-	cout << "					     ▒   1. 쉬움    ▒" << endl;
-	cout << "					     ▒   2. 보통    ▒" << endl;
-	cout << "					     ▒   3. 어려움  ▒" << endl;
-	cout << "					     ▒              ▒" << endl;
-	cout << "					     ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒" << endl << endl;
-	cout << endl << "					       ☞  ";
+	cout << "\n\n\n\n\n\n\n";
+	cout << "					           난이도 설정 " << endl;
+	cout << "					                   " << endl;
+	cout << "					            1. 쉬움    " << endl;
+	cout << "					            2. 보통    " << endl;
+	cout << "					            3. 어려움  " << endl;
+	cout << "					                   " << endl;
+	cout << "\n\n\n					         ☞  ";
 	cin >> level;
 	system("cls");
 	return level;
