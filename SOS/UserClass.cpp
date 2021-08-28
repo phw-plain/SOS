@@ -11,6 +11,13 @@ private:
 	int energy;
 	int rice;
 	int bottle;
+	int position = 0;
+	string map[16] = {
+		"惫拳", "厘固", "抄檬", "悼归", "概拳", 
+		"葛鄂", "孩采", "荐访", "救俺", "楷采", 
+		"埔瘤", "归钦", "枚逻", "荐惫", "墨扼",
+		"冠窍"
+	};
 	static int cnt;
 public:
 	User(int level) {
@@ -45,17 +52,17 @@ public:
 	}
 	void Map() {
 		cout << "\n\n\n";
-		cout << "   ------&&开-------&&开-------&&开-------&&开-------&&开-------&&开-----" << endl;
-		cout << "   |									|" << endl;
-		cout << "   |									|" << endl;
-		cout << "  &&开						                       &&开" << endl;
-		cout << "   |									|" << endl;
-		cout << "   |									|" << endl;
-		cout << "  &&开						                       &&开" << endl;
-		cout << "   |									|" << endl;
-		cout << "   |									|" << endl;
-		cout << "   ------&&开-------&&开-------&&开-------&&开-------&&开-------&&开-----" << endl;
-		cout << "\n\n泅犁 开 : " << "&&开" << endl;
+		cout << "   ------" << map[0] << "开-------" << map[1] << "开-------" << map[2] << "开-------" << map[3] << "开-------" << map[4] << "开-------" << map[5] << "开-----" << endl;
+		cout << "   |										    |" << endl;
+		cout << "   |										    |" << endl;
+		cout << " " << map[15] << "开										  " << map[6] << "开" << endl;
+		cout << "   |										    |" << endl;
+		cout << "   |										    |" << endl;
+		cout << " " << map[14] << "开										  " << map[7] << "开" << endl;
+		cout << "   |										    |" << endl;
+		cout << "   |										    |" << endl;
+		cout << "   ------" << map[13] << "开-------" << map[12] << "开-------" << map[11] << "开-------" << map[10] << "开-------" << map[9] << "开-------" << map[8] << "开-----" << endl;
+		cout << "\n\n泅犁 开 : " << map[position] << "开" << endl;
 		_getch();
 		system("cls");
 	}
@@ -89,6 +96,5 @@ public:
 		cout << "	|_______________________________|" << endl;
 		cout << endl << "	1. 泪磊扁" << endl;
 		cout << "	2. 捞悼窍扁" << endl;
-
 	}
 };
