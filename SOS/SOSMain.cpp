@@ -5,6 +5,23 @@
 #include <mmsystem.h>
 #include <iomanip>
 #pragma comment(lib,"winmm.lib")
+// 색깔 표
+#define BLACK 0 
+#define BLUE 1 
+#define GREEN 2 
+#define CYAN 3 
+#define RED 4 
+#define MAGENTA 5 
+#define BROWN 6 
+#define LIGHTGRAY 7 
+#define DARKGRAY 8 
+#define LIGHTBLUE 9 
+#define LIGHTGREEN 10 
+#define LIGHTCYAN 11 
+#define LIGHTRED 12 
+#define LIGHTMAGENTA 13 
+#define YELLOW 14 
+#define WHITE 15 
 using namespace std;
 
 class User {
@@ -97,6 +114,7 @@ public:
 	}
 };
 
+void textcolor(int foreground, int background);
 int User::cnt = 0;
 
 void Intro();
@@ -278,6 +296,7 @@ int Menu() {
 			check[key] = ' ';
 			check[--key] = '>';
 		}
+		textcolor(LIGHTGREEN, BLACK);
 		cout << endl << endl << endl;
 		cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
 		cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
@@ -289,8 +308,9 @@ int Menu() {
 		cout << "		    ■■			■■	    ■■				    ■■" << endl;
 		cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
 		cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
+		textcolor(RED, BLACK);
 		cout << endl << endl << "					       survival of subway" << endl << endl << endl;
-
+		textcolor(LIGHTGREEN, BLACK);
 		cout << "					        ________________" << endl;
 		cout << "					       		" << endl;
 		cout << "					         "<< check[0] <<"  게임 시작	" << endl;
@@ -298,6 +318,7 @@ int Menu() {
 		cout << "					         "<< check[2] <<"  게임 종료	" << endl;
 		cout << "					        ________________" << endl;
 		k = _getch();
+		textcolor(WHITE, BLACK);
 	}
 	int num;
 	for (int i = 0; i < 3; i++) {
@@ -320,4 +341,10 @@ int Level() {
 	cin >> level;
 	system("cls");
 	return level;
+}
+
+void textcolor(int foreground, int background)
+{
+	int color = foreground + background * 16;
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
