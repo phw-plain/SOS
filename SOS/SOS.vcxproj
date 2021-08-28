@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="SOSMain.cpp" />
+    <ClCompile Include="UserClass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="alarm1.wav" />
