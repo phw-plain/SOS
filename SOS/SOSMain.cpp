@@ -118,6 +118,7 @@ void textcolor(int foreground, int background);
 int User::cnt = 0;
 
 void Intro();
+void Rule();
 int Menu();
 int Level();
 
@@ -126,24 +127,19 @@ int main() {
 	while(num != 3) {
 		num = Menu();
 		switch (num){
-		case 1: {
-			system("cls");
-			Intro();
-			int level = Level();
-			User u(level);
-			u.play();
-			break;
-		}
-		case 2: break;
-		case 3: break;
-		default: cout << "\n						 << 입력 오류 >>\n" << endl;
-			cout << "					       처음으로 돌아갑니다.\n" << endl;
-			cout << "					      ";
-			for (int i = 0; i < 5; i++) {
-				Sleep(1000);
-				cout << " · ";
+			case 1: {
+				system("cls");
+				Intro();
+				int level = Level();
+				User u(level);
+				u.play();
+				break;
 			}
-			break;
+			case 2: {
+				system("cls");
+				Rule();
+				break;
+			}
 		}
 		system("cls");
 	}
@@ -234,7 +230,9 @@ void Intro() {
 				cout << "|_______________________________|" << endl;
 				Sleep(2000);
 				PlaySound(NULL, 0, 0);
-				yn = tolower(_getch());
+				while(yn != 'y' && yn != 'n'){
+					yn = tolower(_getch());
+				}
 				break;
 			}
 			case 2: {
@@ -341,6 +339,26 @@ int Level() {
 	cin >> level;
 	system("cls");
 	return level;
+}
+
+void Rule() {
+	cout << "		== 게임 플레이 방법 ==" << endl;
+	cout << endl;
+	cout << "▶ 배고픔과 수분 에너지가 떨어지지 않게 잘 유지해야 합니다." << endl;
+	cout << "▶ 위 세가지는 쾌적, 양호, 최악으로 분류됩니다." << endl;
+	cout << "▶ 상태가 최악인 경우에는 확률적으로 사망하며 게임 오버 됩니다." << endl;
+	cout << endl;
+	cout << "<이동하기>" << endl;
+	cout << "▶ 이동하기를 통해서 다른 역으로 이동할 수 있습니다." << endl;
+	cout << "▶ 난이도에 따라서 역을 이동할 수 있는 간격이 정해집니다." << endl;
+	cout << "▶ 한 번 방문한 역은 다시 돌아갈 수 없습니다." << endl;
+	cout << endl;
+	cout << "<조작키>" << endl;
+	cout << "S, 인트로 진행 도중 스킵 가능" << endl;
+	cout << "I, 가방 : 아이템을 확인할 수 있다." << endl;
+	cout << "O, 상태 : 배고픔과 수분, 에너지를 확인할 수 있다." << endl;
+	cout << "P, 지도 : 지하철 노선을 볼 수 있다." << endl;
+	_getch();
 }
 
 void textcolor(int foreground, int background)
