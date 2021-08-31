@@ -3,14 +3,28 @@
 #include <conio.h>
 using namespace std;
 
+class Item {
+private:
+	int id;
+	const char* name;
+public:
+	static int cnt;
+	Item(int id, const char* name) : id(id), name(name) { cnt++; }
+	const char* getName() {
+		return name;
+	}
+	int getCnt() {
+		return cnt;
+	}
+	
+};
 class User {
 private:
 	int day;
 	int food;
 	int water;
 	int energy;
-	int rice;
-	int bottle;
+	Item* item[12];
 	int position = 0;
 	string map[16] = {
 		"국화", "장미", "난초", "동백", "매화", 
@@ -21,16 +35,12 @@ private:
 	static int cnt;
 public:
 	User(int level) {
+		item[0] = new Item(1, "생수");
+		item[1] = new Item(2, "도시락");
 		food = 100 - ((level - 1) * 10);
 		water = 100 - ((level - 1) * 10);
 		energy = 100 - ((level - 1) * 10);
-		rice = level;
-		bottle = level;
-		switch (level) {
-		case 1: day = 30; break;
-		case 2: day = 50; break;
-		case 3: day = 100; break;
-		}
+		day = 30;
 	}
 	void play() {
 		while (day > 0) {
@@ -45,7 +55,34 @@ public:
 		}
 	}
 	void Bag() {
-
+		cout << "	      ____" << endl;
+		cout << "	     / /＼＼" << endl;
+		cout << "____________/_/___＼＼___________" << endl;
+		cout << "|				|" << endl;
+		cout << "|";
+		for (int i = 0; i < 3; i++) {
+			if (i < Item::cnt)
+				cout << item[i]->getName() << "	     ";
+			else
+				cout << "	 ";
+		}
+		cout << "|" << endl;
+		cout << "|				|" << endl;
+		cout << "|_______________________________|" << endl;
+		cout << "|				|" << endl;
+		cout << "|				|" << endl;
+		cout << "|				|" << endl;
+		cout << "|_______________________________|" << endl;
+		cout << "|				|" << endl;
+		cout << "|				|" << endl;
+		cout << "|				|" << endl;
+		cout << "|_______________________________|" << endl;
+		cout << "|				|" << endl;
+		cout << "|				|" << endl;
+		cout << "|				|" << endl;
+		cout << "|_______________________________|" << endl;
+		_getch();
+		system("cls");
 	}
 	void Info() {
 

@@ -24,6 +24,7 @@
 #define WHITE 15 
 using namespace std;
 
+int Item::cnt = 0;
 int User::cnt = 0;
 void textcolor(int foreground, int background);
 void Intro();
