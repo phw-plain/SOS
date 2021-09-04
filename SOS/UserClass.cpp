@@ -36,7 +36,7 @@ private:
 public:
 	User(int level) {
 		item[0] = new Item(1, "생수");
-		item[1] = new Item(2, "도시락");
+		item[1] = new Item(1, "생수");
 		food = 100 - ((level - 1) * 10);
 		water = 100 - ((level - 1) * 10);
 		energy = 100 - ((level - 1) * 10);
@@ -62,23 +62,48 @@ public:
 		cout << "|";
 		for (int i = 0; i < 3; i++) {
 			if (i < Item::cnt)
-				cout << item[i]->getName() << "	     ";
+				cout << item[i]->getName() << "	   ";
 			else
-				cout << "	 ";
+				cout << "	  ";
 		}
+		cout << "\t";
 		cout << "|" << endl;
 		cout << "|				|" << endl;
 		cout << "|_______________________________|" << endl;
 		cout << "|				|" << endl;
-		cout << "|				|" << endl;
+		cout << "|";
+		for (int i = 3; i < 6; i++) {
+			if (i < Item::cnt)
+				cout << item[i]->getName() << "	   ";
+			else
+				cout << "	  ";
+		}
+		cout << "\t";
+		cout << "|" << endl;
 		cout << "|				|" << endl;
 		cout << "|_______________________________|" << endl;
 		cout << "|				|" << endl;
-		cout << "|				|" << endl;
+		cout << "|";
+		for (int i = 6; i < 9; i++) {
+			if (i < Item::cnt)
+				cout << item[i]->getName() << "	   ";
+			else
+				cout << "	  ";
+		}
+		cout << "\t";
+		cout << "|" << endl;
 		cout << "|				|" << endl;
 		cout << "|_______________________________|" << endl;
 		cout << "|				|" << endl;
-		cout << "|				|" << endl;
+		cout << "|";
+		for (int i = 9; i < 12; i++) {
+			if (i < Item::cnt)
+				cout << item[i]->getName() << "	   ";
+			else
+				cout << "	  ";
+		}
+		cout << "\t";
+		cout << "|" << endl;
 		cout << "|				|" << endl;
 		cout << "|_______________________________|" << endl;
 		_getch();
