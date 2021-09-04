@@ -48,9 +48,8 @@ public:
 			char check = tolower(_getch());
 			system("cls");
 			switch (check) {
-			case 'i': Bag(); break;
-			case 'o': Info(); break;
-			case 'p': Map(); break;
+			case 'b': Bag(); break;
+			case 'm': Map(); break;
 			}
 		}
 	}
@@ -109,9 +108,6 @@ public:
 		_getch();
 		system("cls");
 	}
-	void Info() {
-
-	}
 	void Map() {
 		cout << "\n\n\n";
 		cout << "   ------" << map[0] << "역-------" << map[1] << "역-------" << map[2] << "역-------" << map[3] << "역-------" << map[4] << "역-------" << map[5] << "역-----" << endl;
@@ -130,8 +126,8 @@ public:
 	}
 	void Phone() {
 		cout << "	_________________________________" << endl;
-		cout << "	|	   			|" << endl;
-		cout << "	|-------------------------------|" << endl;
+		cout << "	|	   			|	1. 잠자기" << endl;
+		cout << "	|-------------------------------|	2. 이동하기" << endl;
 		cout << "	|	     20XX년  2월 13일	|" << endl;
 		cout << "	|				|" << endl;
 		cout << "	|    ________       ________ 	|" << endl;
@@ -140,10 +136,11 @@ public:
 		cout << "	|   |________|     |________|	|" << endl;
 		cout << "	|				|" << endl;
 		cout << "	|				|" << endl;
-		cout << "	|    ________			|" << endl;
-		cout << "	|   |        |			|" << endl;
-		cout << "	|   |  상태  |			|" << endl;
-		cout << "	|   |________|			|" << endl;
+		cout << "	|   ---------  상태  ---------	|" << endl;
+		cout << "	|      수분	       100	|" << endl;
+		cout << "	|      배고픔          100	|" << endl;
+		cout << "	|      에너지          100	|" << endl;
+		cout << "	|   ________________________	|" << endl;
 		cout << "	|				|" << endl;
 		cout << "	|				|" << endl;
 		cout << "	|   ________________________/|	|" << endl;
@@ -156,7 +153,5 @@ public:
 		cout << "	|-------------------------------|" << endl;
 		cout << "	|	        ○		|" << endl;
 		cout << "	|_______________________________|" << endl;
-		cout << endl << "	1. 잠자기" << endl;
-		cout << "	2. 이동하기" << endl;
 	}
 };
