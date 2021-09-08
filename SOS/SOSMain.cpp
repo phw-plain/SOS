@@ -68,6 +68,7 @@ void Intro() {
 	story_n[0] = "N버튼을 누르자 화면이 멈췄다...";
 	story_n[1] = "핸드폰이 고장났나?";
 	story_n[2] = "이것저것 누르다보니 알수없는 빛이 주위를 에워쌌다..";
+
 	char yn;
 
 	for(int i = 0; i < sizeof(story)/sizeof(char*); i++){
@@ -80,7 +81,10 @@ void Intro() {
 					cout << story[i][j];
 				}
 				PlaySound(NULL, 0, 0);
-				yn = tolower(_getch());
+				do {
+					yn = tolower(_getch());
+				} while (yn != 13 && yn != 's'); // 13은 Enter 
+
 				break;
 			}
 			case 1: {
@@ -140,9 +144,10 @@ void Intro() {
 				cout << "|_______________________________|" << endl;
 				Sleep(2000);
 				PlaySound(NULL, 0, 0);
-				while(yn != 'y' && yn != 'n'){
+				do {
 					yn = tolower(_getch());
-				}
+				} while (yn != 's' && yn != 'y' && yn != 'n');
+
 				break;
 			}
 			case 2: {
@@ -154,7 +159,9 @@ void Intro() {
 						cout << story_y[0][j];
 					}
 					PlaySound(NULL, 0, 0);
-					yn = tolower(_getch());
+					do {
+						yn = tolower(_getch());
+					} while (yn != 13 && yn != 's');
 				} else {
 					for (int k = 0; k < sizeof(story_n) / sizeof(char*); k++) {
 						cout << "\n\n\n\n\n" << "			  ";
@@ -165,7 +172,10 @@ void Intro() {
 						}
 						if (k < sizeof(story_n) / sizeof(char*)) {
 							PlaySound(NULL, 0, 0);
-							yn = tolower(_getch());
+							do {
+								yn = tolower(_getch());
+							} while (yn != 13 && yn != 's');
+
 							if (yn == 's') break;
 							system("cls");
 						}
@@ -181,7 +191,10 @@ void Intro() {
 					cout << story[i-2][j];
 				}
 				PlaySound(NULL, 0, 0);
-				yn = tolower(_getch());
+				do {
+					yn = tolower(_getch());
+				} while (yn != 13 && yn != 's');
+
 				break;
 			}
 		}
@@ -196,14 +209,6 @@ int Menu() {
 	PlaySound(TEXT("main.wav"),0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	while (k!=13) { // 72 80
 		system("cls");
-		if (key != 2 && k == 80) {
-			check[key] = ' ';
-			check[++key] = '>';
-		}
-		else if (key != 0 && k == 72) {
-			check[key] = ' ';
-			check[--key] = '>';
-		}
 		textcolor(LIGHTGREEN, BLACK);
 		cout << endl << endl << endl;
 		cout << "	■■■■■■■■			■■■■■■■■			■■■■■■■■" << endl;
@@ -225,7 +230,17 @@ int Menu() {
 		cout << "					         "<< check[1] <<"  게임 방법	" << endl;
 		cout << "					         "<< check[2] <<"  게임 종료	" << endl;
 		cout << "					        ________________" << endl;
-		k = _getch();
+		do {
+			k = _getch();
+		} while (k != 13 && k != 72 && k != 80);
+		if (key != 2 && k == 80) {
+			check[key] = ' ';
+			check[++key] = '>';
+		}
+		else if (key != 0 && k == 72) {
+			check[key] = ' ';
+			check[--key] = '>';
+		}
 		textcolor(WHITE, BLACK);
 	}
 	int num;
