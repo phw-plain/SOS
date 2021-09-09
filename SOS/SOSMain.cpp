@@ -29,27 +29,36 @@ int User::cnt = 0;
 void textcolor(int foreground, int background);
 void Intro();
 void Rule();
+void GameOver();
 int Menu();
 int Level();
 
 int main() {
+	srand((unsigned)time(NULL));
 	int num = 0;
-	while(num != 3) {
+	while (num != 3) {
 		num = Menu();
-		switch (num){
-			case 1: {
-				system("cls");
-				Intro();
-				int level = Level();
-				User u(level);
-				u.play();
-				break;
+		switch (num) {
+		case 1: {
+			system("cls");
+			Intro();
+			int level = Level();
+			User u(level);
+			if (u.play()) {
+				GameOver();
+				system("pause");
 			}
-			case 2: {
-				system("cls");
-				Rule();
-				break;
+			else {
+				cout << "게임 클리어" << endl;
+				system("pause");
 			}
+			break;
+		}
+		case 2: {
+			system("cls");
+			Rule();
+			break;
+		}
 		}
 		system("cls");
 	}
@@ -58,7 +67,7 @@ int main() {
 void Intro() {
 	const char* story[5];
 	story[0] = "20XX년 2월 13일, 핸드폰으로 문자가 왔다.";
-	story[1] = "앞으로 당신은 외부와의 연결이 끊긴 지하철에서 생존해야 합니다."; 
+	story[1] = "앞으로 당신은 외부와의 연결이 끊긴 지하철에서 생존해야 합니다.";
 	story[2] = "배고픔, 수분, 에너지가 일정 범위로 내려가면 당신은 사망합니다.";
 
 	const char* story_y[1];
@@ -71,132 +80,148 @@ void Intro() {
 
 	char yn;
 
-	for(int i = 0; i < sizeof(story)/sizeof(char*); i++){
+	for (int i = 0; i < sizeof(story) / sizeof(char*); i++) {
 		switch (i) {
-			case 0: {
+		case 0: {
+			cout << "\n\n\n\n\n" << "			  ";
+			PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
+			for (int j = 0; j < strlen(story[i]); j++) {
+				Sleep(50);
+				cout << story[i][j];
+			}
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << endl;
+			cout << "												Enter : 다음 장면으로" << endl;
+			cout << "												S : 스킵" << endl;
+			PlaySound(NULL, 0, 0);
+			do {
+				yn = tolower(_getch());
+			} while (yn != 13 && yn != 's'); // 13은 Enter 
+
+			break;
+		}
+		case 1: {
+			PlaySound(TEXT("alarm1.wav"), 0, SND_FILENAME | SND_ASYNC);
+			cout << "_________________________________" << endl;
+			cout << "| SOS   			|" << endl;
+			cout << "|-------------------------------|" << endl;
+			cout << "|  |＼_______________________	|" << endl;
+			cout << "|  | 심심한 당신을 위해	     |	|" << endl;
+			cout << "|  | 준비한 이색 체험!!	     |	|" << endl;
+			cout << "|  |_________________________|	|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|-------------------------------|" << endl;
+			cout << "|	        ○		|" << endl;
+			cout << "|_______________________________|" << endl;
+			Sleep(2000);
+			system("cls");
+			PlaySound(TEXT("alarm1.wav"), 0, SND_FILENAME | SND_ASYNC);
+			cout << "_________________________________" << endl;
+			cout << "| SOS   			|" << endl;
+			cout << "|-------------------------------|" << endl;
+			cout << "|  |＼_______________________	|" << endl;
+			cout << "|  | 심심한 당신을 위해	     |	|" << endl;
+			cout << "|  | 준비한 이색 체험!!	     |	|" << endl;
+			cout << "|  |_________________________|	|" << endl;
+			cout << "|				|" << endl;
+			cout << "|  |＼_______________________	|" << endl;
+			cout << "|  | 지금 바로 참가	     |	|" << endl;
+			cout << "|  | 하시겠습니까?(Y/N)      |	|" << endl;
+			cout << "|  |_________________________|	|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|				|" << endl;
+			cout << "|-------------------------------|" << endl;
+			cout << "|	        ○		|" << endl;
+			cout << "|_______________________________|" << endl;
+			Sleep(2000);
+			PlaySound(NULL, 0, 0);
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << endl;
+			cout << "												y,n : 다음 장면으로" << endl;
+			cout << "												S : 스킵" << endl;
+			do {
+				yn = tolower(_getch());
+			} while (yn != 's' && yn != 'y' && yn != 'n');
+
+			break;
+		}
+		case 2: {
+			PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
+			if (yn == 'y') {
 				cout << "\n\n\n\n\n" << "			  ";
-				PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
-				for (int j = 0; j < strlen(story[i]); j++) {
+				for (int j = 0; j < strlen(story_y[0]); j++) {
 					Sleep(50);
-					cout << story[i][j];
+					cout << story_y[0][j];
 				}
 				PlaySound(NULL, 0, 0);
-				do {
-					yn = tolower(_getch());
-				} while (yn != 13 && yn != 's'); // 13은 Enter 
-
-				break;
-			}
-			case 1: {
-				PlaySound(TEXT("alarm1.wav"), 0, SND_FILENAME | SND_ASYNC);
-				cout << "_________________________________" << endl;
-				cout << "| SOS   			|" << endl;
-				cout << "|-------------------------------|" << endl;
-				cout << "|  |＼_______________________	|" << endl;
-				cout << "|  | 심심한 당신을 위해	     |	|" << endl;
-				cout << "|  | 준비한 이색 체험!!	     |	|" << endl;
-				cout << "|  |_________________________|	|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|-------------------------------|" << endl;
-				cout << "|	        ○		|" << endl;
-				cout << "|_______________________________|" << endl;
-				Sleep(2000);
-				system("cls");
-				PlaySound(TEXT("alarm1.wav"), 0, SND_FILENAME | SND_ASYNC);
-				cout << "_________________________________" << endl;
-				cout << "| SOS   			|" << endl;
-				cout << "|-------------------------------|" << endl;
-				cout << "|  |＼_______________________	|" << endl;
-				cout << "|  | 심심한 당신을 위해	     |	|" << endl;
-				cout << "|  | 준비한 이색 체험!!	     |	|" << endl;
-				cout << "|  |_________________________|	|" << endl;
-				cout << "|				|" << endl;
-				cout << "|  |＼_______________________	|" << endl;
-				cout << "|  | 지금 바로 참가	     |	|" << endl;
-				cout << "|  | 하시겠습니까?(Y/N)      |	|" << endl;
-				cout << "|  |_________________________|	|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|				|" << endl;
-				cout << "|-------------------------------|" << endl;
-				cout << "|	        ○		|" << endl;
-				cout << "|_______________________________|" << endl;
-				Sleep(2000);
-				PlaySound(NULL, 0, 0);
-				do {
-					yn = tolower(_getch());
-				} while (yn != 's' && yn != 'y' && yn != 'n');
-
-				break;
-			}
-			case 2: {
-				PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
-				if (yn == 'y') {
-					cout << "\n\n\n\n\n" << "			  ";
-					for (int j = 0; j < strlen(story_y[0]); j++) {
-						Sleep(50);
-						cout << story_y[0][j];
-					}
-					PlaySound(NULL, 0, 0);
-					do {
-						yn = tolower(_getch());
-					} while (yn != 13 && yn != 's');
-				} else {
-					for (int k = 0; k < sizeof(story_n) / sizeof(char*); k++) {
-						cout << "\n\n\n\n\n" << "			  ";
-						PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
-						for (int j = 0; j < strlen(story_n[k]); j++) {
-							Sleep(50);
-							cout << story_n[k][j];
-						}
-						if (k < sizeof(story_n) / sizeof(char*)) {
-							PlaySound(NULL, 0, 0);
-							do {
-								yn = tolower(_getch());
-							} while (yn != 13 && yn != 's');
-
-							if (yn == 's') break;
-							system("cls");
-						}
-					}
-				}
-				break;
-			}
-			case 3: case 4: {
-				cout << "\n\n\n\n\n" << "			  ";
-				PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
-				for (int j = 0; j < strlen(story[i-2]); j++) {
-					Sleep(50);
-					cout << story[i-2][j];
-				}
-				PlaySound(NULL, 0, 0);
+				cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << endl;
+				cout << "												Enter : 다음 장면으로" << endl;
+				cout << "												S : 스킵" << endl;
 				do {
 					yn = tolower(_getch());
 				} while (yn != 13 && yn != 's');
-
-				break;
 			}
+			else {
+				for (int k = 0; k < sizeof(story_n) / sizeof(char*); k++) {
+					cout << "\n\n\n\n\n" << "			  ";
+					PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
+					for (int j = 0; j < strlen(story_n[k]); j++) {
+						Sleep(50);
+						cout << story_n[k][j];
+					}
+					if (k < sizeof(story_n) / sizeof(char*)) {
+						PlaySound(NULL, 0, 0);
+						cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << endl;
+						cout << "												Enter : 다음 장면으로" << endl;
+						cout << "												S : 스킵" << endl;
+						do {
+							yn = tolower(_getch());
+						} while (yn != 13 && yn != 's');
+
+						if (yn == 's') break;
+						system("cls");
+					}
+				}
+			}
+			break;
+		}
+		case 3: case 4: {
+			cout << "\n\n\n\n\n" << "			  ";
+			PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
+			for (int j = 0; j < strlen(story[i - 2]); j++) {
+				Sleep(50);
+				cout << story[i - 2][j];
+			}
+			PlaySound(NULL, 0, 0);
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << endl;
+			cout << "												Enter : 다음 장면으로" << endl;
+			cout << "												S : 스킵" << endl;
+			do {
+				yn = tolower(_getch());
+			} while (yn != 13 && yn != 's');
+
+			break;
+		}
 		}
 		if (yn == 's') break;
 		system("cls");
@@ -205,9 +230,9 @@ void Intro() {
 }
 int Menu() {
 	char check[3] = { '>', ' ', ' ' };
-	int key=0, k=0;
-	PlaySound(TEXT("main.wav"),0, SND_FILENAME | SND_ASYNC | SND_LOOP);
-	while (k!=13) { // 72 80
+	int key = 0, k = 0;
+	PlaySound(TEXT("main.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
+	while (k != 13) { // 72 80
 		system("cls");
 		textcolor(LIGHTGREEN, BLACK);
 		cout << endl << endl << endl;
@@ -226,9 +251,9 @@ int Menu() {
 		textcolor(LIGHTGREEN, BLACK);
 		cout << "					        ________________" << endl;
 		cout << "					       		" << endl;
-		cout << "					         "<< check[0] <<"  게임 시작	" << endl;
-		cout << "					         "<< check[1] <<"  게임 방법	" << endl;
-		cout << "					         "<< check[2] <<"  게임 종료	" << endl;
+		cout << "					         " << check[0] << "  게임 시작	" << endl;
+		cout << "					         " << check[1] << "  게임 방법	" << endl;
+		cout << "					         " << check[2] << "  게임 종료	" << endl;
 		cout << "					        ________________" << endl;
 		do {
 			k = _getch();
@@ -285,6 +310,28 @@ void Rule() {
 	cout << "B, 가방 : 아이템을 확인할 수 있다." << endl;
 	cout << "M, 지도 : 지하철 노선을 볼 수 있다." << endl;
 	_getch();
+}
+
+void GameOver() {
+	textcolor(LIGHTGREEN, BLACK);
+	cout << endl << endl;
+	cout << "               ■■■■■■■■          ■■■■■	      ■■    ■■         ■■■■■■■■" << endl;
+	cout << "               ■                     ■            ■      ■     ■     ■       ■" << endl;
+	cout << "               ■                     ■            ■      ■     ■     ■       ■" << endl;
+	cout << "               ■      ■■■■       ■■■■■■■■      ■     ■     ■       ■■■■■■■■" << endl;
+	cout << "               ■            ■       ■            ■      ■     ■     ■       ■" << endl;
+	cout << "               ■            ■       ■            ■      ■     ■     ■       ■" << endl;
+	cout << "               ■■■■■■■■       ■            ■      ■     ■     ■       ■■■■■■■■" << endl;
+	cout << endl << endl;
+	cout << "               ■■■■■■■■       ■            ■      ■■■■■■■■       ■■■■■■■" << endl;
+	cout << "               ■            ■       ■            ■      ■                     ■            ■" << endl;
+	cout << "               ■            ■       ■            ■      ■                     ■            ■" << endl;
+	cout << "               ■            ■       ■            ■      ■■■■■■■■       ■■■■■■■" << endl;
+	cout << "               ■            ■       ■            ■      ■                     ■            ■" << endl;
+	cout << "               ■            ■         ■        ■        ■                     ■            ■" << endl;
+	cout << "               ■■■■■■■■           ■■■■          ■■■■■■■■       ■            ■" << endl;
+	cout << endl << endl << endl << endl << endl << endl << endl << endl;
+	textcolor(WHITE, BLACK);
 }
 
 void textcolor(int foreground, int background)
