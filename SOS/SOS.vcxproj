@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="SOSMain.cpp" />
+    <ClCompile Include="TextColor.cpp" />
     <ClCompile Include="UserClass.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +149,9 @@
     <Media Include="alarm2.wav" />
     <Media Include="main.wav" />
     <Media Include="typing.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TextColor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

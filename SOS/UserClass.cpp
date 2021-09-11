@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Windows.h>
 #include <conio.h>
+#include "TextColor.h"		// 텍스트 컬러 소스 파일
 using namespace std;
 
 class Item {
@@ -201,6 +202,8 @@ public:
 		// 수분 배고픔 20~40 사이의 감소(rand이용)
 		// position 변경 -> 역 이름을 입력 받고 -> for문을 이용해서 역 위치 int 찾는다. -> 현재 역은 지운다 -> 다음역으로 이동
 		// 변수를 새로 선언해서 한번 사용시 몇일동안 이용 불가능 하게 만든다.
+		// 이동하기 사운드 넣으면 좋을 듯
+		cout << "\n\n\n\n\n\n";
 		cout << "\t\t\t\t\t\t         Ｏ" << endl;
 		cout << "\t\t\t\t\t\t       ｏ" << endl;
 		cout << "\t\t\t\t\t\t      °" << endl;
@@ -210,15 +213,17 @@ public:
 		cout << "\t\t\t\t\t\t    ┃ 　　 ┠┨  ┠┨  ┃" << endl;
 		cout << "\t\t\t\t\t\t    ┃ 　　 ┠┨  ┠┨  ┃" << endl;
 		cout << "\t\t\t\t\t\t    ┗◎━━◎┛┗◎┛┗◎┛" << endl;
-		cout << "\n\n";
-		const char* a = "\t\t\t\t\t\t이 동 중 . . .";
+		cout << "\n\n\t\t\t\t\t\t     ";
+		const char* a = "이 동 중 . . .";
+		textcolor(LIGHTMAGENTA, BLACK);
 		for (int j = 0; j < strlen(a); j++) {
 			Sleep(500);
 			cout << a[j];
 		}
+		textcolor(WHITE, BLACK);
 		Sleep(3000);
-		cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-		cout << "												이동 완료!!" << endl;
+		cout << "\n\n\n\n\n\n\n\n\n\n\n";
+		cout << "													이동 완료!!" << endl;
 		Sleep(3000);
 		system("cls");
 	}

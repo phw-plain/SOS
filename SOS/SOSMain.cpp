@@ -4,29 +4,13 @@
 #include <conio.h>
 #include <mmsystem.h>
 #include <iomanip>
+#include "TextColor.h"		// 텍스트 컬러 소스 파일
 #include "UserClass.cpp"		// User 클래스 소스 파일
 #pragma comment(lib,"winmm.lib")
-#define BLACK 0					// 색깔 표
-#define BLUE 1 
-#define GREEN 2 
-#define CYAN 3 
-#define RED 4 
-#define MAGENTA 5 
-#define BROWN 6 
-#define LIGHTGRAY 7 
-#define DARKGRAY 8 
-#define LIGHTBLUE 9 
-#define LIGHTGREEN 10 
-#define LIGHTCYAN 11 
-#define LIGHTRED 12 
-#define LIGHTMAGENTA 13 
-#define YELLOW 14 
-#define WHITE 15 
 using namespace std;
 
 int Item::cnt = 0;
 int User::cnt = 0;
-void textcolor(int foreground, int background);
 void Intro();
 void Rule();
 void GameOver();
@@ -333,10 +317,4 @@ void GameOver() {
 	cout << "               ■■■■■■■■           ■■■■          ■■■■■■■■       ■            ■" << endl;
 	cout << endl << endl << endl << endl << endl << endl << endl << endl;
 	textcolor(WHITE, BLACK);
-}
-
-void textcolor(int foreground, int background)
-{
-	int color = foreground + background * 16;
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
