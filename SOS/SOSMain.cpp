@@ -81,18 +81,19 @@ void Intro() {
 	char yn;
 
 	for (int i = 0; i < sizeof(story) / sizeof(char*); i++) {
+		
 		switch (i) {
 		case 0: {
-			cout << "\n\n\n\n\n" << "			  ";
+			cout << "\n\n\n\n\n\n\n\n\n\n\n" << "			              ";
 			PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 			for (int j = 0; j < strlen(story[i]); j++) {
 				Sleep(50);
 				cout << story[i][j];
 			}
-			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << endl;
+			PlaySound(NULL, 0, 0);
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 			cout << "												Enter : 다음 장면으로" << endl;
 			cout << "												S : 스킵" << endl;
-			PlaySound(NULL, 0, 0);
 			do {
 				yn = tolower(_getch());
 			} while (yn != 13 && yn != 's'); // 13은 Enter 
@@ -156,8 +157,8 @@ void Intro() {
 			cout << "|_______________________________|" << endl;
 			Sleep(2000);
 			PlaySound(NULL, 0, 0);
-			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << endl;
-			cout << "												y,n : 다음 장면으로" << endl;
+			cout << "\n\n";
+			cout << "												Y, N : 다음 장면으로" << endl;
 			cout << "												S : 스킵" << endl;
 			do {
 				yn = tolower(_getch());
@@ -168,13 +169,13 @@ void Intro() {
 		case 2: {
 			PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 			if (yn == 'y') {
-				cout << "\n\n\n\n\n" << "			  ";
+				cout << "\n\n\n\n\n\n\n\n\n\n\n" << "			              ";
 				for (int j = 0; j < strlen(story_y[0]); j++) {
 					Sleep(50);
 					cout << story_y[0][j];
 				}
 				PlaySound(NULL, 0, 0);
-				cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << endl;
+				cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 				cout << "												Enter : 다음 장면으로" << endl;
 				cout << "												S : 스킵" << endl;
 				do {
@@ -183,7 +184,7 @@ void Intro() {
 			}
 			else {
 				for (int k = 0; k < sizeof(story_n) / sizeof(char*); k++) {
-					cout << "\n\n\n\n\n" << "			  ";
+					cout << "\n\n\n\n\n\n\n\n\n\n\n" << "			              ";
 					PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 					for (int j = 0; j < strlen(story_n[k]); j++) {
 						Sleep(50);
@@ -191,7 +192,7 @@ void Intro() {
 					}
 					if (k < sizeof(story_n) / sizeof(char*)) {
 						PlaySound(NULL, 0, 0);
-						cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << endl;
+						cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 						cout << "												Enter : 다음 장면으로" << endl;
 						cout << "												S : 스킵" << endl;
 						do {
@@ -206,14 +207,14 @@ void Intro() {
 			break;
 		}
 		case 3: case 4: {
-			cout << "\n\n\n\n\n" << "			  ";
+			cout << "\n\n\n\n\n\n\n\n\n\n\n" << "			  ";
 			PlaySound(TEXT("typing.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 			for (int j = 0; j < strlen(story[i - 2]); j++) {
 				Sleep(50);
 				cout << story[i - 2][j];
 			}
 			PlaySound(NULL, 0, 0);
-			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" << endl;
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 			cout << "												Enter : 다음 장면으로" << endl;
 			cout << "												S : 스킵" << endl;
 			do {

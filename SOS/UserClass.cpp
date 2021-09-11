@@ -138,8 +138,8 @@ public:
 	}
 	void Phone() {
 		cout << "	_________________________________" << endl;
-		cout << "	|	   			|	1. 잠자기" << endl;
-		cout << "	|-------------------------------|	2. 이동하기" << endl;
+		cout << "	|	   			|" << endl;
+		cout << "	|-------------------------------|" << endl;
 		cout << "	|	     20XX년  " << month << "월 " << day << "일	|" << endl;
 		cout << "	|				|" << endl;
 		cout << "	|    ________       ________ 	|" << endl;
@@ -162,10 +162,10 @@ public:
 		cout << "	|  | 언제쯤 나갈 수 있을까.. |	|" << endl;
 		cout << "	|  |_________________________|	|" << endl;
 		cout << "	|				|" << endl;
-		cout << "	|				|" << endl;
-		cout << "	|-------------------------------|" << endl;
-		cout << "	|	        ○		|" << endl;
-		cout << "	|_______________________________|" << endl;
+		cout << "	|				|								[1] 취침 하기" << endl;
+		cout << "	|-------------------------------|								[2] 이동 하기" << endl;
+		cout << "	|	        ○		|								[B] 가방 열기" << endl;
+		cout << "	|_______________________________|								[M] 지도 열기" << endl;
 	}
 	void NextDay() {
 		survive++;
@@ -201,6 +201,26 @@ public:
 		// 수분 배고픔 20~40 사이의 감소(rand이용)
 		// position 변경 -> 역 이름을 입력 받고 -> for문을 이용해서 역 위치 int 찾는다. -> 현재 역은 지운다 -> 다음역으로 이동
 		// 변수를 새로 선언해서 한번 사용시 몇일동안 이용 불가능 하게 만든다.
+		cout << "\t\t\t\t\t\t         Ｏ" << endl;
+		cout << "\t\t\t\t\t\t       ｏ" << endl;
+		cout << "\t\t\t\t\t\t      °" << endl;
+		cout << "\t\t\t\t\t\t     ┳┳ ∩∩" << endl;
+		cout << "\t\t\t\t\t\t     ┃┃(-∀-)" << endl;
+		cout << "\t\t\t\t\t\t    ┏┻┻┷━ Ｏ┏━┷┓┏━┷┓" << endl;
+		cout << "\t\t\t\t\t\t    ┃ 　　 ┠┨  ┠┨  ┃" << endl;
+		cout << "\t\t\t\t\t\t    ┃ 　　 ┠┨  ┠┨  ┃" << endl;
+		cout << "\t\t\t\t\t\t    ┗◎━━◎┛┗◎┛┗◎┛" << endl;
+		cout << "\n\n";
+		const char* a = "\t\t\t\t\t\t이 동 중 . . .";
+		for (int j = 0; j < strlen(a); j++) {
+			Sleep(500);
+			cout << a[j];
+		}
+		Sleep(3000);
+		cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+		cout << "												이동 완료!!" << endl;
+		Sleep(3000);
+		system("cls");
 	}
 	bool DieCheck() {
 		bool answer = true;
