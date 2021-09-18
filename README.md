@@ -1,4 +1,4 @@
-# Bingo
+# SOS(Survival Of Subway)
 
 > C++언어로 만든 생존 시뮬레이션 콘솔 게임입니다.
 
