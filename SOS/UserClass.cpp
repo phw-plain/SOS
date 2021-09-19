@@ -1,15 +1,15 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <Windows.h>
 #include <conio.h>
-#include "TextColor.h"		// ÅØ½ºÆ® ÄÃ·¯ ¼Ò½º ÆÄÀÏ
+#include "TextColor.h"		// í…ìŠ¤íŠ¸ ì»¬ëŸ¬ ì†ŒìŠ¤ íŒŒì¼
 using namespace std;
 
 class Item {
 private:
-	int id;				// ¾ÆÀÌÅÛ ¹øÈ£
-	const char* name;	// ¾ÆÀÌÅÛ ÀÌ¸§
+	int id;				// ì•„ì´í…œ ë²ˆí˜¸
+	const char* name;	// ì•„ì´í…œ ì´ë¦„
 public:
-	static int cnt;		// ¾ÆÀÌÅÛ ÃÑ °¹¼ö
+	static int cnt;		// ì•„ì´í…œ ì´ ê°¯ìˆ˜
 	Item(int id, const char* name) : id(id), name(name) { cnt++; }
 	const char* getName() {
 		return name;
@@ -18,34 +18,37 @@ public:
 };
 class User {
 private:
-	int month;
-	int day;
-	int s_day;		// »ıÁ¸ ÇØ¾ß ÇÏ´Â ÀÏÀÚ
-	int survive;	// ÃÑ »ıÁ¸ ³¯Â¥
-	int water;		// ¼öºĞ ¼öÄ¡
-	int food;		// ¹è°íÇÄ ¼öÄ¡
-	int energy;		// ¿¡³ÊÁö ¼öÄ¡
+	int month;		// ì›”
+	int day;		// ì¼
+	int s_day;		// ìƒì¡´ í•´ì•¼ í•˜ëŠ” ì¼ì
+	int survive;	// ì´ ìƒì¡´ ë‚ ì§œ
+	int water;		// ìˆ˜ë¶„ ìˆ˜ì¹˜
+	int food;		// ë°°ê³ í”” ìˆ˜ì¹˜
+	int energy;		// ì—ë„ˆì§€ ìˆ˜ì¹˜
+	int money;		// ë³´ìœ  ëˆ
 
-	Item* item[12];		// ¾ÆÀÌÅÛ
-	int position = 0;	// ÇöÀç ¿ª À§Ä¡
+	Item* item[12];		// ì•„ì´í…œ
+	int position = 0;	// í˜„ì¬ ì—­ ìœ„ì¹˜
 	string map[16] = {
-		"±¹È­", "Àå¹Ì", "³­ÃÊ", "µ¿¹é", "¸ÅÈ­",
-		"¸ğ¶õ", "º¢²É", "¼ö·Ã", "¾È°³", "¿¬²É",
-		"ÆÒÁö", "¹éÇÕ", "Ã¶Âß", "¼ö±¹", "Ä«¶ó",
-		"¹ÚÇÏ"
+		"êµ­í™”", "ì¥ë¯¸", "ë‚œì´ˆ", "ë™ë°±", "ë§¤í™”",
+		"ëª¨ë€", "ë²šê½ƒ", "ìˆ˜ë ¨", "ì•ˆê°œ", "ì—°ê½ƒ",
+		"íŒ¬ì§€", "ë°±í•©", "ì² ì­‰", "ìˆ˜êµ­", "ì¹´ë¼",
+		"ë°•í•˜"
 	};
-	static int cnt;		// ¹«½¼ ÀÇ¹Ì??
+	static int cnt;		// ë¬´ìŠ¨ ì˜ë¯¸??
 public:
 	User(int level) {
-		item[0] = new Item(1, "»ı¼ö");
-		item[1] = new Item(1, "»ı¼ö");
+		item[0] = new Item(1, "ìƒìˆ˜");
+		item[1] = new Item(1, "ìƒìˆ˜");
+		item[2] = new Item(1, "ìƒìˆ˜");
 		food = 100 - ((level - 1) * 10);
 		water = 100 - ((level - 1) * 10);
 		energy = 100 - ((level - 1) * 10);
-		s_day = 30;
-		survive = 1;
-		month = 2;
-		day = 13;
+		s_day = 30;							// ìƒì¡´í•´ì•¼ í•˜ëŠ” ë‚ ì§œ
+		survive = 1;						// ìƒì¡´í•œ ë‚ ì§œ
+		month = 2;							// ì›”
+		day = 13;							// ì¼
+		money = 10000;						// ë³´ìœ  ëˆ
 	}
 	bool play() {
 		while (s_day > 0) {
@@ -61,112 +64,146 @@ public:
 			if (!DieCheck()) {
 				break;
 			}
-			// ¼öºĞ ¹è°íÇÄ ¿¡³ÊÁö¿¡ µû¸¥ »ç¸Á ÇÔ¼ö ±¸Çö
+			// ìˆ˜ë¶„ ë°°ê³ í”” ì—ë„ˆì§€ì— ë”°ë¥¸ ì‚¬ë§ í•¨ìˆ˜ êµ¬í˜„
 		}
 		if (survive == day) return true;
 		else false;
 	}
 	void Bag() {
-		cout << "	      ____" << endl;
-		cout << "	     / /¡¬¡¬" << endl;
-		cout << "____________/_/___¡¬¡¬___________" << endl;
-		cout << "|				|" << endl;
-		cout << "|";
-		for (int i = 0; i < 3; i++) {
-			if (i < Item::cnt)
-				cout << item[i]->getName() << "	   ";
-			else
-				cout << "	  ";
+		string check[12] = { "--", "  ", "  " , "  " , "  " , "  " , "  " , "  " , "  " , "  " , "  " , "  " };
+		int key = 0, k = 0;
+		while (k != 13) {
+			cout << "	      ____" << endl;
+			cout << "	     / /ï¼¼ï¼¼" << endl;
+			cout << "____________/_/___ï¼¼ï¼¼___________" << endl;
+			cout << "|				|" << endl;
+			cout << "|";
+			for (int i = 0; i < 3; i++) {
+				if (i < Item::cnt)
+					cout << "     " << item[i]->getName();
+				else
+					cout << "        ";
+			}
+			cout << "\t|" << endl;
+			cout << "|      ";
+			textcolor(LIGHTBLUE, BLACK);
+			cout << check[0] << "       " << check[1] << "       " << check[2];
+			textcolor(WHITE, BLACK);
+			cout << "	|" << endl;
+			cout << "|_______________________________|" << endl;
+			cout << "|				|" << endl;
+			cout << "|";
+			for (int i = 3; i < 6; i++) {
+				if (i < Item::cnt)
+					cout << "     " << item[i]->getName();
+				else
+					cout << "        ";
+			}
+			cout << "\t|" << endl;
+			cout << "|      ";
+			textcolor(LIGHTBLUE, BLACK);
+			cout << check[3] << "       " << check[4] << "       " << check[5];
+			textcolor(WHITE, BLACK);
+			cout << "	|" << endl;
+			cout << "|_______________________________|" << endl;
+			cout << "|				|" << endl;
+			cout << "|";
+			for (int i = 6; i < 9; i++) {
+				if (i < Item::cnt)
+					cout << "     " << item[i]->getName();
+				else
+					cout << "        ";
+			}
+			cout << "\t|" << endl;
+			cout << "|      ";
+			textcolor(LIGHTBLUE, BLACK);
+			cout << check[6] << "       " << check[7] << "       " << check[8];
+			textcolor(WHITE, BLACK);
+			cout << "	|" << endl;
+			cout << "|_______________________________|" << endl;
+			cout << "|				|" << endl;
+			cout << "|";
+			for (int i = 9; i < 12; i++) {
+				if (i < Item::cnt)
+					cout << "     " << item[i]->getName();
+				else
+					cout << "        ";
+			}
+			cout << "\t|" << endl;
+			cout << "|      ";
+			textcolor(LIGHTBLUE, BLACK);
+			cout << check[9] << "       " << check[10] << "       " << check[11];
+			textcolor(WHITE, BLACK);
+			cout << "	|" << endl;
+			cout << "|_______________________________|" << endl;
+			do {
+				k = _getch();
+			} while (k != 13 && k != 75 && k != 77);
+			if (key != 11 && k == 77) {
+				check[key] = "  ";
+				check[++key] = "--";
+			}
+			else if (key != 0 && k == 75) {
+				check[key] = "  ";
+				check[--key] = "--";
+			}
+			else if (k == 13) {
+				ItemUse(); 
+				// ì•„ì´í…œ ì‚¬ìš© ë¯¸êµ¬í˜„
+				// í•´ë‹¹ ì¹¸ì— ì•„ì´í…œì´ ìˆëŠ” ê²½ìš° -> ì´ë²¤íŠ¸ ë°œìƒ o
+				// í•´ë‹¹ ì¹¸ì— ì•„ì´í…œì´ ì—†ëŠ” ê²½ìš° -> ì´ë²¤íŠ¸ ë°œìƒ x ë‹¤ì‹œ ê°€ë°©ìœ¼ë¡œ ã„±ã„±
+				// ì´ë²¤íŠ¸ëŠ” [ì•„ì´í…œì´ë¦„]ì„ ì‚¬ìš©í•˜ì‹œê² ìŠµë‹ˆê¹Œ?
+				// (O or X) O : 000ì¦ê°€ , xëŠ” ë‹¤ì‹œ ê°€ë°©ìœ¼ë¡œ ã„±ã„±
+			}
+			system("cls");
 		}
-		cout << "\t";
-		cout << "|" << endl;
-		cout << "|				|" << endl;
-		cout << "|_______________________________|" << endl;
-		cout << "|				|" << endl;
-		cout << "|";
-		for (int i = 3; i < 6; i++) {
-			if (i < Item::cnt)
-				cout << item[i]->getName() << "	   ";
-			else
-				cout << "	  ";
-		}
-		cout << "\t";
-		cout << "|" << endl;
-		cout << "|				|" << endl;
-		cout << "|_______________________________|" << endl;
-		cout << "|				|" << endl;
-		cout << "|";
-		for (int i = 6; i < 9; i++) {
-			if (i < Item::cnt)
-				cout << item[i]->getName() << "	   ";
-			else
-				cout << "	  ";
-		}
-		cout << "\t";
-		cout << "|" << endl;
-		cout << "|				|" << endl;
-		cout << "|_______________________________|" << endl;
-		cout << "|				|" << endl;
-		cout << "|";
-		for (int i = 9; i < 12; i++) {
-			if (i < Item::cnt)
-				cout << item[i]->getName() << "	   ";
-			else
-				cout << "	  ";
-		}
-		cout << "\t";
-		cout << "|" << endl;
-		cout << "|				|" << endl;
-		cout << "|_______________________________|" << endl;
-		_getch();
-		system("cls");
 	}
 	void Map() {
 		cout << "\n\n\n";
-		cout << "   ------" << map[0] << "¿ª-------" << map[1] << "¿ª-------" << map[2] << "¿ª-------" << map[3] << "¿ª-------" << map[4] << "¿ª-------" << map[5] << "¿ª-----" << endl;
+		cout << "   ------" << map[0] << "ì—­-------" << map[1] << "ì—­-------" << map[2] << "ì—­-------" << map[3] << "ì—­-------" << map[4] << "ì—­-------" << map[5] << "ì—­-----" << endl;
 		cout << "   |										    |" << endl;
 		cout << "   |										    |" << endl;
-		cout << " " << map[15] << "¿ª										  " << map[6] << "¿ª" << endl;
+		cout << " " << map[15] << "ì—­										  " << map[6] << "ì—­" << endl;
 		cout << "   |										    |" << endl;
 		cout << "   |										    |" << endl;
-		cout << " " << map[14] << "¿ª										  " << map[7] << "¿ª" << endl;
+		cout << " " << map[14] << "ì—­										  " << map[7] << "ì—­" << endl;
 		cout << "   |										    |" << endl;
 		cout << "   |										    |" << endl;
-		cout << "   ------" << map[13] << "¿ª-------" << map[12] << "¿ª-------" << map[11] << "¿ª-------" << map[10] << "¿ª-------" << map[9] << "¿ª-------" << map[8] << "¿ª-----" << endl;
-		cout << "\n\nÇöÀç ¿ª : " << map[position] << "¿ª" << endl;
+		cout << "   ------" << map[13] << "ì—­-------" << map[12] << "ì—­-------" << map[11] << "ì—­-------" << map[10] << "ì—­-------" << map[9] << "ì—­-------" << map[8] << "ì—­-----" << endl;
+		cout << "\n\ní˜„ì¬ ì—­ : " << map[position] << "ì—­" << endl;
 		_getch();
 		system("cls");
 	}
 	void Phone() {
-		cout << "	_________________________________" << endl;
-		cout << "	|	   			|" << endl;
-		cout << "	|-------------------------------|" << endl;
-		cout << "	|	     20XX³â  " << month << "¿ù " << day << "ÀÏ	|" << endl;
-		cout << "	|				|" << endl;
-		cout << "	|    ________       ________ 	|" << endl;
-		cout << "	|   |        |     |	    |	|" << endl;
-		cout << "	|   |  °¡¹æ  |     |  Áöµµ  |	|" << endl;
+		cout << "	_________________________________							_________________" << endl;
+		cout << "	|	   			|							||ã€€|âˆ§,,âˆ§	|" << endl;
+		cout << "	|-------------------------------|							||ï¼¿|*ï¼Ï‰-)	|" << endl;
+		cout << "	|	     20XXë…„  " << month << "ì›” " << day << "ì¼	|							||  |ï½â™¥ï½	|" << endl;
+		cout << "	|				|							||ï¿£|â” J	|" << endl;
+		cout << "	|    ________       ________ 	|							|_______________|" << endl;
+		cout << "	|   |        |     |	    |	|"<< endl;
+		cout << "	|   |  ê°€ë°©  |     |  ì§€ë„  |	|							ë³´ìœ  ëˆ : " << money << endl;
 		cout << "	|   |________|     |________|	|" << endl;
 		cout << "	|				|" << endl;
 		cout << "	|				|" << endl;
-		cout << "	|   ---------  »óÅÂ  ---------	|" << endl;
-		cout << "	|      ¼öºĞ	       " << water << "	|" << endl;
-		cout << "	|      ¹è°íÇÄ          " << food << "	|" << endl;
-		cout << "	|      ¿¡³ÊÁö          " << energy << "	|" << endl;
+		cout << "	|   ---------  ìƒíƒœ  ---------	|" << endl;
+		cout << "	|      ìˆ˜ë¶„	       " << water << "	|" << endl;
+		cout << "	|      ë°°ê³ í””          " << food << "	|" << endl;
+		cout << "	|      ì—ë„ˆì§€          " << energy << "	|" << endl;
 		cout << "	|   ________________________	|" << endl;
 		cout << "	|				|" << endl;
 		cout << "	|				|" << endl;
 		cout << "	|   ________________________/|	|" << endl;
 		cout << "	|  |			     |	|" << endl;
-		if (survive < 10) cout << "	|  | " << survive << "ÀÏÂ÷,                  |	|" << endl;
-		else if (survive < 100) cout << "	|  | " << survive << "ÀÏÂ÷,                 |	|" << endl;
-		cout << "	|  | ¾ğÁ¦Âë ³ª°¥ ¼ö ÀÖÀ»±î.. |	|" << endl;
+		if (survive < 10) cout << "	|  | " << survive << "ì¼ì°¨,                  |	|" << endl;
+		else if (survive < 100) cout << "	|  | " << survive << "ì¼ì°¨,                 |	|" << endl;
+		cout << "	|  | ì–¸ì œì¯¤ ë‚˜ê°ˆ ìˆ˜ ìˆì„ê¹Œ.. |	|" << endl;
 		cout << "	|  |_________________________|	|" << endl;
 		cout << "	|				|" << endl;
-		cout << "	|				|								[1] ÃëÄ§ ÇÏ±â" << endl;
-		cout << "	|-------------------------------|								[2] ÀÌµ¿ ÇÏ±â" << endl;
-		cout << "	|	        ¡Û		|								[B] °¡¹æ ¿­±â" << endl;
-		cout << "	|_______________________________|								[M] Áöµµ ¿­±â" << endl;
+		cout << "	|				|								[1] ì·¨ì¹¨ í•˜ê¸°" << endl;
+		cout << "	|-------------------------------|								[2] ì´ë™ í•˜ê¸°" << endl;
+		cout << "	|	        â—‹		|								[B] ê°€ë°© ì—´ê¸°" << endl;
+		cout << "	|_______________________________|								[M] ì§€ë„ ì—´ê¸°" << endl;
 	}
 	void NextDay() {
 		survive++;
@@ -190,31 +227,22 @@ public:
 				day = 1;
 			}
 		}
-		// ¼öºĞ ¹è°íÇÄ 10~20 »çÀÌÀÇ °¨¼Ò(randÀÌ¿ë)
+		// ìˆ˜ë¶„ ë°°ê³ í”” 10~20 ì‚¬ì´ì˜ ê°ì†Œ(randì´ìš©)
 		food -= (rand() % 19 + 1);
 		water -= (rand() % 19 + 1);
-
 		energy += 20;
 		if (energy > 100) energy = 100;
-	}
-	void Move() {
-		// ÀÌµ¿ÇÏ±â¸¦ ´©¸¦ ½Ã ¿¡³ÊÁö Àı¹İ °¨¼Ò
-		// ¼öºĞ ¹è°íÇÄ 20~40 »çÀÌÀÇ °¨¼Ò(randÀÌ¿ë)
-		// position º¯°æ -> ¿ª ÀÌ¸§À» ÀÔ·Â ¹Ş°í -> for¹®À» ÀÌ¿ëÇØ¼­ ¿ª À§Ä¡ int Ã£´Â´Ù. -> ÇöÀç ¿ªÀº Áö¿î´Ù -> ´ÙÀ½¿ªÀ¸·Î ÀÌµ¿
-		// º¯¼ö¸¦ »õ·Î ¼±¾ğÇØ¼­ ÇÑ¹ø »ç¿ë½Ã ¸îÀÏµ¿¾È ÀÌ¿ë ºÒ°¡´É ÇÏ°Ô ¸¸µç´Ù.
-		// ÀÌµ¿ÇÏ±â »ç¿îµå ³ÖÀ¸¸é ÁÁÀ» µí
+		// í™”ë©´ì— ë³´ì—¬ì§€ëŠ” ê·¸ë¦¼
 		cout << "\n\n\n\n\n\n";
-		cout << "\t\t\t\t\t\t         £Ï" << endl;
-		cout << "\t\t\t\t\t\t       £ï" << endl;
-		cout << "\t\t\t\t\t\t      ¡Æ" << endl;
-		cout << "\t\t\t\t\t\t     ¦³¦³ ¡û¡û" << endl;
-		cout << "\t\t\t\t\t\t     ¦­¦­(-¢£-)" << endl;
-		cout << "\t\t\t\t\t\t    ¦®¦µ¦µ¦º¦¬ £Ï¦®¦¬¦º¦¯¦®¦¬¦º¦¯" << endl;
-		cout << "\t\t\t\t\t\t    ¦­ ¡¡¡¡ ¦·¦¹  ¦·¦¹  ¦­" << endl;
-		cout << "\t\t\t\t\t\t    ¦­ ¡¡¡¡ ¦·¦¹  ¦·¦¹  ¦­" << endl;
-		cout << "\t\t\t\t\t\t    ¦±¡İ¦¬¦¬¡İ¦°¦±¡İ¦°¦±¡İ¦°" << endl;
+		cout << "\t\t\t\t\t\tâˆ©â€•â€•â€•â€•âˆ©" << endl;
+		cout << "\t\t\t\t\t\t|| âˆ§ âˆ§ã€€||" << endl;
+		cout << "\t\t\t\t\t\t||(*Â´ -`)//" << endl;
+		cout << "\t\t\t\t\t\t| / ^ âŒ’âŒ’ã¥`ï¿£ï¼¼" << endl;
+		cout << "\t\t\t\t\t\t   (ãƒã€€ã€€âŒ’  ï¼¼ ï¼¼" << endl;
+		cout << "\t\t\t\t\t\t ï¼¼ã€€ã€€ || ï¿£ï¿£ï¿£ï¿£ï¿£ ||" << endl;
+		cout << "\t\t\t\t\t\t   ï¼¼, /|| â€•â€•â€•â€•â€• ||" << endl;
 		cout << "\n\n\t\t\t\t\t\t     ";
-		const char* a = "ÀÌ µ¿ Áß . . .";
+		const char* a = "íœ´ ì‹ ì¤‘ . . .";
 		textcolor(LIGHTMAGENTA, BLACK);
 		for (int j = 0; j < strlen(a); j++) {
 			Sleep(500);
@@ -223,21 +251,56 @@ public:
 		textcolor(WHITE, BLACK);
 		Sleep(3000);
 		cout << "\n\n\n\n\n\n\n\n\n\n\n";
-		cout << "													ÀÌµ¿ ¿Ï·á!!" << endl;
+		cout << "													íœ´ì‹ ì™„ë£Œ!!" << endl;
+		Sleep(3000);
+		system("cls");
+	}
+	void Move() {
+		// ì´ë™í•˜ê¸°ë¥¼ ëˆ„ë¥¼ ì‹œ ì—ë„ˆì§€ ì ˆë°˜ ê°ì†Œ
+		// ìˆ˜ë¶„ ë°°ê³ í”” 20~40 ì‚¬ì´ì˜ ê°ì†Œ(randì´ìš©)
+		// position ë³€ê²½ -> ì—­ ì´ë¦„ì„ ì…ë ¥ ë°›ê³  -> forë¬¸ì„ ì´ìš©í•´ì„œ ì—­ ìœ„ì¹˜ int ì°¾ëŠ”ë‹¤. -> í˜„ì¬ ì—­ì€ ì§€ìš´ë‹¤ -> ë‹¤ìŒì—­ìœ¼ë¡œ ì´ë™
+		// ë³€ìˆ˜ë¥¼ ìƒˆë¡œ ì„ ì–¸í•´ì„œ í•œë²ˆ ì‚¬ìš©ì‹œ ëª‡ì¼ë™ì•ˆ ì´ìš© ë¶ˆê°€ëŠ¥ í•˜ê²Œ ë§Œë“ ë‹¤.
+		// ì´ë™í•˜ê¸° ì‚¬ìš´ë“œ ë„£ìœ¼ë©´ ì¢‹ì„ ë“¯
+		
+		// í™”ë©´ì— ë³´ì—¬ì§€ëŠ” ê·¸ë¦¼
+		cout << "\n\n\n\n\n\n";
+		cout << "\t\t\t\t\t\t         ï¼¯" << endl;
+		cout << "\t\t\t\t\t\t       ï½" << endl;
+		cout << "\t\t\t\t\t\t      Â°" << endl;
+		cout << "\t\t\t\t\t\t     â”³â”³ âˆ©âˆ©" << endl;
+		cout << "\t\t\t\t\t\t     â”ƒâ”ƒ(-âˆ€-)" << endl;
+		cout << "\t\t\t\t\t\t    â”â”»â”»â”·â” ï¼¯â”â”â”·â”“â”â”â”·â”“" << endl;
+		cout << "\t\t\t\t\t\t    â”ƒ ã€€ã€€ â” â”¨  â” â”¨  â”ƒ" << endl;
+		cout << "\t\t\t\t\t\t    â”ƒ ã€€ã€€ â” â”¨  â” â”¨  â”ƒ" << endl;
+		cout << "\t\t\t\t\t\t    â”—â—â”â”â—â”›â”—â—â”›â”—â—â”›" << endl;
+		cout << "\n\n\t\t\t\t\t\t     ";
+		const char* a = "ì´ ë™ ì¤‘ . . .";
+		textcolor(LIGHTMAGENTA, BLACK);
+		for (int j = 0; j < strlen(a); j++) {
+			Sleep(500);
+			cout << a[j];
+		}
+		textcolor(WHITE, BLACK);
+		Sleep(3000);
+		cout << "\n\n\n\n\n\n\n\n\n\n\n";
+		cout << "													ì´ë™ ì™„ë£Œ!!" << endl;
 		Sleep(3000);
 		system("cls");
 	}
 	bool DieCheck() {
 		bool answer = true;
-		if (water <= 10 || food <= 10 || energy <= 10) {		// 90% È®·ü·Î »ç¸Á
+		if (water <= 10 || food <= 10 || energy <= 10) {		// 90% í™•ë¥ ë¡œ ì‚¬ë§
 			if ((rand() % 99 + 1) < 90) answer = false;
 		}
-		else if (water <= 20 || food <= 20 || energy <= 20) {	// 70% È®·ü·Î »ç¸Á
+		else if (water <= 20 || food <= 20 || energy <= 20) {	// 70% í™•ë¥ ë¡œ ì‚¬ë§
 			if ((rand() % 99 + 1) < 70) answer = false;
 		}
-		else if (water <= 30 || food <= 30 || energy <= 30) {	// 65% È®·ü·Î »ç¸Á
+		else if (water <= 30 || food <= 30 || energy <= 30) {	// 65% í™•ë¥ ë¡œ ì‚¬ë§
 			if ((rand() % 99 + 1) < 65) answer = false;
 		}
 		return answer;
+	}
+	void ItemUse() {
+
 	}
 };

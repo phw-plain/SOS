@@ -18,6 +18,8 @@ int Menu();
 int Level();
 
 int main() {
+	/*User test(1);
+	test.play();*/
 	srand((unsigned)time(NULL));
 	int num = 0;
 	while (num != 3) {
