@@ -148,6 +148,9 @@
     <Media Include="alarm1.wav" />
     <Media Include="alarm2.wav" />
     <Media Include="main.wav" />
+    <Media Include="playbgm.wav" />
+    <Media Include="sleep.wav" />
+    <Media Include="subway.wav" />
     <Media Include="typing.wav" />
   </ItemGroup>
   <ItemGroup>

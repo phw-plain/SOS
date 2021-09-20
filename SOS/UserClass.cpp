@@ -26,6 +26,7 @@ private:
 	int food;		// 배고픔 수치
 	int energy;		// 에너지 수치
 	int money;		// 보유 돈
+	bool message;	// 메세지 여부
 
 	Item* item[12];		// 아이템
 	int position = 0;	// 현재 역 위치
@@ -49,25 +50,28 @@ public:
 		month = 2;							// 월
 		day = 13;							// 일
 		money = 10000;						// 보유 돈
+		message = true;
 	}
 	bool play() {
+		PlaySound(TEXT("playbgm.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 		while (s_day > 0) {
 			Phone();
 			char check = tolower(_getch());
+			PlaySound(NULL, 0, 0);
 			system("cls");
 			switch (check) {
 			case 'b': Bag(); break;
 			case 'm': Map(); break;
 			case '1': NextDay(); break;
 			case '2': Move(); break;
+				// 메세지 읽기 키도 만들어야 함!!!!!!!!!!!!
 			}
 			if (!DieCheck()) {
 				break;
 			}
-			// 수분 배고픔 에너지에 따른 사망 함수 구현
 		}
 		if (survive == day) return true;
-		else false;
+		else return false;
 	}
 	void Bag() {
 		string check[12] = { "--", "  ", "  " , "  " , "  " , "  " , "  " , "  " , "  " , "  " , "  " , "  " };
@@ -186,24 +190,32 @@ public:
 		cout << "	|   |________|     |________|	|" << endl;
 		cout << "	|				|" << endl;
 		cout << "	|				|" << endl;
-		cout << "	|   ---------  상태  ---------	|" << endl;
-		cout << "	|      수분	       " << water << "	|" << endl;
-		cout << "	|      배고픔          " << food << "	|" << endl;
-		cout << "	|      에너지          " << energy << "	|" << endl;
-		cout << "	|   ________________________	|" << endl;
-		cout << "	|				|" << endl;
-		cout << "	|				|" << endl;
-		cout << "	|   ________________________/|	|" << endl;
-		cout << "	|  |			     |	|" << endl;
-		if (survive < 10) cout << "	|  | " << survive << "일차,                  |	|" << endl;
-		else if (survive < 100) cout << "	|  | " << survive << "일차,                 |	|" << endl;
+		cout << "	|   ---------  상태  ---------	|";
+		if (message)cout << "\t\t         ∧＿∧";
+		cout << endl << "	|      수분	       " << water << "	|";
+		if (message)cout << "\t\t         ('ω')";
+		cout << endl << "	|      배고픔          " << food << "	|";
+		if (message)cout << "\t\t   ┏━━━━ ∪━ ∪━━━━┓";
+		cout << endl << "	|      에너지          " << energy << "	|";
+		if (message)cout << "\t\t   ┃ ＼　　　　 ／ ┃";
+		cout << endl << "	|   ________________________	|";
+		if (message)cout << "\t\t   ┃　 ＼　♡ ／   ┃";
+		cout << endl << "	|				|";
+		if (message)cout << "\t\t   ┃　／ ＼＿／ ＼ ┃";
+		cout << endl << "	|				|";
+		if (message)cout << "\t\t   ┗━━━━━━━━━━━━━━━┛";
+		cout << endl << "	|   ________________________/|	|" << endl;
+		cout << "	|  |			     |	|";
+		if (message)cout << "\t\t      메세지 도착!!";
+		if (survive < 10) cout << endl << "	|  | " << survive << "일차,                  |	|" << endl;
+		else if (survive < 100) cout << endl << "	|  | " << survive << "일차,                 |	|" << endl;
 		cout << "	|  | 언제쯤 나갈 수 있을까.. |	|" << endl;
 		cout << "	|  |_________________________|	|" << endl;
 		cout << "	|				|" << endl;
-		cout << "	|				|								[1] 취침 하기" << endl;
-		cout << "	|-------------------------------|								[2] 이동 하기" << endl;
-		cout << "	|	        ○		|								[B] 가방 열기" << endl;
-		cout << "	|_______________________________|								[M] 지도 열기" << endl;
+		cout << "	|				|							    [1] 취침 하기" << endl;
+		cout << "	|-------------------------------|							    [2] 이동 하기" << endl;
+		cout << "	|	        ○		|							    [B] 가방 열기" << endl;
+		cout << "	|_______________________________|							    [M] 지도 열기" << endl;
 	}
 	void NextDay() {
 		survive++;
@@ -232,8 +244,11 @@ public:
 		water -= (rand() % 19 + 1);
 		energy += 20;
 		if (energy > 100) energy = 100;
+		// message 여부
+		message = false;
 		// 화면에 보여지는 그림
 		cout << "\n\n\n\n\n\n";
+		PlaySound(TEXT("sleep.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 		cout << "\t\t\t\t\t\t∩――――∩" << endl;
 		cout << "\t\t\t\t\t\t|| ∧ ∧　||" << endl;
 		cout << "\t\t\t\t\t\t||(*´ -`)//" << endl;
@@ -245,14 +260,15 @@ public:
 		const char* a = "휴 식 중 . . .";
 		textcolor(LIGHTMAGENTA, BLACK);
 		for (int j = 0; j < strlen(a); j++) {
-			Sleep(500);
+			Sleep(400);
 			cout << a[j];
 		}
 		textcolor(WHITE, BLACK);
-		Sleep(3000);
+		Sleep(2000);
+		PlaySound(NULL, 0, 0);
 		cout << "\n\n\n\n\n\n\n\n\n\n\n";
 		cout << "													휴식 완료!!" << endl;
-		Sleep(3000);
+		Sleep(2000);
 		system("cls");
 	}
 	void Move() {
@@ -264,6 +280,7 @@ public:
 		
 		// 화면에 보여지는 그림
 		cout << "\n\n\n\n\n\n";
+		PlaySound(TEXT("subway.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 		cout << "\t\t\t\t\t\t         Ｏ" << endl;
 		cout << "\t\t\t\t\t\t       ｏ" << endl;
 		cout << "\t\t\t\t\t\t      °" << endl;
@@ -277,14 +294,15 @@ public:
 		const char* a = "이 동 중 . . .";
 		textcolor(LIGHTMAGENTA, BLACK);
 		for (int j = 0; j < strlen(a); j++) {
-			Sleep(500);
+			Sleep(400);
 			cout << a[j];
 		}
 		textcolor(WHITE, BLACK);
-		Sleep(3000);
+		Sleep(2000);
+		PlaySound(NULL, 0, 0);
 		cout << "\n\n\n\n\n\n\n\n\n\n\n";
 		cout << "													이동 완료!!" << endl;
-		Sleep(3000);
+		Sleep(2000);
 		system("cls");
 	}
 	bool DieCheck() {
