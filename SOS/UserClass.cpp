@@ -6,15 +6,44 @@ using namespace std;
 
 class Item {
 private:
-	int id;				// 아이템 번호
-	const char* name;	// 아이템 이름
 public:
 	static int cnt;		// 아이템 총 갯수
-	Item(int id, const char* name) : id(id), name(name) { cnt++; }
-	const char* getName() {
-		return name;
+	Item() {
+		cnt++; 
 	}
-
+	virtual int getCnt() {
+		return cnt;
+	}
+	// 순수 가상 함수 = 이름 출력
+	virtual string getName() = 0;
+};
+class Water : public Item {
+private:
+	static int cnt;
+public:
+	Water() {
+		cnt++;
+	}
+	int getCnt() {
+		return cnt;
+	}
+	string getName() {
+		return "생수";
+	}
+};
+class Food : public Item {
+private:
+	static int cnt;
+public:
+	Food() {
+		cnt++;
+	}
+	int getCnt() {
+		return cnt;
+	}
+	string getName() {
+		return "식량";
+	}
 };
 class User {
 private:
@@ -27,8 +56,9 @@ private:
 	int energy;		// 에너지 수치
 	int money;		// 보유 돈
 	bool message;	// 메세지 여부
-
 	Item* item[12];		// 아이템
+	
+
 	int position = 0;	// 현재 역 위치
 	string map[16] = {
 		"국화", "장미", "난초", "동백", "매화",
@@ -36,12 +66,11 @@ private:
 		"팬지", "백합", "철쭉", "수국", "카라",
 		"박하"
 	};
-	static int cnt;		// 무슨 의미??
-public:
+public:static bool bagpull[12];
 	User(int level) {
-		item[0] = new Item(1, "생수");
-		item[1] = new Item(1, "생수");
-		item[2] = new Item(1, "생수");
+		ItemAdd(1, 0);
+		ItemAdd(1, 1);
+		ItemAdd(2, 2);
 		food = 100 - ((level - 1) * 10);
 		water = 100 - ((level - 1) * 10);
 		energy = 100 - ((level - 1) * 10);
@@ -53,18 +82,18 @@ public:
 		message = true;
 	}
 	bool play() {
-		PlaySound(TEXT("playbgm.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 		while (s_day > 0) {
+			PlaySound(TEXT("playbgm.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 			Phone();
 			char check = tolower(_getch());
-			PlaySound(NULL, 0, 0);
 			system("cls");
+			PlaySound(NULL, 0, 0);
 			switch (check) {
-			case 'b': Bag(); break;
-			case 'm': Map(); break;
-			case '1': NextDay(); break;
-			case '2': Move(); break;
-				// 메세지 읽기 키도 만들어야 함!!!!!!!!!!!!
+				case 'b': Bag(); break;
+				case 'm': Map(); break;
+				case '1': NextDay(); break;
+				case '2': Move(); break;
+				case '3': Message(); break;
 			}
 			if (!DieCheck()) {
 				break;
@@ -74,21 +103,23 @@ public:
 		else return false;
 	}
 	void Bag() {
-		string check[12] = { "--", "  ", "  " , "  " , "  " , "  " , "  " , "  " , "  " , "  " , "  " , "  " };
+		string check[12] = { "--", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  " };
 		int key = 0, k = 0;
 		while (k != 13) {
 			cout << "	      ____" << endl;
 			cout << "	     / /＼＼" << endl;
 			cout << "____________/_/___＼＼___________" << endl;
 			cout << "|				|" << endl;
+			// 아이템 이름 출력
 			cout << "|";
 			for (int i = 0; i < 3; i++) {
-				if (i < Item::cnt)
+				if (bagpull[i])
 					cout << "     " << item[i]->getName();
 				else
 					cout << "        ";
 			}
 			cout << "\t|" << endl;
+			// 아이템 선택 창
 			cout << "|      ";
 			textcolor(LIGHTBLUE, BLACK);
 			cout << check[0] << "       " << check[1] << "       " << check[2];
@@ -98,7 +129,7 @@ public:
 			cout << "|				|" << endl;
 			cout << "|";
 			for (int i = 3; i < 6; i++) {
-				if (i < Item::cnt)
+				if (bagpull[i])
 					cout << "     " << item[i]->getName();
 				else
 					cout << "        ";
@@ -113,7 +144,7 @@ public:
 			cout << "|				|" << endl;
 			cout << "|";
 			for (int i = 6; i < 9; i++) {
-				if (i < Item::cnt)
+				if (bagpull[i])
 					cout << "     " << item[i]->getName();
 				else
 					cout << "        ";
@@ -128,7 +159,7 @@ public:
 			cout << "|				|" << endl;
 			cout << "|";
 			for (int i = 9; i < 12; i++) {
-				if (i < Item::cnt)
+				if (bagpull[i])
 					cout << "     " << item[i]->getName();
 				else
 					cout << "        ";
@@ -152,7 +183,7 @@ public:
 				check[--key] = "--";
 			}
 			else if (k == 13) {
-				ItemUse(); 
+				ItemUse(key); 
 				// 아이템 사용 미구현
 				// 해당 칸에 아이템이 있는 경우 -> 이벤트 발생 o
 				// 해당 칸에 아이템이 없는 경우 -> 이벤트 발생 x 다시 가방으로 ㄱㄱ
@@ -211,9 +242,9 @@ public:
 		else if (survive < 100) cout << endl << "	|  | " << survive << "일차,                 |	|" << endl;
 		cout << "	|  | 언제쯤 나갈 수 있을까.. |	|" << endl;
 		cout << "	|  |_________________________|	|" << endl;
-		cout << "	|				|" << endl;
 		cout << "	|				|							    [1] 취침 하기" << endl;
-		cout << "	|-------------------------------|							    [2] 이동 하기" << endl;
+		cout << "	|				|							    [2] 이동 하기" << endl;
+		cout << "	|-------------------------------|							    [3] 문자 읽기" << endl;
 		cout << "	|	        ○		|							    [B] 가방 열기" << endl;
 		cout << "	|_______________________________|							    [M] 지도 열기" << endl;
 	}
@@ -318,7 +349,40 @@ public:
 		}
 		return answer;
 	}
-	void ItemUse() {
-
+	void ItemAdd(int id, int k) {
+		// 아이템을 생성해주는 메소드
+		for (int i = 0; i < 12; i++) {
+			cout << "check" << !bagpull[i] << endl;
+			if (!bagpull[i]) {
+				switch (id) {
+				case 1: item[k] = new Water();
+					break;
+				case 2: item[k] = new Food();
+					break;
+				}
+				bagpull[i] = true;
+				break;
+			}
+			else {
+				cout << "가방 공간이 부족합니다." << endl;
+			}
+		}
+	}
+	void ItemUse(int key) {
+		// 아이템 사용 미구현
+		// 해당 칸에 아이템이 있는 경우 -> 이벤트 발생 o
+		// 해당 칸에 아이템이 없는 경우 -> 이벤트 발생 x 다시 가방으로 ㄱㄱ
+		// 이벤트는 [아이템이름]을 사용하시겠습니까?
+		// (O or X) O : 000증가 , x는 다시 가방으로 ㄱㄱ
+	}
+	void Message() {
+		if (message) {
+			cout << "메세지 출력 중 입니다." << endl;
+		}
+		else {
+			cout << "메세지가 존재하지 않습니다." << endl;
+		}
+		system("pause");
+		system("cls");
 	}
 };

@@ -9,8 +9,10 @@
 #pragma comment(lib,"winmm.lib")
 using namespace std;
 
+bool User::bagpull[12] = { false };
 int Item::cnt = 0;
-int User::cnt = 0;
+int Water::cnt = 0;
+int Food::cnt = 0;
 void Intro();
 void Rule();
 void GameOver();
@@ -18,8 +20,10 @@ int Menu();
 int Level();
 
 int main() {
-	/*User test(1);
-	test.play();*/
+	User test(1);
+	for(int i=0; i<12; i++)cout << test.bagpull[i] << " ";
+	cout << endl<<false << endl;
+	test.play();
 	srand((unsigned)time(NULL));
 	int num = 0;
 	while (num != 3) {
