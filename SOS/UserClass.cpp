@@ -275,8 +275,6 @@ public:static bool bagpull[12];
 		water -= (rand() % 19 + 1);
 		energy += 20;
 		if (energy > 100) energy = 100;
-		// message 여부
-		message = false;
 		// 화면에 보여지는 그림
 		cout << "\n\n\n\n\n\n";
 		PlaySound(TEXT("sleep.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
@@ -352,7 +350,6 @@ public:static bool bagpull[12];
 	void ItemAdd(int id, int k) {
 		// 아이템을 생성해주는 메소드
 		for (int i = 0; i < 12; i++) {
-			cout << "check" << !bagpull[i] << endl;
 			if (!bagpull[i]) {
 				switch (id) {
 				case 1: item[k] = new Water();
@@ -363,9 +360,7 @@ public:static bool bagpull[12];
 				bagpull[i] = true;
 				break;
 			}
-			else {
-				cout << "가방 공간이 부족합니다." << endl;
-			}
+			else { }
 		}
 	}
 	void ItemUse(int key) {
@@ -378,6 +373,7 @@ public:static bool bagpull[12];
 	void Message() {
 		if (message) {
 			cout << "메세지 출력 중 입니다." << endl;
+			message = false;
 		}
 		else {
 			cout << "메세지가 존재하지 않습니다." << endl;
