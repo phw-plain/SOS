@@ -6,10 +6,14 @@ using namespace std;
 
 class Item {
 private:
+	int id = 0;
 public:
 	static int cnt;		// 아이템 총 갯수
 	Item() {
 		cnt++; 
+	}
+	virtual int getId() {
+		return id;
 	}
 	virtual int getCnt() {
 		return cnt;
@@ -19,10 +23,14 @@ public:
 };
 class Water : public Item {
 private:
+	int id = 1;
 	static int cnt;
 public:
 	Water() {
 		cnt++;
+	}
+	int getId() {
+		return id;
 	}
 	int getCnt() {
 		return cnt;
@@ -33,10 +41,14 @@ public:
 };
 class Food : public Item {
 private:
+	int id = 2;
 	static int cnt;
 public:
 	Food() {
 		cnt++;
+	}
+	int getId() {
+		return id;
 	}
 	int getCnt() {
 		return cnt;
@@ -183,7 +195,8 @@ public:static bool bagpull[12];
 				check[--key] = "--";
 			}
 			else if (k == 13) {
-				ItemUse(key); 
+				if (bagpull[key])
+					ItemUse(key);
 				// 아이템 사용 미구현
 				// 해당 칸에 아이템이 있는 경우 -> 이벤트 발생 o
 				// 해당 칸에 아이템이 없는 경우 -> 이벤트 발생 x 다시 가방으로 ㄱㄱ
@@ -369,6 +382,23 @@ public:static bool bagpull[12];
 		// 해당 칸에 아이템이 없는 경우 -> 이벤트 발생 x 다시 가방으로 ㄱㄱ
 		// 이벤트는 [아이템이름]을 사용하시겠습니까?
 		// (O or X) O : 000증가 , x는 다시 가방으로 ㄱㄱ
+		cout << "아이템 사용하시겠습니까?" << endl;
+		system("pause");
+		switch (item[key]->getId()) {
+		case 1:
+			water += 10;
+			if (water >= 100) water = 100;
+			break;
+		case 2:
+			food += 10;
+			if (food >= 100) food = 100;
+			break;
+		}
+		delete item[key];
+		bagpull[key] = false;
+		
+		cout << "아이템이 사용되었습니다." << endl;
+		system("pause");
 	}
 	void Message() {
 		if (message) {
