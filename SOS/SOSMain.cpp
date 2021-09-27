@@ -20,7 +20,7 @@ int Menu();
 int Level();
 
 int main() {
-	User test(1);
+	User test;
 	test.play();
 	srand((unsigned)time(NULL));
 	int num = 0;
@@ -30,8 +30,9 @@ int main() {
 		case 1: {
 			system("cls");
 			Intro();
-			int level = Level();
-			User u(level);
+			//int level = Level();
+			//User u(level);
+			User u;
 			if (u.play()) {
 				GameOver();
 				system("pause");
@@ -265,20 +266,20 @@ int Menu() {
 	return num;
 }
 
-int Level() {
-	int level;
-	cout << "\n\n\n\n\n\n\n";
-	cout << "					           난이도 설정 " << endl;
-	cout << "					                   " << endl;
-	cout << "					            1. 쉬움    " << endl;
-	cout << "					            2. 보통    " << endl;
-	cout << "					            3. 어려움  " << endl;
-	cout << "					                   " << endl;
-	cout << "\n\n\n					         ☞  ";
-	cin >> level;
-	system("cls");
-	return level;
-}
+//int Level() {
+//	int level;
+//	cout << "\n\n\n\n\n\n\n";
+//	cout << "					           난이도 설정 " << endl;
+//	cout << "					                   " << endl;
+//	cout << "					            1. 쉬움    " << endl;
+//	cout << "					            2. 보통    " << endl;
+//	cout << "					            3. 어려움  " << endl;
+//	cout << "					                   " << endl;
+//	cout << "\n\n\n					         ☞  ";
+//	cin >> level;
+//	system("cls");
+//	return level;
+//}
 
 void Rule() {
 	cout << "		== 게임 플레이 방법 ==" << endl;
