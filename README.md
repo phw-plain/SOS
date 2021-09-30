@@ -6,4 +6,4 @@
 
 1. ZIP 파일 다운로드
 2. 압축해제
-3. Bingo > Debug > C++Project.exe 실행
+3. SOS > Debug > C++Project.exe 실행
