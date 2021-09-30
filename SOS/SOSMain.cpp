@@ -16,12 +16,13 @@ int Food::cnt = 0;
 void Intro();
 void Rule();
 void GameOver();
+void GameClear();
 int Menu();
-int Level();
+//int Level();
 
 int main() {
-	User test;
-	test.play();
+	//User test;
+	//test.play();
 	srand((unsigned)time(NULL));
 	int num = 0;
 	while (num != 3) {
@@ -35,11 +36,9 @@ int main() {
 			User u;
 			if (u.play()) {
 				GameOver();
-				system("pause");
 			}
 			else {
-				cout << "게임 클리어" << endl;
-				system("pause");
+				GameClear();
 			}
 			break;
 		}
@@ -303,7 +302,7 @@ void Rule() {
 }
 
 void GameOver() {
-	textcolor(LIGHTGREEN, BLACK);
+	textcolor(RED, BLACK);
 	cout << endl << endl;
 	cout << "               ■■■■■■■■          ■■■■■	      ■■    ■■         ■■■■■■■■" << endl;
 	cout << "               ■                     ■            ■      ■     ■     ■       ■" << endl;
@@ -322,4 +321,29 @@ void GameOver() {
 	cout << "               ■■■■■■■■           ■■■■          ■■■■■■■■       ■            ■" << endl;
 	cout << endl << endl << endl << endl << endl << endl << endl << endl;
 	textcolor(WHITE, BLACK);
+	system("pause");
+	system("cls");
+}
+void GameClear () {
+	textcolor(LIGHTGREEN, BLACK);
+	cout << endl << endl;
+	cout << "               ■■■■■■■■         ■■■■■           ■■    ■■         ■■■■■■■" << endl;
+	cout << "               ■                     ■          ■       ■     ■     ■       ■" << endl;
+	cout << "               ■                     ■          ■       ■     ■     ■       ■" << endl;
+	cout << "               ■      ■■■■       ■■■■■■■       ■     ■     ■       ■■■■■■■" << endl;
+	cout << "               ■            ■       ■          ■       ■     ■     ■       ■" << endl;
+	cout << "               ■            ■       ■          ■       ■     ■     ■       ■" << endl;
+	cout << "               ■■■■■■■■       ■          ■       ■     ■     ■       ■■■■■■■" << endl;
+	cout << endl << endl;
+	cout << "               ■■■■■■■   ■               ■■■■■■■     ■■■■■     ■■■■■■" << endl;
+	cout << "               ■               ■               ■               ■          ■   ■          ■" << endl;
+	cout << "               ■               ■               ■               ■          ■   ■          ■" << endl;
+	cout << "               ■               ■               ■■■■■■■   ■■■■■■■   ■■■■■■" << endl;
+	cout << "               ■               ■               ■               ■          ■   ■          ■" << endl;
+	cout << "               ■               ■               ■               ■          ■   ■          ■" << endl;
+	cout << "               ■■■■■■■   ■■■■■■■   ■■■■■■■   ■          ■   ■          ■" << endl;
+	cout << endl << endl << endl << endl << endl << endl << endl << endl;
+	textcolor(WHITE, BLACK);
+	system("pause");
+	system("cls");
 }

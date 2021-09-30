@@ -67,7 +67,6 @@ private:
 	int food;		// 배고픔 수치
 	int energy;		// 에너지 수치
 	int money;		// 보유 돈
-	bool message;	// 메세지 여부
 	Item* item[12];		// 아이템
 	
 	int limit;
@@ -77,6 +76,15 @@ private:
 		"모란역", "벚꽃역", "수련역", "안개역", "연꽃역",
 		"팬지역", "백합역", "철쭉역", "수국역", "카라역",
 		"박하역"
+	};
+
+	bool message;	// 메세지 여부
+	int m_key;
+	string messages[4] = {
+		"SOS 게임에 오신 것을 환영합니다.\n기본적으로 지급되는 생수와 식량 외에 더 많은 것을 얻고 싶다면 다른 곳으로 움직여야 할 것 입니다.\n당신이 죽음에 도달한다면 알려드리도록 하겠습니다.\n"
+		, "수분이 부족하여 위험 상태 입니다.\n빨리 생수를 섭취하지 않는다면 죽을 수도 있겠습니다."
+		, "배고픔이 부족하여 위험 상태 입니다.\n빨리 식량을 섭취하지 않는다면 죽을 수도 있겠습니다."
+		, "에너지가 부족하여 위험 상태 입니다.\n빨리 취침하지 않는다면 죽을 수도 있겠습니다."
 	};
 public:static bool bagpull[12];
 	//User(int level) {
@@ -93,28 +101,30 @@ public:static bool bagpull[12];
 		day = 13;							// 일
 		money = 10000;						// 보유 돈
 		message = true;
+		m_key = 0;
 		limit = 0;
 		position = 0;
 	}
 	bool play() {
 		while (s_day > 0) {
+			if(survive == 1) 
 			PlaySound(TEXT("playbgm.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 			char check = Phone();
-			
 			system("cls");
 			PlaySound(NULL, 0, 0);
 			switch (check) {
 				case 'q': Bag(); break;
 				case 'w': Map(); break;
 				case '1': NextDay(); break;
-				case '2': Message(); break;
+				case '2': Message(m_key); break;
 			}
+			addMessage();
 			if (!DieCheck()) {
 				break;
 			}
 		}
-		if (survive == day) return true;
-		else return false;
+		if (survive == day) return false;
+		else return true;
 	}
 	void Bag() {
 		string check[12] = { "--", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  " };
@@ -251,10 +261,14 @@ public:static bool bagpull[12];
 			}
 			cout << "-----" << endl;
 			cout << "\n\n현재 역 : " << map[position] << endl;
+			cout << "\n\n\n\n\n\n\n\n\n\n";
+			cout << "												Enter : 선택" << endl;
+			cout << "												←,→ : 이동" << endl;
+			cout << "												    X : 종료" << endl;
 			// 75 left 77 right
 			do {
-				k = _getch();
-			} while (k != 13 && k != 75 && k != 77);
+				k = toupper(_getch());
+			} while (k != 13 && k != 75 && k != 77 && k != 88);
 			if (k == 77 || k == 75) {
 				for (int i = 0; i < 16; i++) {
 					if (key[i]) {
@@ -271,13 +285,19 @@ public:static bool bagpull[12];
 					}
 				}
 			}
+			else if (k == 88) {
+				break;
+			}
 			system("cls");
 		}
-		for (int i = 0; i < 16; i++) {
-			if (key[i])
-				k = i;
+		system("cls");
+		if (k != 88) {
+			for (int i = 0; i < 16; i++) {
+				if (key[i])
+					k = i;
+			}
+			Move(map[k], k);
 		}
-		Move(map[k], k);
 	}
 	char Phone() {
 		cout << "	_________________________________							_________________" << endl;
@@ -371,79 +391,88 @@ public:static bool bagpull[12];
 			cout << a[j];
 		}
 		textcolor(WHITE, BLACK);
-		Sleep(2000);
+		Sleep(1000);
 		PlaySound(NULL, 0, 0);
 		cout << "\n\n\n\n\n\n\n\n\n\n\n";
 		cout << "													휴식 완료!!" << endl;
-		Sleep(2000);
+		Sleep(1000);
 		system("cls");
 	}
 	void Move(string map, int k) {
 		if(limit == 0){
-			char check;
+			int yn;
 			cout << map << " 으로 이동하시겠습니까?" << endl;
-			cout << "▶ ";
-			cin >> check;
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+			cout << "												Y : 시작" << endl;
+			cout << "												N : 취소" << endl;
 			// 이동 yn 구현 필요 
-			position = k;
-			// 몇일동안 이용 불가능
-			limit = 5;
-			// 하루 지남
-			survive++;
-			day++;
-			switch (month) {
-			case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-				if (day > 31) {
-					month++;
-					day = 1;
-				}
-				break;
-			case 4: case 6: case 9: case 11:
-				if (day > 30) {
-					month++;
-					day = 1;
-				}
-				break;
-			default:
-				if (day > 28) {
-					month++;
-					day = 1;
-				}
-			}
-			// 이동하기를 누를 시 에너지 절반 감소
-			// 수분 배고픔 20~40 감소, 에너지 30~40 감소(rand이용) 
-			food -= (rand() % 21 + 20);
-			water -= (rand() % 21 + 20);
-			energy -= (rand() % 11 + 30);
-			// 화면에 보여지는 그림
-			cout << "\n\n\n\n\n\n";
-			// 이동하기 사운드
-			PlaySound(TEXT("subway.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
-			cout << "\t\t\t\t\t\t         Ｏ" << endl;
-			cout << "\t\t\t\t\t\t       ｏ" << endl;
-			cout << "\t\t\t\t\t\t      °" << endl;
-			cout << "\t\t\t\t\t\t     ┳┳ ∩∩" << endl;
-			cout << "\t\t\t\t\t\t     ┃┃(-∀-)" << endl;
-			cout << "\t\t\t\t\t\t    ┏┻┻┷━ Ｏ┏━┷┓┏━┷┓" << endl;
-			cout << "\t\t\t\t\t\t    ┃ 　　 ┠┨  ┠┨  ┃" << endl;
-			cout << "\t\t\t\t\t\t    ┃ 　　 ┠┨  ┠┨  ┃" << endl;
-			cout << "\t\t\t\t\t\t    ┗◎━━◎┛┗◎┛┗◎┛" << endl;
-			cout << "\n\n\t\t\t\t\t\t     ";
-			const char* a = "이 동 중 . . .";
-			textcolor(LIGHTMAGENTA, BLACK);
-			for (int j = 0; j < strlen(a); j++) {
-				Sleep(400);
-				cout << a[j];
-			}
-			textcolor(WHITE, BLACK);
-			Sleep(2000);
-			PlaySound(NULL, 0, 0);
-			cout << "\n\n\n\n\n\n\n\n\n\n\n";
-			cout << "													이동 완료!!" << endl;
-			Sleep(2000);
+			do {
+				yn = tolower(_getch());
+			} while (yn != 121 && yn != 110);
 			system("cls");
-			// 최초 역 방문시 가판대 상점을 이용할 수 있음
-			Shop();
+			if (yn == 121) {
+				position = k;
+				// 몇일동안 이용 불가능
+				limit = 5;
+				// 하루 지남
+				survive++;
+				day++;
+				switch (month) {
+				case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+					if (day > 31) {
+						month++;
+						day = 1;
+					}
+					break;
+				case 4: case 6: case 9: case 11:
+					if (day > 30) {
+						month++;
+						day = 1;
+					}
+					break;
+				default:
+					if (day > 28) {
+						month++;
+						day = 1;
+					}
+				}
+				// 이동하기를 누를 시 에너지 절반 감소
+				// 수분 배고픔 20~40 감소, 에너지 30~40 감소(rand이용) 
+				food -= (rand() % 21 + 20);
+				water -= (rand() % 21 + 20);
+				energy -= (rand() % 11 + 30);
+				// 화면에 보여지는 그림
+				cout << "\n\n\n\n\n\n";
+				PlaySound(TEXT("subway.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
+				cout << "\t\t\t\t\t\t         Ｏ" << endl;
+				cout << "\t\t\t\t\t\t       ｏ" << endl;
+				cout << "\t\t\t\t\t\t      °" << endl;
+				cout << "\t\t\t\t\t\t     ┳┳ ∩∩" << endl;
+				cout << "\t\t\t\t\t\t     ┃┃(-∀-)" << endl;
+				cout << "\t\t\t\t\t\t    ┏┻┻┷━ Ｏ┏━┷┓┏━┷┓" << endl;
+				cout << "\t\t\t\t\t\t    ┃ 　　 ┠┨  ┠┨  ┃" << endl;
+				cout << "\t\t\t\t\t\t    ┃ 　　 ┠┨  ┠┨  ┃" << endl;
+				cout << "\t\t\t\t\t\t    ┗◎━━◎┛┗◎┛┗◎┛" << endl;
+				cout << "\n\n\t\t\t\t\t\t     ";
+				const char* a = "이 동 중 . . .";
+				textcolor(LIGHTMAGENTA, BLACK);
+				for (int j = 0; j < strlen(a); j++) {
+					Sleep(400);
+					cout << a[j];
+				}
+				textcolor(WHITE, BLACK);
+				Sleep(1000);
+				PlaySound(NULL, 0, 0);
+				cout << "\n\n\n\n\n\n\n\n\n\n\n";
+				cout << "													이동 완료!!" << endl;
+				Sleep(1000);
+				system("cls");
+				// 최초 역 방문시 가판대 상점을 이용할 수 있음
+				Shop();
+			}
+			else {
+				Map();
+			}
 		}
 		else {
 			cout << "이동하기를 사용하기까지 " << limit << "일 남았습니다." << endl;
@@ -485,11 +514,11 @@ public:static bool bagpull[12];
 		system("pause");
 		switch (item[key]->getId()) {
 		case 1:
-			water += 10;
+			water += 15;
 			if (water >= 100) water = 100;
 			break;
 		case 2:
-			food += 10;
+			food += 15;
 			if (food >= 100) food = 100;
 			break;
 		}
@@ -499,9 +528,21 @@ public:static bool bagpull[12];
 		cout << "아이템이 사용되었습니다." << endl;
 		system("pause");
 	}
-	void Message() {
+	void addMessage() {
+		if (water <= 40) {
+			m_key = 1;
+			message = true;
+		}
+		else if (food <= 40) {
+			m_key = 2;
+		}
+		else if (energy <= 40) {
+			m_key = 3;
+		}
+	}
+	void Message(int num) {
 		if (message) {
-			cout << "메세지 출력 중 입니다." << endl;
+			cout << messages[num] << endl;
 			message = false;
 		}
 		else {
@@ -511,7 +552,9 @@ public:static bool bagpull[12];
 		system("cls");
 	}
 	void Shop() {
-		int k = 0;
+		int k = 0, p = 0; 
+		string key[2] = { "  ", "  " };
+		key[p] = "◀";
 		while (k != 120) {
 			cout << "	┏━━━━━━━━━━━━━━━━━━━━━━┓" << endl;
 			cout << "	┃  다팔아 가판대       ┃" << endl;
@@ -520,8 +563,8 @@ public:static bool bagpull[12];
 			cout << "	  ┃┃　　 ∧＿∧　　 ┃┃" << endl;
 			cout << "	  ┗┛　　 ('ω')　   ┗┛" << endl;
 			cout << "	┏━━━━━━━━━━━━━━━━━━━━━━┓" << endl;
-			cout << "	┃  식량 2개	    ◀ ┃" << endl;
-			cout << "	┃  생수 2개	       ┃" << endl;
+			cout << "	┃  식량 2개	    " << key[0] << " ┃" << endl;
+			cout << "	┃  생수 2개	    " << key[1] << " ┃" << endl;
 			cout << "	┃         	       ┃" << endl;
 			cout << "	┗━━━━━━━━━━━━━━━━━━━━━━┛" << endl;
 			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
@@ -531,10 +574,19 @@ public:static bool bagpull[12];
 
 			// 72 Up 80 Down
 			do {
-				k = tolower(_getch());
+				k = toupper(_getch());
 			} while (k != 120 && k != 13 && k != 72 && k != 80);
 			// 이동 기능 구현 필요
+			if (p != 0 && k == 72) {
+				key[p] = "  ";
+				key[--p] = "◀";
+			}
+			else if (p != 1 && k == 80) {
+				key[p] = "  ";
+				key[++p] = "◀";
+			}
 			// 구매 기능 구현 필요
+			system("cls");
 		}
 		system("cls");
 	}
