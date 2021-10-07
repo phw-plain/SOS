@@ -67,6 +67,7 @@ private:
 	int food;		// 배고픔 수치
 	int energy;		// 에너지 수치
 	int money;		// 보유 돈
+	int state;	// 상태 변수
 	Item* item[12];		// 아이템
 	
 	int limit;
@@ -89,9 +90,9 @@ private:
 public:static bool bagpull[12];
 	//User(int level) {
 	User() {
-		ItemAdd(1, 0);
-		ItemAdd(1, 1);
-		ItemAdd(2, 2);
+		ItemAdd(1);
+		ItemAdd(1);
+		ItemAdd(2);
 		food = 100;
 		water = 100;
 		energy = 100;
@@ -99,11 +100,12 @@ public:static bool bagpull[12];
 		survive = 1;						// 생존한 날짜
 		month = 2;							// 월
 		day = 13;							// 일
-		money = 10000;						// 보유 돈
+		money = 100000;						// 보유 돈
 		message = true;
 		m_key = 0;
 		limit = 0;
 		position = 0;
+		state = 1;
 	}
 	bool play() {
 		while (s_day > 0) {
@@ -117,6 +119,7 @@ public:static bool bagpull[12];
 				case 'w': Map(); break;
 				case '1': NextDay(); break;
 				case '2': Message(m_key); break;
+				case '0': Shop(); break;
 			}
 			addMessage();
 			if (!DieCheck()) {
@@ -303,7 +306,22 @@ public:static bool bagpull[12];
 		cout << "	_________________________________							_________________" << endl;
 		cout << "	|	   			|							||　|∧,,∧	|" << endl;
 		cout << "	|-------------------------------|							||＿|*－ω-)	|" << endl;
-		cout << "	|	     20XX년  " << month << "월 " << day << "일	|							||  |ｏ♥ｏ	|" << endl;
+		cout << "	|";
+		switch (state) {
+		case 1: textcolor(LIGHTGREEN, BLACK);
+			break;
+		case 2: textcolor(LIGHTCYAN, BLACK);
+			break;
+		case 3: textcolor(LIGHTRED, BLACK);
+			break;
+		}
+		cout << "   ■";
+		textcolor(WHITE, BLACK);
+		cout << "	     20XX년  " << month << "월 " << day << "일	|							||  |ｏ";
+		textcolor(LIGHTRED, BLACK);
+		cout << "♥";
+		textcolor(WHITE, BLACK);
+		cout << "ｏ	|" << endl;
 		cout << "	|				|							||￣|━ J	|" << endl;
 		cout << "	|    ________       ________ 	|							|_______________|" << endl;
 		cout << "	|   |        |     |	    |	|"<< endl;
@@ -320,7 +338,11 @@ public:static bool bagpull[12];
 		cout << endl << "	|      에너지          " << energy << "	|";
 		if (message)cout << "\t\t   ┃ ＼　　　　 ／ ┃";
 		cout << endl << "	|   ________________________	|";
-		if (message)cout << "\t\t   ┃　 ＼　♡ ／   ┃";
+		if (message)cout << "\t\t   ┃　 ＼　";
+		textcolor(LIGHTRED, BLACK);
+		cout << "♡";
+		textcolor(WHITE, BLACK);
+		cout << " ／   ┃";
 		cout << endl << "	|				|";
 		if (message)cout << "\t\t   ┃　／ ＼＿／ ＼ ┃";
 		cout << endl << "	|				|";
@@ -387,7 +409,7 @@ public:static bool bagpull[12];
 		const char* a = "휴 식 중 . . .";
 		textcolor(LIGHTMAGENTA, BLACK);
 		for (int j = 0; j < strlen(a); j++) {
-			Sleep(400);
+			Sleep(300);
 			cout << a[j];
 		}
 		textcolor(WHITE, BLACK);
@@ -399,7 +421,7 @@ public:static bool bagpull[12];
 		system("cls");
 	}
 	void Move(string map, int k) {
-		if(limit == 0){
+		if(limit == 0 && k != position){
 			int yn;
 			cout << map << " 으로 이동하시겠습니까?" << endl;
 			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
@@ -457,7 +479,7 @@ public:static bool bagpull[12];
 				const char* a = "이 동 중 . . .";
 				textcolor(LIGHTMAGENTA, BLACK);
 				for (int j = 0; j < strlen(a); j++) {
-					Sleep(400);
+					Sleep(300);
 					cout << a[j];
 				}
 				textcolor(WHITE, BLACK);
@@ -474,6 +496,11 @@ public:static bool bagpull[12];
 				Map();
 			}
 		}
+		else if (k == position) {
+			cout << "현재역에서 현재 역으로 이동할 수 없습니다." << endl;
+			system("pause");
+			system("cls");
+		}
 		else {
 			cout << "이동하기를 사용하기까지 " << limit << "일 남았습니다." << endl;
 			system("pause");
@@ -482,32 +509,39 @@ public:static bool bagpull[12];
 	}
 	bool DieCheck() {
 		bool answer = true;
-		if (water <= 10 || food <= 10 || energy <= 10) {		// 90% 확률로 사망
-			if ((rand() % 99 + 1) < 90) answer = false;
+		if (water <= 10 || food <= 10 || energy <= 10) {		// 80% 확률로 사망
+			if ((rand() % 99 + 1) < 80) answer = false;
 		}
-		else if (water <= 20 || food <= 20 || energy <= 20) {	// 70% 확률로 사망
-			if ((rand() % 99 + 1) < 70) answer = false;
+		else if (water <= 20 || food <= 20 || energy <= 20) {	// 60% 확률로 사망
+			if ((rand() % 99 + 1) < 60) answer = false;
 		}
-		else if (water <= 30 || food <= 30 || energy <= 30) {	// 65% 확률로 사망
-			if ((rand() % 99 + 1) < 65) answer = false;
+		else if (water <= 30 || food <= 30 || energy <= 30) {	// 40% 확률로 사망
+			if ((rand() % 99 + 1) < 40) answer = false;
+			state = 3;
+		} else if (water <= 60 || food <= 60 || energy <= 60) {
+			state = 2;
+		} else {
+			state = 1;
 		}
 		return answer;
 	}
-	void ItemAdd(int id, int k) {
+	bool ItemAdd(int id) {
 		// 아이템을 생성해주는 메소드
-		for (int i = 0; i < 12; i++) {
+		int i;
+		for (i = 0; i < 12; i++) {
 			if (!bagpull[i]) {
 				switch (id) {
-				case 1: item[k] = new Water();
+				case 1: item[i] = new Water();
 					break;
-				case 2: item[k] = new Food();
+				case 2: item[i] = new Food();
 					break;
 				}
 				bagpull[i] = true;
 				break;
 			}
-			else { }
 		}
+		if (i == 12) return false;
+		return true;
 	}
 	void ItemUse(int key) {
 		cout << "아이템 사용하시겠습니까?" << endl;
@@ -563,8 +597,8 @@ public:static bool bagpull[12];
 			cout << "	  ┃┃　　 ∧＿∧　　 ┃┃" << endl;
 			cout << "	  ┗┛　　 ('ω')　   ┗┛" << endl;
 			cout << "	┏━━━━━━━━━━━━━━━━━━━━━━┓" << endl;
-			cout << "	┃  식량 2개	    " << key[0] << " ┃" << endl;
-			cout << "	┃  생수 2개	    " << key[1] << " ┃" << endl;
+			cout << "	┃  식량 1개	    " << key[0] << " ┃" << endl;
+			cout << "	┃  생수 1개	    " << key[1] << " ┃" << endl;
 			cout << "	┃         	       ┃" << endl;
 			cout << "	┗━━━━━━━━━━━━━━━━━━━━━━┛" << endl;
 			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
@@ -575,7 +609,7 @@ public:static bool bagpull[12];
 			// 72 Up 80 Down
 			do {
 				k = toupper(_getch());
-			} while (k != 120 && k != 13 && k != 72 && k != 80);
+			} while (k != 88 && k != 13 && k != 72 && k != 80);
 			// 이동 기능 구현 필요
 			if (p != 0 && k == 72) {
 				key[p] = "  ";
@@ -584,6 +618,34 @@ public:static bool bagpull[12];
 			else if (p != 1 && k == 80) {
 				key[p] = "  ";
 				key[++p] = "◀";
+			}
+			else if (k == 13) {
+				system("cls");
+				switch (p) {
+				case 0:
+					cout << "식량의 가격은 3,000원 입니다. 구매하시겠습니까?" << endl;
+					system("pause");
+					if (ItemAdd(2))
+						money -= 3000;
+					else {
+						cout << "가방 공간이 가득찼습니다. 더 이상 구매할 수 없습니다." << endl;
+						system("pause");
+					}
+					break;
+				case 1:
+					cout << "생수의 가격은 1,700원 입니다. 구매하시겠습니까?" << endl;
+					system("pause");
+					if (ItemAdd(1))
+						money -= 1700;
+					else {
+						cout << "가방 공간이 가득찼습니다. 더 이상 구매할 수 없습니다." << endl;
+						system("pause");
+					}
+					break;
+				}
+			}
+			else { // X를 누른 경우
+				break;
 			}
 			// 구매 기능 구현 필요
 			system("cls");

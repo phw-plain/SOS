@@ -4,10 +4,13 @@
 #include <conio.h>
 #include <mmsystem.h>
 #include <iomanip>
+#include <fstream>
+#include <string>
 #include "TextColor.h"		// 텍스트 컬러 소스 파일
 #include "UserClass.cpp"		// User 클래스 소스 파일
 #pragma comment(lib,"winmm.lib")
 using namespace std;
+
 
 bool User::bagpull[12] = { false, false, false, false, false, false, false, false, false, false, false, false };
 int Item::cnt = 0;
@@ -15,14 +18,34 @@ int Water::cnt = 0;
 int Food::cnt = 0;
 void Intro();
 void Rule();
+void Rank();
 void GameOver();
 void GameClear();
 int Menu();
 //int Level();
 
 int main() {
-	//User test;
-	//test.play();
+	// 파일 입출력
+	//ofstream WriteFile("Jumsu.txt"); // 파일 생성
+	//WriteFile << "300" << endl;
+	//WriteFile.close();
+	//string Jumsu; // 파일 내용
+	//ifstream ReadFile("Jumsu.txt");
+	//cout << "현재 점수 : ";
+	//while (getline(ReadFile, Jumsu)) {
+	//	cout << Jumsu << endl; // 파일 라인 단위로 출력
+
+	//}
+	//system("pause");
+	//system("cls");
+
+	User test;
+	if (test.play()) {
+		GameOver();
+	}
+	else {
+		GameClear();
+	}
 	srand((unsigned)time(NULL));
 	int num = 0;
 	while (num != 3) {
@@ -45,6 +68,11 @@ int main() {
 		case 2: {
 			system("cls");
 			Rule();
+			break;
+		}
+		case 3: {
+			system("cls");
+			Rank();
 			break;
 		}
 		}
@@ -218,7 +246,7 @@ void Intro() {
 	system("cls");
 }
 int Menu() {
-	char check[3] = { '>', ' ', ' ' };
+	char check[4] = { '>', ' ', ' ', ' ' };
 	int key = 0, k = 0;
 	PlaySound(TEXT("main.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	while (k != 13) { // 72 80
@@ -242,12 +270,13 @@ int Menu() {
 		cout << "					       		" << endl;
 		cout << "					         " << check[0] << "  게임 시작	" << endl;
 		cout << "					         " << check[1] << "  게임 방법	" << endl;
-		cout << "					         " << check[2] << "  게임 종료	" << endl;
+		cout << "					         " << check[2] << "  게임 랭킹	" << endl;
+		cout << "					         " << check[3] << "  게임 종료	" << endl;
 		cout << "					        ________________" << endl;
 		do {
 			k = _getch();
 		} while (k != 13 && k != 72 && k != 80);
-		if (key != 2 && k == 80) {
+		if (key != 3 && k == 80) {
 			check[key] = ' ';
 			check[++key] = '>';
 		}
@@ -258,7 +287,7 @@ int Menu() {
 		textcolor(WHITE, BLACK);
 	}
 	int num;
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		if (check[i] == '>') num = i + 1;
 	}
 	PlaySound(NULL, 0, 0);
@@ -284,7 +313,7 @@ void Rule() {
 	cout << "		== 게임 플레이 방법 ==" << endl;
 	cout << endl;
 	cout << "▶ 배고픔과 수분 에너지가 떨어지지 않게 잘 유지해야 합니다." << endl;
-	cout << "▶ 위 세가지는 쾌적, 양호, 최악으로 분류됩니다." << endl;
+	cout << "▶ 위 세가지는 쾌적(초록), 양호(주황), 최악(빨강)으로 분류됩니다." << endl;
 	cout << "▶ 상태가 양호인 경우에는 확률적으로 이동하기 기능을 사용할 수 없습니다." << endl;
 	cout << "▶ 상태가 최악인 경우에는 확률적으로 사망하며 게임 오버 됩니다." << endl;
 	cout << endl;
@@ -301,6 +330,27 @@ void Rule() {
 	_getch();
 }
 
+void Rank() {
+	textcolor(LIGHTGREEN, BLACK);
+	cout << endl << endl << endl;
+	cout << "		   ■■■■■■          ■■■■■        ■■        ■      ■          ■" << endl;
+	cout << "		   ■          ■      ■          ■      ■  ■      ■      ■          ■" << endl;
+	cout << "		   ■          ■      ■          ■      ■   ■     ■      ■        ■" << endl;
+	cout << "		   ■■■■■■        ■■■■■■■      ■    ■    ■      ■■■■■" << endl;
+	cout << "		   ■          ■      ■          ■      ■     ■   ■      ■        ■" << endl;
+	cout << "		   ■          ■      ■          ■      ■      ■  ■      ■          ■" << endl;
+	cout << "		   ■          ■      ■          ■      ■        ■■      ■          ■" << endl;
+	cout << endl << endl << endl;
+	cout << "					        ________________" << endl;
+	cout << "					       		" << endl;
+	cout << "					          " << 1 << ".  3:00:12	" << endl;
+	cout << "					          " << 2 << ".  4:20:47	" << endl;
+	cout << "					          " << 3 << ".  4:37:05	" << endl;
+	cout << "					        ________________" << endl;
+	textcolor(WHITE, BLACK);
+	system("pause");
+	system("cls");
+}
 void GameOver() {
 	textcolor(RED, BLACK);
 	cout << endl << endl;
