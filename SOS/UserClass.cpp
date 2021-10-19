@@ -70,7 +70,6 @@ private:
 	int state;	// 상태 변수
 	Item* item[12];		// 아이템
 	
-	int limit;
 	int position;	// 현재 역 위치
 	string map[16] = {
 		"국화역", "장미역", "난초역", "동백역", "매화역",
@@ -81,11 +80,26 @@ private:
 
 	bool message;	// 메세지 여부
 	int m_key;
-	string messages[4] = {
+	string messages[1] = {
 		"SOS 게임에 오신 것을 환영합니다.\n기본적으로 지급되는 생수와 식량 외에 더 많은 것을 얻고 싶다면 다른 곳으로 움직여야 할 것 입니다.\n당신이 죽음에 도달한다면 알려드리도록 하겠습니다.\n"
-		, "수분이 부족하여 위험 상태 입니다.\n빨리 생수를 섭취하지 않는다면 죽을 수도 있겠습니다."
-		, "배고픔이 부족하여 위험 상태 입니다.\n빨리 식량을 섭취하지 않는다면 죽을 수도 있겠습니다."
-		, "에너지가 부족하여 위험 상태 입니다.\n빨리 취침하지 않는다면 죽을 수도 있겠습니다."
+	};
+
+	bool quest;
+	int q_key;
+	string quests[2] = {
+		"퀘스트가 없습니다.	"
+		,"고영희의 생수 배달 심부름"
+	};
+
+	// 고영희 대화 내용
+	string talk1[7] = {									
+		"어 왔어?... 안그래도 언제 오려나 생각하고 있었어								"
+		, "넌 누구야??													"
+		, "나는 고영희라고 해, 너를 부른 이유는 부탁할게 있어서야								"
+		, "혹시 캣닢이라는 거에 대해 알고있니?										"
+		, "내가 가장 좋아하는건데 이곳에서는 구하기가 쉽지 않아...								"
+		, "혹시 캣닢을 본다면 소소한 보상을 해줄테니 나에게 꼭 가져다줬으면해!!						"
+		, "그래 알겠어													"
 	};
 public:static bool bagpull[12];
 	//User(int level) {
@@ -103,7 +117,8 @@ public:static bool bagpull[12];
 		money = 100000;						// 보유 돈
 		message = true;
 		m_key = 0;
-		limit = 0;
+		quest = false;
+		q_key = 0;
 		position = 0;
 		state = 1;
 	}
@@ -120,8 +135,14 @@ public:static bool bagpull[12];
 				case '1': NextDay(); break;
 				case '2': Message(m_key); break;
 				case '0': Shop(); break;
+				case '9': 
+					for(int i=0; i<7; i++)
+						if (i == 1 || i == 6) 
+							Talk(talk1[i], "  나  ");
+						else 
+							Talk(talk1[i], "고영희");
+					break;
 			}
-			addMessage();
 			if (!DieCheck()) {
 				break;
 			}
@@ -303,29 +324,29 @@ public:static bool bagpull[12];
 		}
 	}
 	char Phone() {
-		cout << "	_________________________________							_________________" << endl;
-		cout << "	|	   			|							||　|∧,,∧	|" << endl;
-		cout << "	|-------------------------------|							||＿|*－ω-)	|" << endl;
+		cout << "	_________________________________	_________________________________		_________________" << endl;
+		cout << "	|	   			|	|				|		||　|∧,,∧	|" << endl;
+		cout << "	|-------------------------------|	|				|		||＿|*－ω-)	|" << endl;
 		cout << "	|";
 		switch (state) {
 		case 1: textcolor(LIGHTGREEN, BLACK);
 			break;
-		case 2: textcolor(LIGHTCYAN, BLACK);
+		case 2: textcolor(YELLOW, BLACK);
 			break;
 		case 3: textcolor(LIGHTRED, BLACK);
 			break;
 		}
 		cout << "   ■";
 		textcolor(WHITE, BLACK);
-		cout << "	     20XX년  " << month << "월 " << day << "일	|							||  |ｏ";
+		cout << "	     20XX년  " << month << "월 " << day << "일	|	| " << quests[q_key] << "	|		||  |ｏ";
 		textcolor(LIGHTRED, BLACK);
 		cout << "♥";
 		textcolor(WHITE, BLACK);
 		cout << "ｏ	|" << endl;
-		cout << "	|				|							||￣|━ J	|" << endl;
-		cout << "	|    ________       ________ 	|							|_______________|" << endl;
-		cout << "	|   |        |     |	    |	|"<< endl;
-		cout << "	|   |  가방  |     |  지도  |	|							보유 돈 : " << money << endl;
+		cout << "	|				|	|				|		||￣|━ J	|" << endl;
+		cout << "	|    ________       ________ 	|	|_____________________________  |		|_______________|" << endl;
+		cout << "	|   |        |     |	    |	|				      ＼|"<< endl;
+		cout << "	|   |  가방  |     |  지도  |	|				    Quest		보유 돈 : " << money << endl;
 		cout << "	|   |________|     |________|	|" << endl;
 		cout << "	|				|" << endl;
 		cout << "	|				|" << endl;
@@ -338,12 +359,14 @@ public:static bool bagpull[12];
 		cout << endl << "	|      에너지          " << energy << "	|";
 		if (message)cout << "\t\t   ┃ ＼　　　　 ／ ┃";
 		cout << endl << "	|   ________________________	|";
-		if (message)cout << "\t\t   ┃　 ＼　";
-		textcolor(LIGHTRED, BLACK);
-		cout << "♡";
-		textcolor(WHITE, BLACK);
-		cout << " ／   ┃";
-		cout << endl << "	|				|";
+		if (message) {
+			cout << "\t\t   ┃　 ＼　";
+			textcolor(LIGHTRED, BLACK);
+			cout << "♡";
+			textcolor(WHITE, BLACK);
+			cout << " ／   ┃";
+			cout << endl << "	|				|";
+		}
 		if (message)cout << "\t\t   ┃　／ ＼＿／ ＼ ┃";
 		cout << endl << "	|				|";
 		if (message)cout << "\t\t   ┗━━━━━━━━━━━━━━━┛";
@@ -362,7 +385,7 @@ public:static bool bagpull[12];
 		char check;
 		do {
 			check = tolower(_getch());
-		} while (check != '1' && check != '2' && check != 'w' && check != 'q');
+		} while (check != '1' && check != '2' && check != 'w' && check != 'q' && check != '9');
 		return check;
 	}
 	void NextDay() {
@@ -393,8 +416,6 @@ public:static bool bagpull[12];
 		energy += 20;
 		// 에너지 증가
 		if (energy > 100) energy = 100;
-		// 이동 제한 하루 씩 감소
-		if (limit != 0) limit--;
 		// 화면에 보여지는 그림
 		cout << "\n\n\n\n\n\n";
 		PlaySound(TEXT("sleep.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
@@ -421,7 +442,12 @@ public:static bool bagpull[12];
 		system("cls");
 	}
 	void Move(string map, int k) {
-		if(limit == 0 && k != position){
+		int cnt = 0;
+		for (int i = position; i!=k; i++) {
+			if (i == 15) i = 0;
+			cnt++;
+		}
+		if (cnt <= 5 && energy >= 80 && k != position) {
 			int yn;
 			cout << map << " 으로 이동하시겠습니까?" << endl;
 			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
@@ -434,8 +460,6 @@ public:static bool bagpull[12];
 			system("cls");
 			if (yn == 121) {
 				position = k;
-				// 몇일동안 이용 불가능
-				limit = 5;
 				// 하루 지남
 				survive++;
 				day++;
@@ -469,7 +493,7 @@ public:static bool bagpull[12];
 				cout << "\t\t\t\t\t\t         Ｏ" << endl;
 				cout << "\t\t\t\t\t\t       ｏ" << endl;
 				cout << "\t\t\t\t\t\t      °" << endl;
-				cout << "\t\t\t\t\t\t     ┳┳ ∩∩" << endl;
+				cout << "\t\t\t\t\t\t     ┳┳ ∧∧" << endl;
 				cout << "\t\t\t\t\t\t     ┃┃(-∀-)" << endl;
 				cout << "\t\t\t\t\t\t    ┏┻┻┷━ Ｏ┏━┷┓┏━┷┓" << endl;
 				cout << "\t\t\t\t\t\t    ┃ 　　 ┠┨  ┠┨  ┃" << endl;
@@ -497,28 +521,33 @@ public:static bool bagpull[12];
 			}
 		}
 		else if (k == position) {
-			cout << "현재역에서 현재 역으로 이동할 수 없습니다." << endl;
+			cout << "현재 " << map << "에 있으므로 이동할 수 없습니다." << endl;
 			system("pause");
 			system("cls");
 		}
-		else {
-			cout << "이동하기를 사용하기까지 " << limit << "일 남았습니다." << endl;
+		else if (cnt > 5) {
+			cout << "한 번에 이동할 수 있는 역의 범위를 넘어갔습니다. [이동 불가]" << endl;
+			system("pause");
+			system("cls");
+		}
+		else if(energy < 80){
+			cout << "현재 이동하기를 사용할 수 있는 상태가 아닙니다. 충분한 휴식을 취한 후 다시 이동하기를 사용하세요." << endl;
 			system("pause");
 			system("cls");
 		}
 	}
 	bool DieCheck() {
 		bool answer = true;
-		if (water <= 10 || food <= 10 || energy <= 10) {		// 80% 확률로 사망
-			if ((rand() % 99 + 1) < 80) answer = false;
+		if (water <= 10 || food <= 10 || energy <= 10) {		// 90% 확률로 사망
+			if ((rand() % 99 + 1) <= 90) answer = false;
 		}
-		else if (water <= 20 || food <= 20 || energy <= 20) {	// 60% 확률로 사망
-			if ((rand() % 99 + 1) < 60) answer = false;
+		else if (water <= 20 || food <= 20 || energy <= 20) {	// 50% 확률로 사망
+			if ((rand() % 99 + 1) <= 50) answer = false;
 		}
-		else if (water <= 30 || food <= 30 || energy <= 30) {	// 40% 확률로 사망
-			if ((rand() % 99 + 1) < 40) answer = false;
+		else if (water <= 30 || food <= 30 || energy <= 30) {	// 20% 확률로 사망
+			if ((rand() % 99 + 1) <= 20) answer = false;
 			state = 3;
-		} else if (water <= 60 || food <= 60 || energy <= 60) {
+		} else if (water <= 50 || food <= 50 || energy <= 50) {
 			state = 2;
 		} else {
 			state = 1;
@@ -561,18 +590,6 @@ public:static bool bagpull[12];
 		
 		cout << "아이템이 사용되었습니다." << endl;
 		system("pause");
-	}
-	void addMessage() {
-		if (water <= 40) {
-			m_key = 1;
-			message = true;
-		}
-		else if (food <= 40) {
-			m_key = 2;
-		}
-		else if (energy <= 40) {
-			m_key = 3;
-		}
 	}
 	void Message(int num) {
 		if (message) {
@@ -650,6 +667,58 @@ public:static bool bagpull[12];
 			// 구매 기능 구현 필요
 			system("cls");
 		}
+		system("cls");
+	}
+	void Talk(string str, string name) {
+		cout << endl << endl << endl << endl << endl << endl << endl;
+		if(name == "고영희"){
+			cout << "						　　　　　　　　　　　  　;' ':;,,　　　　       ,;'':;," << endl;
+			cout << "						　　　　　　　　　　　   ;'　　 ':;,.,.,.,.,.,,,;'　　';," << endl;
+			cout << "						      　　　　　　　　 ,:'　　　　　　　　 　   ::::::::" << endl;
+			cout << "						         　　　　　　,:' ／ 　 　　　　＼ 　　   ::::::::'," << endl;
+			cout << "						　             　　 :'　 ●　　　　　 ●　 　　    ::::::::" << endl;
+			cout << "						　　  　　　　　　　i　 '''　(__人__)　　'''' 　　  :::::::::" << endl;
+			cout << "						　　　　  　　　　　 :　 　　　　　　　　　 　     ::::::::" << endl;
+			cout << "						　　　　　　　　　　　`:,  　　　　　 　 　     ::::::::::" << endl;
+			cout << "						　　　　  　　　　　　 ,:'　　　　　　　    : :::::::::::::" << endl;
+			cout << "						　　　　　　　 　　 ,:'　　　　　　　　        : : ::::::::::" << endl;
+		}
+		else if (name == "  나  ") {
+			cout << "	　  　,;'':;, 　　　　       ,;'':;," << endl;
+			cout << "	　　 ;'　　 ':;,.,.,.,.,.,,,;'　　 ';," << endl;
+			cout << "	　 ,:'　　　　　　　　 　            ':," << endl;
+			cout << "	  ,:'                   　　           ':," << endl;
+			cout << "	 :'　         __           __           ':" << endl;
+			cout << "	 i　                    　　             i" << endl;
+			cout << "	  :　 　*　 　　　　ㅅ  　       *      :" << endl;
+			cout << "	   `:,  　　　　　 　 　             ,:`" << endl;
+			cout << "	   ,:'　　　　　　　                ':," << endl;
+			cout << "	,:'　　　　　　　　                    ':," << endl;
+		}
+		if (name == "  나  ") {
+			cout << " __________" << endl;
+			cout << "|  " << name << "  |" << endl;
+			cout << "|__________|____________________________________________________________________________________________________________" << endl;
+
+		}
+		else {
+			cout << "													     __________" << endl;
+			cout << "													    |  " << name << "  |" << endl;
+			cout << "____________________________________________________________________________________________________________|__________|" << endl;
+		}
+		cout << "|															|" << endl;
+		cout << "|	" << str << "|" << endl;
+		cout << "|															|" << endl;
+		cout << "|															|" << endl;
+		cout << "|															|" << endl;
+		cout << "|															|" << endl;
+		cout << "|															|" << endl;
+		cout << "|															|" << endl;
+		cout << "|______________________________________________________________________________________________________________________|" << endl;
+		char yn;
+		do {
+			yn = tolower(_getch());
+		} while (yn != 13); // 13은 Enter 
 		system("cls");
 	}
 };
