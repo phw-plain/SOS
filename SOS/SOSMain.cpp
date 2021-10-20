@@ -25,6 +25,37 @@ int Menu();
 //int Level();
 
 int main() {
+	cout << "				_________________________________________________________" << endl;
+	cout << "				|		  					|" << endl;
+	cout << "				|-------------------------------------------------------|" << endl;
+	//cout << "	|	     20XX년  " << month << "월 " << day << "일	|	| ";
+	cout << "				|				 20XX년  " << 12 << "월 " << 25 << "일	|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|	SOS 관리자 				■	|" << endl;
+	cout << "				|	__________________________________________	|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|	???					■	|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	cout << "				|							|" << endl;
+	system("pause");
 	// 파일 입출력
 	//ofstream WriteFile("Jumsu.txt"); // 파일 생성
 	//WriteFile << "300" << endl;

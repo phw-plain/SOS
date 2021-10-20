@@ -86,9 +86,9 @@ private:
 
 	bool quest;
 	int q_key;
-	string quests[2] = {
-		"퀘스트가 없습니다.	"
-		,"고영희의 생수 배달 심부름"
+	int q_cnt;
+	string quests[1] = {
+		"고영희의 생수 배달 심부름"
 	};
 
 	// 고영희 대화 내용
@@ -119,6 +119,7 @@ public:static bool bagpull[12];
 		m_key = 0;
 		quest = false;
 		q_key = 0;
+		q_cnt = 0;
 		position = 0;
 		state = 1;
 	}
@@ -338,7 +339,10 @@ public:static bool bagpull[12];
 		}
 		cout << "   ■";
 		textcolor(WHITE, BLACK);
-		cout << "	     20XX년  " << month << "월 " << day << "일	|	| " << quests[q_key] << "	|		||  |ｏ";
+		cout << "	     20XX년  " << month << "월 " << day << "일	|	| ";
+		if(quest) cout << quests[q_key];
+		else cout << "퀘스트가 없습니다.	";
+		cout<< "	|		||  |ｏ";
 		textcolor(LIGHTRED, BLACK);
 		cout << "♥";
 		textcolor(WHITE, BLACK);
@@ -442,12 +446,16 @@ public:static bool bagpull[12];
 		system("cls");
 	}
 	void Move(string map, int k) {
-		int cnt = 0;
-		for (int i = position; i!=k; i++) {
-			if (i == 15) i = 0;
-			cnt++;
+		int cnt1 = 0, cnt2 = 0;
+		for (int i = position; i != k; i++) {
+			if (i == 15) i = -1;
+			cnt1++;
 		}
-		if (cnt <= 5 && energy >= 80 && k != position) {
+		for (int i = position; i != k; i--) {
+			if (i == 0) i = 16;
+			cnt2++;
+		}
+		if (cnt1 <= 5 || cnt2 <= 5 && energy >= 80 && k != position) {
 			int yn;
 			cout << map << " 으로 이동하시겠습니까?" << endl;
 			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
@@ -525,7 +533,7 @@ public:static bool bagpull[12];
 			system("pause");
 			system("cls");
 		}
-		else if (cnt > 5) {
+		else if (cnt1 > 5 || cnt2 > 5) {
 			cout << "한 번에 이동할 수 있는 역의 범위를 넘어갔습니다. [이동 불가]" << endl;
 			system("pause");
 			system("cls");
@@ -593,11 +601,69 @@ public:static bool bagpull[12];
 	}
 	void Message(int num) {
 		if (message) {
-			cout << messages[num] << endl;
+			// 메세지 선택 보기 기능 추가하기 bool타입 변수 대신 cnt로 0개가 아니면 보여주기
+			cout << "				_________________________________________________________" << endl;
+			cout << "				|		  					|" << endl;
+			cout << "				|-------------------------------------------------------|" << endl;
+			//cout << "	|	     20XX년  " << month << "월 " << day << "일	|	| ";
+			cout << "				|				 20XX년  " << 12 << "월 " << 25 << "일	|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|	SOS 관리자 				■	|" << endl;
+			cout << "				|	__________________________________________	|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|	???					■	|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
 			message = false;
 		}
 		else {
-			cout << "메세지가 존재하지 않습니다." << endl;
+			cout << "				_________________________________________________________" << endl;
+			cout << "				|    						|" << endl;
+			cout << "				|-------------------------------------------------------|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|		메세지가 존재하지 않습니다.		|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
 		}
 		system("pause");
 		system("cls");
