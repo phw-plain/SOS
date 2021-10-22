@@ -80,8 +80,14 @@ private:
 
 	bool message;	// 메세지 여부
 	int m_key;
-	string messages[1] = {
-		"SOS 게임에 오신 것을 환영합니다.\n기본적으로 지급되는 생수와 식량 외에 더 많은 것을 얻고 싶다면 다른 곳으로 움직여야 할 것 입니다.\n당신이 죽음에 도달한다면 알려드리도록 하겠습니다.\n"
+	int m_cnt;
+	string m_name[2] = {
+		"SOS 운영자"
+		,"고영희	"
+	};
+	string messages[2] = {
+		"SOS 게임에 오신 것을 환영합니다.\n기본적으로 지급되는 생수와 식량 외에 더 많은 것을 얻고 싶다면 다른 곳으로 움직여야 할 것 입니다.\n그럼 행운을 빕니다.\n\n※ 한번 본 메세지는 더 이상 확인할 수 없습니다."
+		,"안녕? 혹시 시간이 된다면 동백역으로 와줘 너에게도 도움이 될 거야"
 	};
 
 	bool quest;
@@ -115,8 +121,8 @@ public:static bool bagpull[12];
 		month = 2;							// 월
 		day = 13;							// 일
 		money = 100000;						// 보유 돈
-		message = true;
 		m_key = 0;
+		m_cnt = 2;
 		quest = false;
 		q_key = 0;
 		q_cnt = 0;
@@ -137,6 +143,7 @@ public:static bool bagpull[12];
 				case '2': Message(m_key); break;
 				case '0': Shop(); break;
 				case '9': 
+					Talk("아...안녕??						", "햄스타");
 					for(int i=0; i<7; i++)
 						if (i == 1 || i == 6) 
 							Talk(talk1[i], "  나  ");
@@ -600,44 +607,67 @@ public:static bool bagpull[12];
 		system("pause");
 	}
 	void Message(int num) {
-		if (message) {
-			// 메세지 선택 보기 기능 추가하기 bool타입 변수 대신 cnt로 0개가 아니면 보여주기
-			cout << "				_________________________________________________________" << endl;
-			cout << "				|		  					|" << endl;
-			cout << "				|-------------------------------------------------------|" << endl;
-			//cout << "	|	     20XX년  " << month << "월 " << day << "일	|	| ";
-			cout << "				|				 20XX년  " << 12 << "월 " << 25 << "일	|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|	SOS 관리자 				■	|" << endl;
-			cout << "				|	__________________________________________	|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|	???					■	|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			message = false;
+		if (m_cnt > 0) {
+			string check[8] = { "■", "□", "□", "□", "□", "□", "□", "□" };
+			int key = 0, k = 0;
+			while (k != 88) {
+				system("cls");
+				cout << "				_________________________________________________________" << endl;
+				cout << "				|		  					|" << endl;
+				cout << "				|-------------------------------------------------------|" << endl;
+				cout << "				|				 20XX년  " << month << "월 " << day << "일	| " << endl;
+				cout << "				|							|" << endl;
+				for (int i = 0; i < 8; i++) {
+					if (i < m_cnt) {
+						if (i != 7) {
+							if (i != 0)
+								cout << "				|	__________________________________________	|" << endl;
+							cout << "				|							|" << endl;
+							cout << "				|	" << m_name[i] << " 				" << check[i] << "	|" << endl;
+						}
+						else {
+							cout << "				|	__________________________________________	|		Enter : 선택" << endl;
+							cout << "				|							|		↑,↓ : 이동" << endl;
+							cout << "				|	" << m_name[i] << " 				" << check[i] << "	|		X : 종료" << endl;
+						} 
+					}
+					else if (i == 7){
+						cout << "				|							|		Enter : 선택" << endl;
+						cout << "				|							|		↑,↓ : 이동" << endl;
+						cout << "				|							|		    X : 종료" << endl;
+					}
+					else {
+						cout << "				|							|" << endl;
+						cout << "				|							|" << endl;
+						cout << "				|							|" << endl;
+					}
+					
+				}
+				do {
+					k = toupper(_getch());
+				} while (k != 13 && k != 72 && k != 80 && k != 88);
+				if (key != (m_cnt-1) && k == 80) {
+					check[key] = "□";
+					check[++key] = "■";
+				}
+				else if (key != 0 && k == 72) {
+					check[key] = "□";
+					check[--key] = "■";
+				}
+				else if (k == 13) {
+					system("cls");
+					cout << messages[key] << endl;
+					_getch();
+					m_cnt--;
+				}
+			}
 		}
 		else {
+			int k = 0;
 			cout << "				_________________________________________________________" << endl;
-			cout << "				|    						|" << endl;
+			cout << "				|    							|" << endl;
 			cout << "				|-------------------------------------------------------|" << endl;
+			cout << "				|				 20XX년  " << month << "월 " << day << "일	| " << endl;
 			cout << "				|							|" << endl;
 			cout << "				|							|" << endl;
 			cout << "				|							|" << endl;
@@ -662,10 +692,11 @@ public:static bool bagpull[12];
 			cout << "				|							|" << endl;
 			cout << "				|							|" << endl;
 			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
-			cout << "				|							|" << endl;
+			cout << "				|							|		    X : 종료" << endl;
+			do {
+				k = toupper(_getch());
+			} while (k != 88);
 		}
-		system("pause");
 		system("cls");
 	}
 	void Shop() {
@@ -748,6 +779,16 @@ public:static bool bagpull[12];
 			cout << "						　　　　　　　　　　　`:,  　　　　　 　 　     ::::::::::" << endl;
 			cout << "						　　　　  　　　　　　 ,:'　　　　　　　    : :::::::::::::" << endl;
 			cout << "						　　　　　　　 　　 ,:'　　　　　　　　        : : ::::::::::" << endl;
+		}
+		else if (name == "햄스타") {
+			cout << endl << endl << endl;
+			cout << "						　　　　　　　　　　　  　 　 　|``--,...　　　　　``　＊ |" << endl;
+			cout << "						　　　　　　　　　　　  　　  　i  ＼　　　　　　　　　 ／:;" << endl;
+			cout << "						　　　　　　　　　　　  　　    ミ　　　　 　　　　　　    ミ" << endl;
+			cout << "						　　　　　　　　　　　  　　   〉 　　　　●　　.　　●　　　ミ" << endl;
+			cout << "						　　　　　　　　　　　  　　   ミ　 　 ``　　　人　　　　　 ミ" << endl;
+			cout << "						　　　　　　　　　　　  　  　ミ :　　　　　 　　　　 　　　  ミ" << endl;
+			cout << "						　　　　　　　　　　　  　  ,I:　　　　　　　つ♣⌒　　        :I," << endl;
 		}
 		else if (name == "  나  ") {
 			cout << "	　  　,;'':;, 　　　　       ,;'':;," << endl;

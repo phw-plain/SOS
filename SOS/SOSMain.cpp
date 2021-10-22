@@ -25,37 +25,8 @@ int Menu();
 //int Level();
 
 int main() {
-	cout << "				_________________________________________________________" << endl;
-	cout << "				|		  					|" << endl;
-	cout << "				|-------------------------------------------------------|" << endl;
-	//cout << "	|	     20XX년  " << month << "월 " << day << "일	|	| ";
-	cout << "				|				 20XX년  " << 12 << "월 " << 25 << "일	|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|	SOS 관리자 				■	|" << endl;
-	cout << "				|	__________________________________________	|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|	???					■	|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	cout << "				|							|" << endl;
-	system("pause");
+	
+
 	// 파일 입출력
 	//ofstream WriteFile("Jumsu.txt"); // 파일 생성
 	//WriteFile << "300" << endl;
@@ -344,9 +315,9 @@ void Rule() {
 	cout << "		== 게임 플레이 방법 ==" << endl;
 	cout << endl;
 	cout << "▶ 배고픔과 수분 에너지가 떨어지지 않게 잘 유지해야 합니다." << endl;
-	cout << "▶ 위 세가지는 쾌적(초록), 양호(주황), 최악(빨강)으로 분류됩니다." << endl;
-	cout << "▶ 상태가 양호인 경우에는 확률적으로 이동하기 기능을 사용할 수 없습니다." << endl;
-	cout << "▶ 상태가 최악인 경우에는 확률적으로 사망하며 게임 오버 됩니다." << endl;
+	cout << "▶ 위 세가지는 쾌적(초록), 양호(노랑), 최악(빨강)으로 분류됩니다." << endl;
+	cout << "▶ 상태가 최악인 경우에는 이동하기 기능을 사용할 수 없습니다." << endl;
+	cout << "▶ 또한 확률적으로 사망하며 게임 오버 됩니다." << endl;
 	cout << endl;
 	cout << "<이동하기>" << endl;
 	cout << "▶ 이동하기를 통해서 다른 역으로 이동할 수 있습니다." << endl;
@@ -356,8 +327,10 @@ void Rule() {
 	cout << "<조작키>" << endl;
 	cout << "Enter, 다음 장면으로 넘어갈 수 있다." << endl;
 	cout << "S, 인트로 진행 도중 스킵할 수 있다." << endl;
-	cout << "B, 가방 : 아이템을 확인할 수 있다." << endl;
-	cout << "M, 지도 : 지하철 노선을 볼 수 있다." << endl;
+	cout << "1, 취침하기 : 다음날로 넘어갈 수 있다." << endl;
+	cout << "2, 문자보기 : 도착한 메세지를 확인할 수 있다." << endl;
+	cout << "Q, 가방 : 아이템을 확인할 수 있다." << endl;
+	cout << "W, 지도 : 지하철 노선을 볼 수 있다." << endl;
 	_getch();
 }
 
