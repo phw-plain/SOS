@@ -137,7 +137,8 @@ public:static bool bagpull[12];
 			system("cls");
 			PlaySound(NULL, 0, 0);
 			switch (check) {
-				case 'q': Bag(); break;
+				case 'e': Bag(); break;
+				case 'q': Quest(); break;
 				case 'w': Map(); break;
 				case '1': NextDay(); break;
 				case '2': Message(m_key); break;
@@ -161,13 +162,14 @@ public:static bool bagpull[12];
 	void Bag() {
 		string check[12] = { "--", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  " };
 		int key = 0, k = 0;
-		while (k != 13) {
-			cout << "	      ____" << endl;
-			cout << "	     / /＼＼" << endl;
-			cout << "____________/_/___＼＼___________" << endl;
-			cout << "|				|" << endl;
+		while (k != 88) {
+			cout << "\n\n\n";
+			cout << "						      ____" << endl;
+			cout << "						     / /＼＼" << endl;
+			cout << "					____________/_/___＼＼___________" << endl;
+			cout << "					|				|" << endl;
 			// 아이템 이름 출력
-			cout << "|";
+			cout << "					|";
 			for (int i = 0; i < 3; i++) {
 				if (bagpull[i])
 					cout << "     " << item[i]->getName();
@@ -176,14 +178,14 @@ public:static bool bagpull[12];
 			}
 			cout << "\t|" << endl;
 			// 아이템 선택 창
-			cout << "|      ";
+			cout << "					|      ";
 			textcolor(LIGHTBLUE, BLACK);
 			cout << check[0] << "       " << check[1] << "       " << check[2];
 			textcolor(WHITE, BLACK);
 			cout << "	|" << endl;
-			cout << "|_______________________________|" << endl;
-			cout << "|				|" << endl;
-			cout << "|";
+			cout << "					|_______________________________|" << endl;
+			cout << "					|				|" << endl;
+			cout << "					|";
 			for (int i = 3; i < 6; i++) {
 				if (bagpull[i])
 					cout << "     " << item[i]->getName();
@@ -191,14 +193,14 @@ public:static bool bagpull[12];
 					cout << "        ";
 			}
 			cout << "\t|" << endl;
-			cout << "|      ";
+			cout << "					|      ";
 			textcolor(LIGHTBLUE, BLACK);
 			cout << check[3] << "       " << check[4] << "       " << check[5];
 			textcolor(WHITE, BLACK);
 			cout << "	|" << endl;
-			cout << "|_______________________________|" << endl;
-			cout << "|				|" << endl;
-			cout << "|";
+			cout << "					|_______________________________|" << endl;
+			cout << "					|				|" << endl;
+			cout << "					|";
 			for (int i = 6; i < 9; i++) {
 				if (bagpull[i])
 					cout << "     " << item[i]->getName();
@@ -206,14 +208,14 @@ public:static bool bagpull[12];
 					cout << "        ";
 			}
 			cout << "\t|" << endl;
-			cout << "|      ";
+			cout << "					|      ";
 			textcolor(LIGHTBLUE, BLACK);
 			cout << check[6] << "       " << check[7] << "       " << check[8];
 			textcolor(WHITE, BLACK);
 			cout << "	|" << endl;
-			cout << "|_______________________________|" << endl;
-			cout << "|				|" << endl;
-			cout << "|";
+			cout << "					|_______________________________|" << endl;
+			cout << "					|				|" << endl;
+			cout << "					|";
 			for (int i = 9; i < 12; i++) {
 				if (bagpull[i])
 					cout << "     " << item[i]->getName();
@@ -221,15 +223,19 @@ public:static bool bagpull[12];
 					cout << "        ";
 			}
 			cout << "\t|" << endl;
-			cout << "|      ";
+			cout << "					|      ";
 			textcolor(LIGHTBLUE, BLACK);
 			cout << check[9] << "       " << check[10] << "       " << check[11];
 			textcolor(WHITE, BLACK);
 			cout << "	|" << endl;
-			cout << "|_______________________________|" << endl;
+			cout << "					|_______________________________|" << endl;
+			cout << "\n\n\n\n";
+			cout << "												Enter : 선택" << endl;
+			cout << "												←,→ : 이동" << endl;
+			cout << "												    X : 종료" << endl;
 			do {
-				k = _getch();
-			} while (k != 13 && k != 75 && k != 77);
+				k = toupper(_getch());
+			} while (k != 13 && k != 75 && k != 77 && k != 88);
 			if (key != 11 && k == 77) {
 				check[key] = "  ";
 				check[++key] = "--";
@@ -252,7 +258,7 @@ public:static bool bagpull[12];
 		int k = 0;
 		while (k != 13) {
 			cout << "\n\n\n";
-			cout << "   ------";
+			cout << "		   ------";
 			if (key[0]) textcolor(MAGENTA, BLACK);
 			cout << map[0];
 			textcolor(WHITE, BLACK);
@@ -263,25 +269,25 @@ public:static bool bagpull[12];
 				textcolor(WHITE, BLACK);
 			}
 			cout << "-----" << endl;
-			cout << "   |										    |" << endl;
-			cout << "   |										    |" << endl;
+			cout << "		   |										    |" << endl;
+			cout << "		   |										    |" << endl;
 			if (key[15]) textcolor(MAGENTA, BLACK);
-			cout << map[15] << "										  ";
+			cout << "		" <<  map[15] << "										  ";
 			textcolor(WHITE, BLACK);
 			if (key[6]) textcolor(MAGENTA, BLACK);
 			cout << map[6] << "" << endl;
 			textcolor(WHITE, BLACK);
-			cout << "   |										    |" << endl;
-			cout << "   |										    |" << endl;
+			cout << "		   |										    |" << endl;
+			cout << "		   |										    |" << endl;
 			if (key[14]) textcolor(MAGENTA, BLACK);
-			cout << map[14] << "										  ";
+			cout << "		" << map[14] << "										  ";
 			textcolor(WHITE, BLACK);
 			if (key[7]) textcolor(MAGENTA, BLACK);
 			cout << map[7] << endl;
 			textcolor(WHITE, BLACK);
-			cout << "   |										    |" << endl;
-			cout << "   |										    |" << endl;
-			cout << "   ------";
+			cout << "		   |										    |" << endl;
+			cout << "		   |										    |" << endl;
+			cout << "		   ------";
 			if (key[13]) textcolor(MAGENTA, BLACK);
 			cout << map[13];
 			textcolor(WHITE, BLACK);
@@ -292,7 +298,7 @@ public:static bool bagpull[12];
 				textcolor(WHITE, BLACK);
 			}
 			cout << "-----" << endl;
-			cout << "\n\n현재 역 : " << map[position] << endl;
+			cout << "\n\n		   현재 역 : " << map[position] << endl;
 			cout << "\n\n\n\n\n\n\n\n\n\n";
 			cout << "												Enter : 선택" << endl;
 			cout << "												←,→ : 이동" << endl;
@@ -388,15 +394,15 @@ public:static bool bagpull[12];
 		else if (survive < 100) cout << endl << "	|  | " << survive << "일차,                 |	|" << endl;
 		cout << "	|  | 언제쯤 나갈 수 있을까.. |	|" << endl;
 		cout << "	|  |_________________________|	|" << endl;
-		cout << "	|				|" << endl;
 		cout << "	|				|							    [1] 취침 하기" << endl;
-		cout << "	|-------------------------------|							    [2] 문자 읽기" << endl;
-		cout << "	|	        ○		|							    [Q] 가방 열기" << endl;
-		cout << "	|_______________________________|							    [W] 지도 열기" << endl;
+		cout << "	|				|							    [2] 문자 읽기" << endl;
+		cout << "	|-------------------------------|							    [Q] 퀘스트보기" << endl;
+		cout << "	|	        ○		|							    [W] 지도 열기" << endl;
+		cout << "	|_______________________________|							    [E] 가방 열기" << endl;
 		char check;
 		do {
 			check = tolower(_getch());
-		} while (check != '1' && check != '2' && check != 'w' && check != 'q' && check != '9');
+		} while (check != '1' && check != '2' && check != 'q' && check != 'w' && check != 'q' && check != '9'); // test용 9는 나중에 지워야 함
 		return check;
 	}
 	void NextDay() {
@@ -463,9 +469,10 @@ public:static bool bagpull[12];
 			cnt2++;
 		}
 		if (cnt1 <= 5 || cnt2 <= 5 && energy >= 80 && k != position) {
-			int yn;
+			int yn; system("cls");
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t";
 			cout << map << " 으로 이동하시겠습니까?" << endl;
-			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 			cout << "												Y : 시작" << endl;
 			cout << "												N : 취소" << endl;
 			// 이동 yn 구현 필요 
@@ -588,23 +595,35 @@ public:static bool bagpull[12];
 		return true;
 	}
 	void ItemUse(int key) {
-		cout << "아이템 사용하시겠습니까?" << endl;
-		system("pause");
-		switch (item[key]->getId()) {
-		case 1:
-			water += 15;
-			if (water >= 100) water = 100;
-			break;
-		case 2:
-			food += 15;
-			if (food >= 100) food = 100;
-			break;
+		system("cls");
+		cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t";
+		cout << item[key]->getName() << "아이템 사용하시겠습니까?" << endl;
+		cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+		cout << "												Y : 시작" << endl;
+		cout << "												N : 취소" << endl;
+		int k;
+		do {
+			k = toupper(_getch());
+		} while (k != 89 && k != 78);
+		if (k == 89) {
+			system("cls");
+			cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t   ";
+			switch (item[key]->getId()) {
+			case 1:
+				cout << "수분 15 상승" << endl;
+				water += 15;
+				if (water >= 100) water = 100;
+				break;
+			case 2:
+				cout << "배고픔 15 상승" << endl;
+				food += 15;
+				if (food >= 100) food = 100;
+				break;
+			}
+			delete item[key];
+			bagpull[key] = false;
+			Sleep(1000);
 		}
-		delete item[key];
-		bagpull[key] = false;
-		
-		cout << "아이템이 사용되었습니다." << endl;
-		system("pause");
 	}
 	void Message(int num) {
 		if (m_cnt > 0) {
@@ -765,6 +784,9 @@ public:static bool bagpull[12];
 			system("cls");
 		}
 		system("cls");
+	}
+	void Quest() {
+		cout << "현재 진행중인 퀘스트 " << q_cnt << "개" << endl;
 	}
 	void Talk(string str, string name) {
 		cout << endl << endl << endl << endl << endl << endl << endl;
