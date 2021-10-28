@@ -13,9 +13,8 @@ using namespace std;
 
 
 bool User::bagpull[12] = { false, false, false, false, false, false, false, false, false, false, false, false };
-int Item::cnt = 0;
-int Water::cnt = 0;
-int Food::cnt = 0;
+bool User::m_pull[8] = { false, false, false, false, false, false, false, false };
+int Messages::cnt = 0;
 void Intro();
 void Rule();
 void Rank();

@@ -8,15 +8,8 @@ class Item {
 private:
 	int id = 0;
 public:
-	static int cnt;		// 아이템 총 갯수
-	Item() {
-		cnt++; 
-	}
 	virtual int getId() {
 		return id;
-	}
-	virtual int getCnt() {
-		return cnt;
 	}
 	// 순수 가상 함수 = 이름 출력
 	virtual string getName() = 0;
@@ -24,16 +17,9 @@ public:
 class Water : public Item {
 private:
 	int id = 1;
-	static int cnt;
 public:
-	Water() {
-		cnt++;
-	}
 	int getId() {
 		return id;
-	}
-	int getCnt() {
-		return cnt;
 	}
 	string getName() {
 		return "생수";
@@ -42,23 +28,38 @@ public:
 class Food : public Item {
 private:
 	int id = 2;
-	static int cnt;
 public:
-	Food() {
-		cnt++;
-	}
 	int getId() {
 		return id;
-	}
-	int getCnt() {
-		return cnt;
 	}
 	string getName() {
 		return "식량";
 	}
 };
+class Messages {
+private:
+	string name;
+	string text;
+public:
+	static int cnt;
+	Messages(string name, string text) : name(name), text(text) {
+		cnt++;
+	}
+	string getName() {
+		return name;
+	}
+	string getText() {
+		return text;
+	}
+	~Messages() {
+
+		cnt--;
+	}
+};
+
 class User {
 private:
+	bool life;
 	int month;		// 월
 	int day;		// 일
 	int s_day;		// 생존 해야 하는 일자
@@ -67,27 +68,16 @@ private:
 	int food;		// 배고픔 수치
 	int energy;		// 에너지 수치
 	int money;		// 보유 돈
-	int state;	// 상태 변수
-	Item* item[12];		// 아이템
-	
+	int state;		// 상태 변수
+	Messages* message[8];	// 메세지
+	Item* item[12];			// 아이템
+
 	int position;	// 현재 역 위치
 	string map[16] = {
 		"국화역", "장미역", "난초역", "동백역", "매화역",
 		"모란역", "벚꽃역", "수련역", "안개역", "연꽃역",
 		"팬지역", "백합역", "철쭉역", "수국역", "카라역",
 		"박하역"
-	};
-
-	bool message;	// 메세지 여부
-	int m_key;
-	int m_cnt;
-	string m_name[2] = {
-		"SOS 운영자"
-		,"고영희	"
-	};
-	string messages[2] = {
-		"SOS 게임에 오신 것을 환영합니다.\n기본적으로 지급되는 생수와 식량 외에 더 많은 것을 얻고 싶다면 다른 곳으로 움직여야 할 것 입니다.\n그럼 행운을 빕니다.\n\n※ 한번 본 메세지는 더 이상 확인할 수 없습니다."
-		,"안녕? 혹시 시간이 된다면 동백역으로 와줘 너에게도 도움이 될 거야"
 	};
 
 	bool quest;
@@ -107,12 +97,17 @@ private:
 		, "혹시 캣닢을 본다면 소소한 보상을 해줄테니 나에게 꼭 가져다줬으면해!!						"
 		, "그래 알겠어													"
 	};
-public:static bool bagpull[12];
+public:
+	static bool bagpull[12];
+	static bool m_pull[8];
 	//User(int level) {
 	User() {
+		MessageAdd("SOS 운영자", "SOS 게임에 오신 것을 환영합니다.\n기본적으로 지급되는 생수와 식량 외에 더 많은 것을 얻고 싶다면 다른 곳으로 움직여야 할 것 입니다.\n그럼 행운을 빕니다.\n\n※ 한번 본 메세지는 더 이상 확인할 수 없습니다.");
+		MessageAdd("고영희	", "안녕? 혹시 시간이 된다면 동백역으로 와줘 너에게도 도움이 될 거야");
 		ItemAdd(1);
 		ItemAdd(1);
 		ItemAdd(2);
+		life = true;						// 생존여부
 		food = 100;
 		water = 100;
 		energy = 100;
@@ -121,8 +116,6 @@ public:static bool bagpull[12];
 		month = 2;							// 월
 		day = 13;							// 일
 		money = 100000;						// 보유 돈
-		m_key = 0;
-		m_cnt = 2;
 		quest = false;
 		q_key = 0;
 		q_cnt = 0;
@@ -131,7 +124,6 @@ public:static bool bagpull[12];
 	}
 	bool play() {
 		while (s_day > 0) {
-			if(survive == 1) 
 			PlaySound(TEXT("playbgm.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 			char check = Phone();
 			system("cls");
@@ -141,7 +133,7 @@ public:static bool bagpull[12];
 				case 'q': Quest(); break;
 				case 'w': Map(); break;
 				case '1': NextDay(); break;
-				case '2': Message(m_key); break;
+				case '2': Message(); break;
 				case '0': Shop(); break;
 				case '9': 
 					Talk("아...안녕??						", "햄스타");
@@ -152,7 +144,7 @@ public:static bool bagpull[12];
 							Talk(talk1[i], "고영희");
 					break;
 			}
-			if (!DieCheck()) {
+			if (!life) {
 				break;
 			}
 		}
@@ -368,15 +360,15 @@ public:static bool bagpull[12];
 		cout << "	|				|" << endl;
 		cout << "	|				|" << endl;
 		cout << "	|   ---------  상태  ---------	|";
-		if (message)cout << "\t\t         ∧＿∧";
+		if (Messages::cnt != 0)cout << "\t\t         ∧＿∧";
 		cout << endl << "	|      수분	       " << water << "	|";
-		if (message)cout << "\t\t         ('ω')";
+		if (Messages::cnt != 0)cout << "\t\t         ('ω')";
 		cout << endl << "	|      배고픔          " << food << "	|";
-		if (message)cout << "\t\t   ┏━━━━ ∪━ ∪━━━━┓";
+		if (Messages::cnt != 0)cout << "\t\t   ┏━━━━ ∪━ ∪━━━━┓";
 		cout << endl << "	|      에너지          " << energy << "	|";
-		if (message)cout << "\t\t   ┃ ＼　　　　 ／ ┃";
+		if (Messages::cnt != 0)cout << "\t\t   ┃ ＼　　　　 ／ ┃";
 		cout << endl << "	|   ________________________	|";
-		if (message) {
+		if (Messages::cnt != 0) {
 			cout << "\t\t   ┃　 ＼　";
 			textcolor(LIGHTRED, BLACK);
 			cout << "♡";
@@ -384,12 +376,12 @@ public:static bool bagpull[12];
 			cout << " ／   ┃";
 			cout << endl << "	|				|";
 		}
-		if (message)cout << "\t\t   ┃　／ ＼＿／ ＼ ┃";
+		if (Messages::cnt != 0)cout << "\t\t   ┃　／ ＼＿／ ＼ ┃";
 		cout << endl << "	|				|";
-		if (message)cout << "\t\t   ┗━━━━━━━━━━━━━━━┛";
+		if (Messages::cnt != 0)cout << "\t\t   ┗━━━━━━━━━━━━━━━┛";
 		cout << endl << "	|   ________________________/|	|" << endl;
 		cout << "	|  |			     |	|";
-		if (message)cout << "\t\t      메세지 도착!!";
+		if (Messages::cnt != 0)cout << "\t\t      메세지 도착!!";
 		if (survive < 10) cout << endl << "	|  | " << survive << "일차,                  |	|" << endl;
 		else if (survive < 100) cout << endl << "	|  | " << survive << "일차,                 |	|" << endl;
 		cout << "	|  | 언제쯤 나갈 수 있을까.. |	|" << endl;
@@ -402,7 +394,7 @@ public:static bool bagpull[12];
 		char check;
 		do {
 			check = tolower(_getch());
-		} while (check != '1' && check != '2' && check != 'q' && check != 'w' && check != 'q' && check != '9'); // test용 9는 나중에 지워야 함
+		} while (check != '1' && check != '2' && check != 'q' && check != 'w' && check != 'e' && check != '9'); // test용 9는 나중에 지워야 함
 		return check;
 	}
 	void NextDay() {
@@ -433,6 +425,8 @@ public:static bool bagpull[12];
 		energy += 20;
 		// 에너지 증가
 		if (energy > 100) energy = 100;
+		// 생존 여부
+		life = DieCheck();
 		// 화면에 보여지는 그림
 		cout << "\n\n\n\n\n\n";
 		PlaySound(TEXT("sleep.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
@@ -468,7 +462,7 @@ public:static bool bagpull[12];
 			if (i == 0) i = 16;
 			cnt2++;
 		}
-		if (cnt1 <= 5 || cnt2 <= 5 && energy >= 80 && k != position) {
+		if ((cnt1 <= 5 || cnt2 <= 5) && state != 3 && k != position) {
 			int yn; system("cls");
 			cout << "\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t";
 			cout << map << " 으로 이동하시겠습니까?" << endl;
@@ -509,6 +503,8 @@ public:static bool bagpull[12];
 				food -= (rand() % 21 + 20);
 				water -= (rand() % 21 + 20);
 				energy -= (rand() % 11 + 30);
+				// 생존 여부
+				life = DieCheck();
 				// 화면에 보여지는 그림
 				cout << "\n\n\n\n\n\n";
 				PlaySound(TEXT("subway.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
@@ -547,16 +543,17 @@ public:static bool bagpull[12];
 			system("pause");
 			system("cls");
 		}
-		else if (cnt1 > 5 || cnt2 > 5) {
+		else if (state == 3) {
+			cout << "현재 이동하기를 사용할 수 있는 상태가 아닙니다." << endl;
+			system("pause");
+			system("cls");
+		}
+		else {
 			cout << "한 번에 이동할 수 있는 역의 범위를 넘어갔습니다. [이동 불가]" << endl;
 			system("pause");
 			system("cls");
 		}
-		else if(energy < 80){
-			cout << "현재 이동하기를 사용할 수 있는 상태가 아닙니다. 충분한 휴식을 취한 후 다시 이동하기를 사용하세요." << endl;
-			system("pause");
-			system("cls");
-		}
+		
 	}
 	bool DieCheck() {
 		bool answer = true;
@@ -625,47 +622,69 @@ public:static bool bagpull[12];
 			Sleep(1000);
 		}
 	}
-	void Message(int num) {
-		if (m_cnt > 0) {
+	void MessageAdd(string name, string text) {
+		int i;
+		for (i = 0; i < 8; i++) {
+			if (!m_pull[i]) {
+				message[i] = new Messages(name, text);
+				m_pull[i] = true;
+				break;
+			}
+		}
+		// 메시지 함이 꽉 찼다는 경고 문구를 출력하는 부분 만들기
+	}
+	void MessageUse(int idx) {
+		cout << message[idx]->getText() << endl;
+		_getch();
+		m_pull[idx] = false;
+		delete message[idx];
+	}
+	void Message() {
+		if (Messages::cnt != 0) {
 			string check[8] = { "■", "□", "□", "□", "□", "□", "□", "□" };
 			int key = 0, k = 0;
-			while (k != 88) {
+			while (Messages::cnt != 0 && k != 88) {
 				system("cls");
+				int p = -1;
+				int ps[8];
 				cout << "				_________________________________________________________" << endl;
 				cout << "				|		  					|" << endl;
 				cout << "				|-------------------------------------------------------|" << endl;
 				cout << "				|				 20XX년  " << month << "월 " << day << "일	| " << endl;
 				cout << "				|							|" << endl;
 				for (int i = 0; i < 8; i++) {
-					if (i < m_cnt) {
+					if (m_pull[i]) {
+						p++;
 						if (i != 7) {
-							if (i != 0)
+							if (p != 0)
 								cout << "				|	__________________________________________	|" << endl;
 							cout << "				|							|" << endl;
-							cout << "				|	" << m_name[i] << " 				" << check[i] << "	|" << endl;
+							cout << "				|	" << message[i]->getName() << " 				" << check[p] << "	|" << endl;
 						}
 						else {
 							cout << "				|	__________________________________________	|		Enter : 선택" << endl;
 							cout << "				|							|		↑,↓ : 이동" << endl;
-							cout << "				|	" << m_name[i] << " 				" << check[i] << "	|		X : 종료" << endl;
-						} 
+							cout << "				|	" << message[i]->getName() << " 				" << check[p] << "	|			X : 종료" << endl;
+						}
+						ps[p] = i;
 					}
-					else if (i == 7){
+				}
+				for (int i = p+1; i < 8; i++) {
+					if (i != 7) {
+						cout << "				|							|" << endl;
+						cout << "				|							|" << endl;
+						cout << "				|							|" << endl;
+					}
+					else {
 						cout << "				|							|		Enter : 선택" << endl;
 						cout << "				|							|		↑,↓ : 이동" << endl;
 						cout << "				|							|		    X : 종료" << endl;
 					}
-					else {
-						cout << "				|							|" << endl;
-						cout << "				|							|" << endl;
-						cout << "				|							|" << endl;
-					}
-					
 				}
 				do {
 					k = toupper(_getch());
 				} while (k != 13 && k != 72 && k != 80 && k != 88);
-				if (key != (m_cnt-1) && k == 80) {
+				if (key != (Messages::cnt - 1) && k == 80) {
 					check[key] = "□";
 					check[++key] = "■";
 				}
@@ -675,13 +694,13 @@ public:static bool bagpull[12];
 				}
 				else if (k == 13) {
 					system("cls");
-					cout << messages[key] << endl;
-					_getch();
-					m_cnt--;
+					MessageUse(ps[key]);
+					check[key] = "□";
+					check[0] = "■";
 				}
 			}
 		}
-		else {
+		if(Messages::cnt == 0) {
 			int k = 0;
 			cout << "				_________________________________________________________" << endl;
 			cout << "				|    							|" << endl;
@@ -787,6 +806,8 @@ public:static bool bagpull[12];
 	}
 	void Quest() {
 		cout << "현재 진행중인 퀘스트 " << q_cnt << "개" << endl;
+		system("pause");
+		system("cls");
 	}
 	void Talk(string str, string name) {
 		cout << endl << endl << endl << endl << endl << endl << endl;
