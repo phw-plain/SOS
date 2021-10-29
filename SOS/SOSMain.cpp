@@ -14,7 +14,9 @@ using namespace std;
 
 bool User::bagpull[12] = { false, false, false, false, false, false, false, false, false, false, false, false };
 bool User::m_pull[8] = { false, false, false, false, false, false, false, false };
+bool User::q_pull[8] = { false, false, false, false, false, false, false, false };
 int Messages::cnt = 0;
+int Quests::cnt = 0;
 void Intro();
 void Rule();
 void Rank();
@@ -49,10 +51,12 @@ int main() {
 	}
 	srand((unsigned)time(NULL));
 	int num = 0;
-	while (num != 3) {
+	PlaySound(TEXT("main.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
+	while (num != 4) {
 		num = Menu();
 		switch (num) {
 		case 1: {
+			PlaySound(NULL, 0, 0);
 			system("cls");
 			Intro();
 			//int level = Level();
@@ -65,6 +69,7 @@ int main() {
 				GameClear();
 			}
 			break;
+			PlaySound(TEXT("main.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 		}
 		case 2: {
 			system("cls");
@@ -98,7 +103,6 @@ void Intro() {
 	char yn;
 
 	for (int i = 0; i < sizeof(story) / sizeof(char*); i++) {
-		
 		switch (i) {
 		case 0: {
 			cout << "\n\n\n\n\n\n\n\n\n\n\n" << "			              ";
@@ -249,7 +253,6 @@ void Intro() {
 int Menu() {
 	char check[4] = { '>', ' ', ' ', ' ' };
 	int key = 0, k = 0;
-	PlaySound(TEXT("main.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 	while (k != 13) { // 72 80
 		system("cls");
 		textcolor(LIGHTGREEN, BLACK);
@@ -291,7 +294,6 @@ int Menu() {
 	for (int i = 0; i < 4; i++) {
 		if (check[i] == '>') num = i + 1;
 	}
-	PlaySound(NULL, 0, 0);
 	return num;
 }
 

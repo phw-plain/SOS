@@ -56,6 +56,41 @@ public:
 		cnt--;
 	}
 };
+class Quests {
+private:
+	string name;
+	string text;
+	string item;
+	int reward;
+	int num;
+public:
+	static int cnt;
+	Quests(int id, string item) : item(item), num(num) {
+		cnt++;
+		switch (id) {
+			case 1: name = "고영희";
+					text = "캣잎을 구해다 주면 좋겠어... 보상은 충분히 하도록 할게";
+					num = rand() % 1 + 1;
+					reward = 5000 * num;
+					break;
+		}
+	}
+	string getName() {
+		return name;
+	}
+	string getText() {
+		return text;
+	}
+	string getItem() {
+		return item;
+	}
+	int getNum() {
+		return num;
+	}
+	~Quests() {
+		cnt--;
+	}
+};
 
 class User {
 private:
@@ -69,6 +104,7 @@ private:
 	int energy;		// 에너지 수치
 	int money;		// 보유 돈
 	int state;		// 상태 변수
+	Quests* quest[8];	// 메세지
 	Messages* message[8];	// 메세지
 	Item* item[12];			// 아이템
 
@@ -78,13 +114,6 @@ private:
 		"모란역", "벚꽃역", "수련역", "안개역", "연꽃역",
 		"팬지역", "백합역", "철쭉역", "수국역", "카라역",
 		"박하역"
-	};
-
-	bool quest;
-	int q_key;
-	int q_cnt;
-	string quests[1] = {
-		"고영희의 생수 배달 심부름"
 	};
 
 	// 고영희 대화 내용
@@ -100,6 +129,7 @@ private:
 public:
 	static bool bagpull[12];
 	static bool m_pull[8];
+	static bool q_pull[8];
 	//User(int level) {
 	User() {
 		MessageAdd("SOS 운영자", "SOS 게임에 오신 것을 환영합니다.\n기본적으로 지급되는 생수와 식량 외에 더 많은 것을 얻고 싶다면 다른 곳으로 움직여야 할 것 입니다.\n그럼 행운을 빕니다.\n\n※ 한번 본 메세지는 더 이상 확인할 수 없습니다.");
@@ -116,9 +146,7 @@ public:
 		month = 2;							// 월
 		day = 13;							// 일
 		money = 100000;						// 보유 돈
-		quest = false;
-		q_key = 0;
-		q_cnt = 0;
+		//quest = false;
 		position = 0;
 		state = 1;
 	}
@@ -345,7 +373,7 @@ public:
 		cout << "   ■";
 		textcolor(WHITE, BLACK);
 		cout << "	     20XX년  " << month << "월 " << day << "일	|	| ";
-		if(quest) cout << quests[q_key];
+		if(Quests::cnt != 0) cout << "현재 진행중인 퀘스트 " << Quests::cnt << "개";
 		else cout << "퀘스트가 없습니다.	";
 		cout<< "	|		||  |ｏ";
 		textcolor(LIGHTRED, BLACK);
@@ -533,6 +561,10 @@ public:
 				system("cls");
 				// 최초 역 방문시 가판대 상점을 이용할 수 있음
 				Shop();
+				// 퀘스트 생성
+				if (position == 3) {
+					QuestAdd(1, "캣잎");
+				}
 			}
 			else {
 				Map();
@@ -804,9 +836,112 @@ public:
 		}
 		system("cls");
 	}
+	void QuestRead(int idx) {
+		cout << quest[idx]->getName() << endl;
+		cout << quest[idx]->getText() << endl;
+		cout << quest[idx]->getItem() << " : 0/" << quest[idx]->getNum() << endl;
+		_getch();
+	}
+	void QuestAdd(int id, string item) {
+		quest[0] = new Quests(id, item);
+		q_pull[0] = true;
+	}
 	void Quest() {
-		cout << "현재 진행중인 퀘스트 " << q_cnt << "개" << endl;
-		system("pause");
+		if (Quests::cnt != 0) {
+			string check[8] = { "■", "□", "□", "□", "□", "□", "□", "□" };
+			int key = 0, k = 0;
+			while (Quests::cnt != 0 && k != 88) {
+				system("cls");
+				int p = -1;
+				int ps[8];
+				cout << "				_________________________________________________________" << endl;
+				cout << "				|		  					|" << endl;
+				cout << "				|-------------------------------------------------------|" << endl;
+				cout << "				|				 20XX년  " << month << "월 " << day << "일	| " << endl;
+				cout << "				|							|" << endl;
+				for (int i = 0; i < 8; i++) {
+					if (q_pull[i]) {
+						p++;
+						if (i != 7) {
+							if (p != 0)
+								cout << "				|	__________________________________________	|" << endl;
+							cout << "				|							|" << endl;
+							cout << "				|	" << quest[i]->getName() << " 				" << check[p] << "	|" << endl;
+						}
+						else {
+							cout << "				|	__________________________________________	|		Enter : 선택" << endl;
+							cout << "				|							|		↑,↓ : 이동" << endl;
+							cout << "				|	" << quest[i]->getName() << " 				" << check[p] << "	|			X : 종료" << endl;
+						}
+						ps[p] = i;
+					}
+				}
+				for (int i = p + 1; i < 8; i++) {
+					if (i != 7) {
+						cout << "				|							|" << endl;
+						cout << "				|							|" << endl;
+						cout << "				|							|" << endl;
+					}
+					else {
+						cout << "				|							|		Enter : 선택" << endl;
+						cout << "				|							|		↑,↓ : 이동" << endl;
+						cout << "				|							|		    X : 종료" << endl;
+					}
+				}
+				do {
+					k = toupper(_getch());
+				} while (k != 13 && k != 72 && k != 80 && k != 88);
+				if (key != (Messages::cnt - 1) && k == 80) {
+					check[key] = "□";
+					check[++key] = "■";
+				}
+				else if (key != 0 && k == 72) {
+					check[key] = "□";
+					check[--key] = "■";
+				}
+				else if (k == 13) {
+					system("cls");
+					QuestRead(ps[key]);
+					check[key] = "□";
+					check[0] = "■";
+				}
+			}
+		}
+		if (Quests::cnt == 0) {
+			int k = 0;
+			cout << "				_________________________________________________________" << endl;
+			cout << "				|    							|" << endl;
+			cout << "				|-------------------------------------------------------|" << endl;
+			cout << "				|				 20XX년  " << month << "월 " << day << "일	| " << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|		퀘스트가 존재하지 않습니다.		|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|" << endl;
+			cout << "				|							|		    X : 종료" << endl;
+			do {
+				k = toupper(_getch());
+			} while (k != 88);
+		}
 		system("cls");
 	}
 	void Talk(string str, string name) {
