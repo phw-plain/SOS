@@ -18,6 +18,10 @@ class Water : public Item {
 private:
 	int id = 1;
 public:
+	static int cnt;
+	Water() {
+		cnt++;
+	}
 	int getId() {
 		return id;
 	}
@@ -29,6 +33,10 @@ class Food : public Item {
 private:
 	int id = 2;
 public:
+	static int cnt;
+	Food(){
+		cnt++;
+	}
 	int getId() {
 		return id;
 	}
@@ -145,7 +153,7 @@ public:
 		survive = 1;						// 생존한 날짜
 		month = 2;							// 월
 		day = 13;							// 일
-		money = 100000;						// 보유 돈
+		money = 30000;						// 보유 돈
 		//quest = false;
 		position = 0;
 		state = 1;
@@ -163,14 +171,14 @@ public:
 				case '1': NextDay(); break;
 				case '2': Message(); break;
 				case '3': Shop(); break;
-				case '9': 
+				/*case '9': 
 					Talk("아...안녕??						", "햄스타");
 					for(int i=0; i<7; i++)
 						if (i == 1 || i == 6) 
 							Talk(talk1[i], "  나  ");
 						else 
 							Talk(talk1[i], "고영희");
-					break;
+					break;*/
 			}
 			if (!life) {
 				break;
@@ -199,7 +207,7 @@ public:
 			cout << "\t|" << endl;
 			// 아이템 선택 창
 			cout << "					|      ";
-			textcolor(LIGHTBLUE, BLACK);
+			textcolor(LIGHTGREEN, BLACK);
 			cout << check[0] << "       " << check[1] << "       " << check[2];
 			textcolor(WHITE, BLACK);
 			cout << "	|" << endl;
@@ -214,7 +222,7 @@ public:
 			}
 			cout << "\t|" << endl;
 			cout << "					|      ";
-			textcolor(LIGHTBLUE, BLACK);
+			textcolor(LIGHTGREEN, BLACK);
 			cout << check[3] << "       " << check[4] << "       " << check[5];
 			textcolor(WHITE, BLACK);
 			cout << "	|" << endl;
@@ -229,7 +237,7 @@ public:
 			}
 			cout << "\t|" << endl;
 			cout << "					|      ";
-			textcolor(LIGHTBLUE, BLACK);
+			textcolor(LIGHTGREEN, BLACK);
 			cout << check[6] << "       " << check[7] << "       " << check[8];
 			textcolor(WHITE, BLACK);
 			cout << "	|" << endl;
@@ -244,7 +252,7 @@ public:
 			}
 			cout << "\t|" << endl;
 			cout << "					|      ";
-			textcolor(LIGHTBLUE, BLACK);
+			textcolor(LIGHTGREEN, BLACK);
 			cout << check[9] << "       " << check[10] << "       " << check[11];
 			textcolor(WHITE, BLACK);
 			cout << "	|" << endl;
@@ -279,41 +287,41 @@ public:
 		while (k != 13) {
 			cout << "\n\n\n";
 			cout << "		   ------";
-			if (key[0]) textcolor(MAGENTA, BLACK);
+			if (key[0]) textcolor(LIGHTGREEN, BLACK);
 			cout << map[0];
 			textcolor(WHITE, BLACK);
 			for (int i = 1; i < 6; i++) {
 				cout << "-------";
-				if (key[i]) textcolor(MAGENTA, BLACK);
+				if (key[i]) textcolor(LIGHTGREEN, BLACK);
 				cout << map[i];
 				textcolor(WHITE, BLACK);
 			}
 			cout << "-----" << endl;
 			cout << "		   |										    |" << endl;
 			cout << "		   |										    |" << endl;
-			if (key[15]) textcolor(MAGENTA, BLACK);
+			if (key[15]) textcolor(LIGHTGREEN, BLACK);
 			cout << "		" <<  map[15] << "										  ";
 			textcolor(WHITE, BLACK);
-			if (key[6]) textcolor(MAGENTA, BLACK);
+			if (key[6]) textcolor(LIGHTGREEN, BLACK);
 			cout << map[6] << "" << endl;
 			textcolor(WHITE, BLACK);
 			cout << "		   |										    |" << endl;
 			cout << "		   |										    |" << endl;
-			if (key[14]) textcolor(MAGENTA, BLACK);
+			if (key[14]) textcolor(LIGHTGREEN, BLACK);
 			cout << "		" << map[14] << "										  ";
 			textcolor(WHITE, BLACK);
-			if (key[7]) textcolor(MAGENTA, BLACK);
+			if (key[7]) textcolor(LIGHTGREEN, BLACK);
 			cout << map[7] << endl;
 			textcolor(WHITE, BLACK);
 			cout << "		   |										    |" << endl;
 			cout << "		   |										    |" << endl;
 			cout << "		   ------";
-			if (key[13]) textcolor(MAGENTA, BLACK);
+			if (key[13]) textcolor(LIGHTGREEN, BLACK);
 			cout << map[13];
 			textcolor(WHITE, BLACK);
 			for (int i = 12; i > 7; i--) {
 				cout << "-------";
-				if (key[i]) textcolor(MAGENTA, BLACK);
+				if (key[i]) textcolor(LIGHTGREEN, BLACK);
 				cout << map[i];
 				textcolor(WHITE, BLACK);
 			}
@@ -389,12 +397,20 @@ public:
 		cout << "	|				|" << endl;
 		cout << "	|   ---------  상태  ---------	|";
 		if (Messages::cnt != 0)cout << "\t\t         ∧＿∧";
+		else cout << "\t\t\t";
 		cout << "				  ┏━━━━━━━━━━━┓" << endl << "	|      수분	       " << water << "	|";
 		if (Messages::cnt != 0)cout << "\t\t         ('ω')";
-		cout << "				  ┃  S H O P♣┃" << endl << "	|      배고픔          " << food << "	|";
+		else cout << "\t\t\t";
+		cout << "				  ┃  S H O P";
+		textcolor(GREEN, BLACK);
+		cout << "♣";
+		textcolor(WHITE, BLACK);
+		cout << "┃" << endl << "	|      배고픔          " << food << "	|";
 		if (Messages::cnt != 0)cout << "\t\t   ┏━━━━ ∪━ ∪━━━━┓";
+		else cout << "\t\t\t\t";
 		cout << "			  ┗━┳┳━━━━━┳┳━┛" << endl << "	|      에너지          " << energy << "	|";
 		if (Messages::cnt != 0)cout << "\t\t   ┃ ＼　　　　 ／ ┃";
+		else cout << "\t\t\t\t";
 		cout << "			   ┏┗┛━━━━━┗┛┓" << endl << "	|   ________________________	|";
 		if (Messages::cnt != 0) {
 			cout << "\t\t   ┃　 ＼　";
@@ -403,13 +419,17 @@ public:
 			textcolor(WHITE, BLACK);
 			cout << " ／   ┃";
 		}
+		else cout << "\t\t\t\t";
 		cout << "			   ┃  ┏━┓━┓  ┃" << endl << "	|				|";
 		if (Messages::cnt != 0)cout << "\t\t   ┃　／ ＼＿／ ＼ ┃";
+		else cout << "\t\t\t\t";
 		cout << "			   ┃  ┃ ┃ ┃  ┃" << endl << "	|				|";
 		if (Messages::cnt != 0)cout << "\t\t   ┗━━━━━━━━━━━━━━━┛";
+		else cout << "\t\t\t\t";
 		cout << "			   ┗━━┗━┛━┛━━┛" << endl << "	|   ________________________/|	|" << endl;
 		cout << "	|  |			     |	|";
 		if (Messages::cnt != 0)cout << "\t\t      메세지 도착!!";
+		else cout << "\t\t\t\t";
 		if (survive < 10) cout << endl << "	|  | " << survive << "일차,                  |	|" << endl;
 		else if (survive < 100) cout << endl << "	|  | " << survive << "일차,                 |	|" << endl;
 		cout << "	|  | 언제쯤 나갈 수 있을까.. |	|" << endl;
@@ -422,7 +442,7 @@ public:
 		char check;
 		do {
 			check = tolower(_getch());
-		} while (check != '1' && check != '2' && check != '3' && check != 'q' && check != 'w' && check != 'e' && check != '9'); // test용 9는 나중에 지워야 함
+		} while (check != '1' && check != '2' && check != '3' && check != 'q' && check != 'w' && check != 'e');
 		return check;
 	}
 	void NextDay() {
@@ -467,7 +487,7 @@ public:
 		cout << "\t\t\t\t\t\t   ＼, /|| ――――― ||" << endl;
 		cout << "\n\n\t\t\t\t\t\t     ";
 		const char* a = "휴 식 중 . . .";
-		textcolor(LIGHTMAGENTA, BLACK);
+		textcolor(LIGHTGREEN, BLACK);
 		for (int j = 0; j < strlen(a); j++) {
 			Sleep(300);
 			cout << a[j];
@@ -547,7 +567,7 @@ public:
 				cout << "\t\t\t\t\t\t    ┗◎━━◎┛┗◎┛┗◎┛" << endl;
 				cout << "\n\n\t\t\t\t\t\t     ";
 				const char* a = "이 동 중 . . .";
-				textcolor(LIGHTMAGENTA, BLACK);
+				textcolor(LIGHTGREEN, BLACK);
 				for (int j = 0; j < strlen(a); j++) {
 					Sleep(300);
 					cout << a[j];
@@ -626,7 +646,7 @@ public:
 		cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t";
 		cout << item[key]->getName() << "아이템 사용하시겠습니까?" << endl;
 		cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-		cout << "												Y : 시작" << endl;
+		cout << "												Y : 사용" << endl;
 		cout << "												N : 취소" << endl;
 		int k;
 		do {
@@ -768,22 +788,33 @@ public:
 		system("cls");
 	}
 	void Shop() {
-		int k = 0, p = 0; 
-		string key[2] = { "  ", "  " };
-		key[p] = "◀";
-		while (k != 120) {
+		int k = 0, key = 0; 
+		bool check[4] = { true, false, false, false };
+		while (k != 88) {
 			cout << "							┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓" << endl;
-			cout << "							┃					보유돈 " << "50000원" << "	  ┃" << endl;
+			cout << "							┃					보유 돈 " << money << "원	  ┃" << endl;
 			cout << "							┃	   ____ 					  ┃" << endl;
 			cout << "							┃	  |____|					  ┃" << endl;
 			cout << "							┃	 /     ＼					  ┃" << endl;
 			cout << "							┃	|   水   |		      ._, , .,, _	  ┃" << endl;
 			cout << "							┃	|________|		      ( : (　   ..)	  ┃" << endl;
 			cout << "		┏━━━━━━━━━━━━━━━━━━━━━━┓		┃	[        ]		      | : |  -ω- |	  ┃" << endl;
-			cout << "		┃  S H O P♣           ┃		┃	[        ]		      | : |　　　 |	  ┃" << endl;
+			cout << "		┃  S H O P";
+			textcolor(GREEN, BLACK);
+			cout << "♣";
+			textcolor(WHITE, BLACK);
+			cout << "           ┃		┃	[        ]		      | : |　　　 |	  ┃" << endl;
 			cout << "		┃        다 팔아요~!   ┃		┃	[________]		       `' '------´	  ┃" << endl;
 			cout << "		┗━┳┳━━━━━━━━━━━━━━━━┳┳━┛		┃							  ┃" << endl;
-			cout << "		  ┃┃　　 ∧＿∧　　 ┃┃			┃	[  생수  ]			[  식량  ]	  ┃" << endl;
+			cout << "		  ┃┃　　 ∧＿∧　　 ┃┃			┃	 [ ";
+			if (check[0]) textcolor(LIGHTGREEN, BLACK);
+			cout << "생수";
+			textcolor(WHITE, BLACK);
+			cout << " ]			 [ ";
+			if (check[1]) textcolor(LIGHTGREEN, BLACK);
+			cout << "식량";
+			textcolor(WHITE, BLACK);
+			cout << " ]	  ┃" << endl;
 			cout << "		  ┗┛　　 ('ω')　   ┗┛			┃							  ┃" << endl;
 			cout << "		┏━━━━━━━━━━━━━━━━━━━━━━┓		┃    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━	  ┃" << endl;
 			cout << "		┃     식량 5,000원     ┃		┃							  ┃" << endl;
@@ -827,62 +858,100 @@ public:
 			cout << "┗━━┛			          ┗━━┛		  ";
 			textcolor(WHITE, BLACK);
 			cout << "┃" << endl;
-			cout << "							┃	[  히든  ]			[  히든  ]	  ┃" << endl;
+			cout << "							┃	 [ ";
+			if (check[2]) textcolor(LIGHTGREEN, BLACK);
+			cout << "히든";
+			textcolor(WHITE, BLACK);
+			cout << " ]			 [ ";
+			if (check[3]) textcolor(LIGHTGREEN, BLACK);
+			cout << "히든";
+			textcolor(WHITE, BLACK); 
+			cout << " ]	  ┃" << endl;
 			cout << "							┃							  ┃" << endl;
 			cout << "							┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" << endl;
 			cout << "													Enter : 구매" << endl;
-			cout << "													↓,↑ : 이동" << endl;
+			cout << "													←,→ : 이동" << endl;
 			cout << "													    X : 종료" << endl;
 			// 72 Up 80 Down
 			do {
 				k = toupper(_getch());
-			} while (k != 88 && k != 13 && k != 72 && k != 80);
-			// 이동 기능 구현 필요
-			if (p != 0 && k == 72) {
-				key[p] = "  ";
-				key[--p] = "◀";
+			} while (k != 13 && k != 75 && k != 77 && k != 88);
+			if (key != 3 && k == 77) {
+				check[key] = false;
+				check[++key] = true;
 			}
-			else if (p != 1 && k == 80) {
-				key[p] = "  ";
-				key[++p] = "◀";
+			else if (key != 0 && k == 75) {
+				check[key] = false;
+				check[--key] = true;
 			}
 			else if (k == 13) {
 				system("cls");
-				switch (p) {
+				int k2;
+				switch (key) {
 				case 0:
-					cout << "식량의 가격은 5,000원 입니다. 구매하시겠습니까?" << endl;
-					system("pause");
-					if (ItemAdd(2) /*&& money >= 5000*/)
-						money -= 3000;
-					else if (money < 5000) {
-						cout << "보유 금액이 부족합니다." << endl;
-						system("pause");
-					}
-					else {
-						cout << "가방 공간이 가득찼습니다. 더 이상 구매할 수 없습니다." << endl;
-						system("pause");
+					cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t";
+					cout << "생수를 구매하시겠습니까?" << endl;
+					cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+					cout << "												Y : 구매" << endl;
+					cout << "												N : 취소" << endl;
+					do {
+						k2 = toupper(_getch());
+					} while (k2 != 89 && k2 != 78);
+					if (k2 == 89) {
+						if (ItemAdd(1) && money >= 4500) {
+							money -= 4500;
+							system("cls");
+							cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t";
+							cout << "생수를 구매하시겠습니까?" << endl;
+							cout << "\t\t\t\t\t\t현재 보유량 : " << Water::cnt << endl;
+							cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+							cout << "													Y : 구매" << endl;
+							cout << "													N : 취소" << endl;
+							Sleep(1500);
+						}
+						else if (money < 4500) {
+							cout << "보유 금액이 부족합니다." << endl;
+							system("pause");
+						}
+						else {
+							cout << "가방 공간이 가득찼습니다. 더 이상 구매할 수 없습니다." << endl;
+							system("pause");
+						}
 					}
 					break;
 				case 1:
-					cout << "생수의 가격은 4,500원 입니다. 구매하시겠습니까?" << endl;
-					system("pause");
-					if (ItemAdd(1) /*&& money >= 4500*/)
-						money -= 1700;
-					else if (money < 4500) {
-						cout << "보유 금액이 부족합니다." << endl;
-						system("pause");
-					}
-					else {
-						cout << "가방 공간이 가득찼습니다. 더 이상 구매할 수 없습니다." << endl;
-						system("pause");
+					cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t";
+					cout << "식량를 구매하시겠습니까?" << endl;
+					cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+					cout << "													Y : 구매" << endl;
+					cout << "													N : 취소" << endl;
+					do {
+						k2 = toupper(_getch());
+					} while (k2 != 89 && k2 != 78);
+					if (k2 == 89) {
+						if (ItemAdd(2) && money >= 5000) {
+							money -= 5000;
+							system("cls");
+							cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t";
+							cout << "식량를 구매하시겠습니까?" << endl;
+							cout << "\t\t\t\t\t\t현재 보유량 : " << Food::cnt << endl;
+							cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+							cout << "													Y : 구매" << endl;
+							cout << "													N : 취소" << endl;
+							Sleep(1500);
+						}
+						else if (money < 5000) {
+							cout << "보유 금액이 부족합니다." << endl;
+							system("pause");
+						}
+						else {
+							cout << "가방 공간이 가득찼습니다. 더 이상 구매할 수 없습니다." << endl;
+							system("pause");
+						}
 					}
 					break;
 				}
 			}
-			else { // X를 누른 경우
-				break;
-			}
-			// 구매 기능 구현 필요
 			system("cls");
 		}
 		system("cls");

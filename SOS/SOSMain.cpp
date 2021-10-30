@@ -15,6 +15,8 @@ using namespace std;
 bool User::bagpull[12] = { false, false, false, false, false, false, false, false, false, false, false, false };
 bool User::m_pull[8] = { false, false, false, false, false, false, false, false };
 bool User::q_pull[8] = { false, false, false, false, false, false, false, false };
+int Water::cnt = 0;
+int Food::cnt = 0;
 int Messages::cnt = 0;
 int Quests::cnt = 0;
 void Intro();
