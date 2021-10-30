@@ -26,8 +26,6 @@ int Menu();
 //int Level();
 
 int main() {
-	
-
 	// 파일 입출력
 	//ofstream WriteFile("Jumsu.txt"); // 파일 생성
 	//WriteFile << "300" << endl;
