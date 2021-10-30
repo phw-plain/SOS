@@ -13,6 +13,7 @@ public:
 	}
 	// 순수 가상 함수 = 이름 출력
 	virtual string getName() = 0;
+	virtual ~Item(){}
 };
 class Water : public Item {
 private:
@@ -28,6 +29,9 @@ public:
 	string getName() {
 		return "생수";
 	}
+	~Water() {
+		cnt--;
+	}
 };
 class Food : public Item {
 private:
@@ -42,6 +46,9 @@ public:
 	}
 	string getName() {
 		return "식량";
+	}
+	~Food() {
+		cnt--;
 	}
 };
 class Messages {
@@ -60,7 +67,6 @@ public:
 		return text;
 	}
 	~Messages() {
-
 		cnt--;
 	}
 };
@@ -78,9 +84,16 @@ public:
 		switch (id) {
 			case 1: name = "고영희";
 					text = "캣잎을 구해다 주면 좋겠어... 보상은 충분히 하도록 할게";
-					num = rand() % 1 + 1;
+					num = rand() % 2 + 1;
 					reward = 5000 * num;
 					break;
+		}
+		switch (id) {
+		case 2: name = "Mr.Ham";
+			text = "치즈를 가져오도록 해, 보상은 충분히 할 것이니 말이야";
+			num = rand() % 2 + 1;
+			reward = 6000 * num;
+			break;
 		}
 	}
 	string getName() {
@@ -111,7 +124,9 @@ private:
 	int food;		// 배고픔 수치
 	int energy;		// 에너지 수치
 	int money;		// 보유 돈
-	int state;		// 상태 변수
+	int state;		// 상태
+	int s_cnt;		// 상점 이용 제한
+	int story;		// 스토리 확인 갯수
 	Quests* quest[8];	// 메세지
 	Messages* message[8];	// 메세지
 	Item* item[12];			// 아이템
@@ -119,7 +134,7 @@ private:
 	int position;	// 현재 역 위치
 	string map[16] = {
 		"국화역", "장미역", "난초역", "동백역", "매화역",
-		"모란역", "벚꽃역", "수련역", "안개역", "연꽃역",
+		"모란역", "별꽃역", "수련역", "안개역", "연꽃역",
 		"팬지역", "백합역", "철쭉역", "수국역", "카라역",
 		"박하역"
 	};
@@ -132,6 +147,17 @@ private:
 		, "혹시 캣닢이라는 거에 대해 알고있니?										"
 		, "내가 가장 좋아하는건데 이곳에서는 구하기가 쉽지 않아...								"
 		, "혹시 캣닢을 본다면 소소한 보상을 해줄테니 나에게 꼭 가져다줬으면해!!						"
+		, "그래 알겠어													"
+	};
+	// 햄스타 대화 내용
+	string talk2[8] = {
+		"한참 걸릴줄 알았는데 빨리 왔군											"
+		, "내 이름은 햄스타 Mr.Ham이라고 부르도록 해									"
+		, "어쩌다 보니 알게됬는데 너 요즘 고양이들 사이에서 유명하던데?							"
+		, "뭐가?														"
+		, "말 만하면 필요한걸 가져다 주는 녀석이 있다고									"
+		, "그래서 말인데 요즘 치즈를 못먹은지 너무 오래됬어								"
+		, "치즈를 얻게 된다면 꼭 나에게 가져오도록 해 그에 대한 대가는 충분히 치를테니 말이야				"
 		, "그래 알겠어													"
 	};
 public:
@@ -151,12 +177,14 @@ public:
 		energy = 100;
 		s_day = 30;							// 생존해야 하는 날짜
 		survive = 1;						// 생존한 날짜
-		month = 2;							// 월
-		day = 13;							// 일
+		month = 5;							// 월
+		day = 25;							// 일
 		money = 30000;						// 보유 돈
 		//quest = false;
 		position = 0;
 		state = 1;
+		s_cnt = 0;
+		story = 0;
 	}
 	bool play() {
 		while (s_day > 0) {
@@ -170,7 +198,9 @@ public:
 				case 'w': Map(); break;
 				case '1': NextDay(); break;
 				case '2': Message(); break;
-				case '3': Shop(); break;
+				case '3': if (s_cnt == 0) Shop();
+						else ClossShop();
+						break;
 				/*case '9': 
 					Talk("아...안녕??						", "햄스타");
 					for(int i=0; i<7; i++)
@@ -258,9 +288,9 @@ public:
 			cout << "	|" << endl;
 			cout << "					|_______________________________|" << endl;
 			cout << "\n\n\n\n";
-			cout << "												Enter : 선택" << endl;
-			cout << "												←,→ : 이동" << endl;
-			cout << "												    X : 종료" << endl;
+			cout << "													Enter : 선택" << endl;
+			cout << "													←,→ : 이동" << endl;
+			cout << "													    X : 종료" << endl;
 			do {
 				k = toupper(_getch());
 			} while (k != 13 && k != 75 && k != 77 && k != 88);
@@ -328,9 +358,9 @@ public:
 			cout << "-----" << endl;
 			cout << "\n\n		   현재 역 : " << map[position] << endl;
 			cout << "\n\n\n\n\n\n\n\n\n\n";
-			cout << "												Enter : 선택" << endl;
-			cout << "												←,→ : 이동" << endl;
-			cout << "												    X : 종료" << endl;
+			cout << "													Enter : 선택" << endl;
+			cout << "													←,→ : 이동" << endl;
+			cout << "													    X : 종료" << endl;
 			// 75 left 77 right
 			do {
 				k = toupper(_getch());
@@ -384,7 +414,14 @@ public:
 		if(Quests::cnt != 0) cout << "현재 진행중인 퀘스트 " << Quests::cnt << "개";
 		else cout << "퀘스트가 없습니다.	";
 		cout<< "	|		||  |ｏ";
-		textcolor(LIGHTRED, BLACK);
+		if (survive < 10)
+			textcolor(LIGHTRED, BLACK);
+		else if (month == 6 && day == 14)
+			textcolor(LIGHTMAGENTA, BLACK);
+		else if (survive < 20)
+			textcolor(BROWN, BLACK);
+		else
+			textcolor(LIGHTGREEN, BLACK);
 		cout << "♥";
 		textcolor(WHITE, BLACK);
 		cout << "ｏ	|" << endl;
@@ -432,7 +469,11 @@ public:
 		else cout << "\t\t\t\t";
 		if (survive < 10) cout << endl << "	|  | " << survive << "일차,                  |	|" << endl;
 		else if (survive < 100) cout << endl << "	|  | " << survive << "일차,                 |	|" << endl;
-		cout << "	|  | 언제쯤 나갈 수 있을까.. |	|" << endl;
+		cout << "	|  | 현재역은 ";
+		textcolor(LIGHTGREEN, BLACK);
+		cout << map[position];
+		textcolor(WHITE, BLACK);
+		cout << "입니다.  |	|" << endl;
 		cout << "	|  |_________________________|	|							    [1] 취침 하기" << endl;
 		cout << "	|				|							    [2] 문자 읽기" << endl;
 		cout << "	|				|							    [3] 상점 가기" << endl;
@@ -470,9 +511,11 @@ public:
 		// 수분 배고픔 10~20 사이의 감소(rand이용)
 		food -= (rand() % 11 + 10);
 		water -= (rand() % 11 + 10);
-		energy += 20;
+		energy += 30;
 		// 에너지 증가
 		if (energy > 100) energy = 100;
+		// 상점 초기화
+		s_cnt = 0;
 		// 생존 여부
 		life = DieCheck();
 		// 화면에 보여지는 그림
@@ -510,13 +553,13 @@ public:
 			if (i == 0) i = 16;
 			cnt2++;
 		}
-		if ((cnt1 <= 5 || cnt2 <= 5) && state != 3 && k != position) {
+		if (/*(cnt1 <= 5 || cnt2 <= 5) &&*/ state != 2 && k != position) {
 			int yn; system("cls");
 			cout << "\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t";
 			cout << map << " 으로 이동하시겠습니까?" << endl;
 			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-			cout << "												Y : 시작" << endl;
-			cout << "												N : 취소" << endl;
+			cout << "													Y : 시작" << endl;
+			cout << "													N : 취소" << endl;
 			// 이동 yn 구현 필요 
 			do {
 				yn = tolower(_getch());
@@ -553,6 +596,8 @@ public:
 				energy -= (rand() % 11 + 30);
 				// 생존 여부
 				life = DieCheck();
+				// 상점 초기화
+				s_cnt = 0;
 				// 화면에 보여지는 그림
 				cout << "\n\n\n\n\n\n";
 				PlaySound(TEXT("subway.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
@@ -581,7 +626,32 @@ public:
 				system("cls");
 				// 특정 역 이동시 퀘스트 생성
 				if (position == 3) {
+					if (story == 0) {
+						for(int i=0; i<7; i++)
+							if (i == 1 || i == 6)
+								Talk(talk1[i], "  나  ");
+							else
+								Talk(talk1[i], "고영희");
+						story++;
+					}
 					QuestAdd(1, "캣잎");
+				}
+				if (position == 10) {
+					if (story == 1) {
+						for (int i = 0; i < 8; i++)
+							if (i == 3 || i == 7)
+								Talk(talk2[i], "  나  ");
+							else
+								Talk(talk2[i], "Mr.Ham");
+						story++;
+					}
+					QuestAdd(2, "치즈");
+				}
+				if (position == 2) {
+					QuestAdd(3, "리본");
+				}
+				if (position == 13) {
+					QuestAdd(4, "도서");
 				}
 			}
 			else {
@@ -592,18 +662,20 @@ public:
 			cout << "현재 " << map << "에 있으므로 이동할 수 없습니다." << endl;
 			system("pause");
 			system("cls");
+			Map();
 		}
-		else if (state == 3) {
+		else if (state == 2) {
 			cout << "현재 이동하기를 사용할 수 있는 상태가 아닙니다." << endl;
 			system("pause");
 			system("cls");
+			Map();
 		}
 		else {
 			cout << "한 번에 이동할 수 있는 역의 범위를 넘어갔습니다. [이동 불가]" << endl;
 			system("pause");
 			system("cls");
+			Map();
 		}
-		
 	}
 	bool DieCheck() {
 		bool answer = true;
@@ -646,8 +718,8 @@ public:
 		cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t";
 		cout << item[key]->getName() << "아이템 사용하시겠습니까?" << endl;
 		cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-		cout << "												Y : 사용" << endl;
-		cout << "												N : 취소" << endl;
+		cout << "													Y : 사용" << endl;
+		cout << "													N : 취소" << endl;
 		int k;
 		do {
 			k = toupper(_getch());
@@ -669,6 +741,7 @@ public:
 			}
 			delete item[key];
 			bagpull[key] = false;
+			DieCheck();
 			Sleep(1000);
 		}
 	}
@@ -746,6 +819,7 @@ public:
 					system("cls");
 					MessageUse(ps[key]);
 					check[key] = "□";
+					key = 0;
 					check[0] = "■";
 				}
 			}
@@ -787,7 +861,33 @@ public:
 		}
 		system("cls");
 	}
+	void ClossShop() {
+		cout << "\n\n\n\n\n\n";
+		cout << "						┏━━━━━━━━━━━━━━━━━━━━━━┓" << endl;
+		cout << "						┃  S H O P";
+		textcolor(GREEN, BLACK);
+		cout << "♣";
+		textcolor(WHITE, BLACK);
+		cout << "	       ┃" << endl;
+		cout << "						┃         C L O S E    ┃" << endl;
+		cout << "						┗━┳┳━━━━━━━━━━━━━━━━┳┳━┛" << endl;
+		cout << "						  ┃┃　　 ∧＿∧　Z　┃┃" << endl;
+		cout << "						  ┗┛　　 (-ω-) z　 ┗┛" << endl;
+		cout << "						┏━━━━━━━━━━━━━━━━━━━━━━┓" << endl;
+		cout << "						┃         	       ┃" << endl;
+		cout << "						┃         	       ┃" << endl;
+		cout << "						┗━━━━━━━━━━━━━━━━━━━━━━┛" << endl;
+		cout << "\n					오늘은 더 이상 상점을 이용하실 수 없습니다." << endl;
+		cout << "\n\n\n\n\n\n\n\n\n";
+		cout << "													X : 돌아가기" << endl;
+		int k;
+		do {
+			k = toupper(_getch());
+		} while (k != 88);
+		system("cls");
+	}
 	void Shop() {
+		s_cnt++;
 		int k = 0, key = 0; 
 		bool check[4] = { true, false, false, false };
 		while (k != 88) {
@@ -964,8 +1064,13 @@ public:
 		_getch();
 	}
 	void QuestAdd(int id, string item) {
-		quest[0] = new Quests(id, item);
-		q_pull[0] = true;
+		for (int i = 0; i < 8; i++) {
+			if (!q_pull[i]) {
+				quest[i] = new Quests(id, item);
+				q_pull[i] = true;
+				break;
+			}
+		}
 	}
 	void Quest() {
 		if (Quests::cnt != 0) {
@@ -987,7 +1092,7 @@ public:
 							if (p != 0)
 								cout << "				|	__________________________________________	|" << endl;
 							cout << "				|							|" << endl;
-							cout << "				|	" << quest[i]->getName() << " 				" << check[p] << "	|" << endl;
+							cout << "				|	" << quest[i]->getName() << " 					" << check[p] << "	|" << endl;
 						}
 						else {
 							cout << "				|	__________________________________________	|		Enter : 선택" << endl;
@@ -1012,7 +1117,7 @@ public:
 				do {
 					k = toupper(_getch());
 				} while (k != 13 && k != 72 && k != 80 && k != 88);
-				if (key != (Messages::cnt - 1) && k == 80) {
+				if (key != (Quests::cnt - 1) && k == 80) {
 					check[key] = "□";
 					check[++key] = "■";
 				}
@@ -1024,6 +1129,7 @@ public:
 					system("cls");
 					QuestRead(ps[key]);
 					check[key] = "□";
+					key = 0;
 					check[0] = "■";
 				}
 			}
@@ -1079,15 +1185,19 @@ public:
 			cout << "						　　　　  　　　　　　 ,:'　　　　　　　    : :::::::::::::" << endl;
 			cout << "						　　　　　　　 　　 ,:'　　　　　　　　        : : ::::::::::" << endl;
 		}
-		else if (name == "햄스타") {
+		else if (name == "Mr.Ham") {
 			cout << endl << endl << endl;
 			cout << "						　　　　　　　　　　　  　 　 　|``--,...　　　　　``　＊ |" << endl;
 			cout << "						　　　　　　　　　　　  　　  　i  ＼　　　　　　　　　 ／:;" << endl;
 			cout << "						　　　　　　　　　　　  　　    ミ　　　　 　　　　　　    ミ" << endl;
-			cout << "						　　　　　　　　　　　  　　   〉 　　　　●　　.　　●　　　ミ" << endl;
+			cout << "						　　　　　　　　　　　  　　   〉 　　　　●　　 　　●　　　ミ" << endl;
 			cout << "						　　　　　　　　　　　  　　   ミ　 　 ``　　　人　　　　　 ミ" << endl;
 			cout << "						　　　　　　　　　　　  　  　ミ :　　　　　 　　　　 　　　  ミ" << endl;
-			cout << "						　　　　　　　　　　　  　  ,I:　　　　　　　つ♣⌒　　        :I," << endl;
+			cout << "						　　　　　　　　　　　  　  ,I:　　　　　　 つ";
+			textcolor(RED, BLACK);
+			cout << "▶◀";
+			textcolor(WHITE, BLACK);
+			cout << "⌒　　        :I," << endl;
 		}
 		else if (name == "  나  ") {
 			cout << "	　  　,;'':;, 　　　　       ,;'':;," << endl;
