@@ -1,2 +1,3 @@
-Test ют╢о╢ы.
-happy	31
+mimi    500
+nana    700
+riri    100

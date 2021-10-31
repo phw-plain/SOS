@@ -32,14 +32,44 @@ void GameClear(User a);
 int Menu();
 
 int main() {
-	// 테스트 계정
-	User test;
+	// 파일 입출력
+	//FILE* pFile = fopen("Jumsu.txt", "r");
+	// 파일이 존재하지 않는 경우
+
+
+	//char str[50];
+	//fgets(str, 50, pFile);
+	//fclose(pFile);
+	//cout << str << endl;
+	
+
+	//ifstream write("Jumsu.txt");
+	//ofstream read("Jumsu.txt");
+
+	//// 파일이 없는 경우 새로 파일 생성
+	//if (write.fail()) {
+	//	ofstream WriteFile("Jumsu.txt");
+	//}
+	//ofstream WriteFile("Jumsu.txt"); // 파일 생성
+	//WriteFile << "test	300" << endl;
+	//WriteFile.close();
+	//string Jumsu; // 파일 내용
+	//ifstream ReadFile("Jumsu.txt");
+	//cout << "현재 점수 : ";
+	//while (getline(ReadFile, Jumsu)) {
+	//	cout << Jumsu << endl; // 파일 라인 단위로 출력
+
+	//}
+	/*system("pause");
+	system("cls");*/
+
+	/*User test;
 	if (test.play()) {
 		GameOver(test);
 	}
 	else {
 		GameClear(test);
-	}
+	}*/
 	srand((unsigned)time(NULL));
 	int num = 0;
 	PlaySound(TEXT("main.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
@@ -321,12 +351,44 @@ void Rank() {
 	cout << "		   ■          ■      ■          ■      ■      ■  ■      ■          ■" << endl;
 	cout << "		   ■          ■      ■          ■      ■        ■■      ■          ■" << endl;
 	cout << endl << endl << endl;
-	cout << "					        ________________" << endl;
+	cout << "					     ________________________" << endl;
 	cout << "					       		" << endl;
-	cout << "					          " << 1 << ".  3:00:12	" << endl;
-	cout << "					          " << 2 << ".  4:20:47	" << endl;
-	cout << "					          " << 3 << ".  4:37:05	" << endl;
-	cout << "					        ________________" << endl;
+	// 랭킹 계산
+	FILE* pFile = fopen("Jumsu.txt", "r");
+	int cnt = -1;
+	int rank[10][2];
+	char* name[10];
+	char arr[10][100];
+	int i = 0;
+	while (true)
+	{
+		char* pStr = fgets(arr[i++], 100, pFile);
+		cnt++;
+		if (pStr == NULL) {
+			break;
+		}
+		strcpy(arr[i], pStr);
+	}
+	for (i = 0; i < cnt; i++) {
+		char* temp = strtok(arr[i], " ");
+		name[i] = temp;
+		temp = strtok(NULL, " ");
+		rank[i][0] = i+1;
+		rank[i][1] = atoi(temp);
+	}
+	for (i = 0; i < cnt - 1; i++) {
+		for (int j = 0; j < cnt; j++) {
+			if (rank[i][1] > rank[j][1]) {
+				int temp = rank[i][0];
+				rank[i][0] = rank[j][0];
+				rank[j][0] = temp;
+			}
+		}
+	}
+	for (i = cnt-1; i >= 0; i--) {
+		cout << cnt - i << ".   " << name[i] << "\t" << rank[rank[i][0]-1][1] << endl;
+	}
+	cout << "\n					     ________________________" << endl;
 	textcolor(WHITE, BLACK);
 	system("pause");
 	system("cls");
@@ -399,7 +461,7 @@ void GameClear (User a) {
 }
 void GameSad (User a) {
 	textcolor(CYAN, BLACK);
-	cout << endl << endl; //ending
+	cout << endl << endl; 
 	cout << "               ■■■■■■■      ■■■■■■■      ■■■■■■" << endl;
 	cout << "               ■                  ■          ■      ■          ■" << endl;
 	cout << "               ■                  ■          ■      ■          ■" << endl;
