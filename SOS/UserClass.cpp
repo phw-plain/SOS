@@ -51,6 +51,78 @@ public:
 		cnt--;
 	}
 };
+class Leaf : public Item {
+private:
+	int id = 3;
+public:
+	static int cnt;
+	Leaf() {
+		cnt++;
+	}
+	int getId() {
+		return id;
+	}
+	string getName() {
+		return "캣잎";
+	}
+	~Leaf() {
+		cnt--;
+	}
+};
+class Ribbon : public Item {
+private:
+	int id = 4;
+public:
+	static int cnt;
+	Ribbon() {
+		cnt++;
+	}
+	int getId() {
+		return id;
+	}
+	string getName() {
+		return "리본";
+	}
+	~Ribbon() {
+		cnt--;
+	}
+};
+class Cheese : public Item {
+private:
+	int id = 5;
+public:
+	static int cnt;
+	Cheese() {
+		cnt++;
+	}
+	int getId() {
+		return id;
+	}
+	string getName() {
+		return "치즈";
+	}
+	~Cheese() {
+		cnt--;
+	}
+};
+class Book : public Item {
+private:
+	int id = 6;
+public:
+	static int cnt;
+	Book() {
+		cnt++;
+	}
+	int getId() {
+		return id;
+	}
+	string getName() {
+		return "도서";
+	}
+	~Book() {
+		cnt--;
+	}
+};
 class Messages {
 private:
 	string name;
@@ -79,22 +151,10 @@ private:
 	int num;
 public:
 	static int cnt;
-	Quests(int id, string item) : item(item), num(num) {
+	Quests(int id, string item, string name) : item(item), num(num), name(name) {
 		cnt++;
-		switch (id) {
-			case 1: name = "고영희";
-					text = "캣잎을 구해다 주면 좋겠어... 보상은 충분히 하도록 할게";
-					num = rand() % 2 + 1;
-					reward = 5000 * num;
-					break;
-		}
-		switch (id) {
-		case 2: name = "Mr.Ham";
-			text = "치즈를 가져오도록 해, 보상은 충분히 할 것이니 말이야";
-			num = rand() % 2 + 1;
-			reward = 6000 * num;
-			break;
-		}
+		num = rand() % 2 + 1;
+		reward = 5000 * num;
 	}
 	string getName() {
 		return name;
@@ -149,8 +209,18 @@ private:
 		, "혹시 캣닢을 본다면 소소한 보상을 해줄테니 나에게 꼭 가져다줬으면해!!						"
 		, "그래 알겠어													"
 	};
+	// 나  비 대화 내용
+	string talk2[7] = {
+		"...(엄청난 고민이 있어보인다.)											"
+		, "혹시 무슨일 있어??												"
+		, "그게... 내가 항상 하고다니던 리본이 보이지가 않아...								"
+		, "어디에서 잃어버렸는지 기억하고 있어?										"
+		, "아니.. 모르겠어..												"
+		, "혹시 꼭 그 리본이 아니어도 괜찮으니까 혹시 나에게 어울릴만한 리본이 있다면 가져다주지 않을래?			"
+		, "그래 알겠어, 찾게 되면 연락할게!										"
+	};
 	// 햄스타 대화 내용
-	string talk2[8] = {
+	string talk3[8] = {
 		"한참 걸릴줄 알았는데 빨리 왔군											"
 		, "내 이름은 햄스타 Mr.Ham이라고 부르도록 해									"
 		, "어쩌다 보니 알게됬는데 너 요즘 고양이들 사이에서 유명하던데?							"
@@ -160,6 +230,7 @@ private:
 		, "치즈를 얻게 된다면 꼭 나에게 가져오도록 해 그에 대한 대가는 충분히 치를테니 말이야				"
 		, "그래 알겠어													"
 	};
+
 public:
 	static bool bagpull[12];
 	static bool m_pull[8];
@@ -171,6 +242,8 @@ public:
 		ItemAdd(1);
 		ItemAdd(1);
 		ItemAdd(2);
+		ItemAdd(3);
+		ItemAdd(3);
 		life = true;						// 생존여부
 		food = 100;
 		water = 100;
@@ -627,7 +700,7 @@ public:
 				// 특정 역 이동시 퀘스트 생성
 				if (position == 3) {
 					if (story == 0) {
-						for(int i=0; i<7; i++)
+						for(int i=0; i < 7; i++)
 							if (i == 1 || i == 6)
 								Talk(talk1[i], "  나  ");
 							else
@@ -636,21 +709,37 @@ public:
 					}
 					QuestAdd(1, "캣잎");
 				}
-				if (position == 10) {
+				if (position == 2) {
 					if (story == 1) {
+						for (int i = 0; i < 7; i++)
+							if (i == 1 || i == 3 || i == 6)
+								Talk(talk2[i], "  나  ");
+							else
+								Talk(talk2[i], "나  비");
+						story++;
+					}
+					QuestAdd(2, "리본");
+				}
+				if (position == 10) {
+					if (story == 2) {
+						for (int i = 0; i < 8; i++)
+							if (i == 3 || i == 7)
+								Talk(talk3[i], "  나  ");
+							else
+								Talk(talk3[i], "Mr.Ham");
+						story++;
+					}
+					QuestAdd(3, "치즈");
+				}
+				if (position == 13) {
+					if (story == 3) {
 						for (int i = 0; i < 8; i++)
 							if (i == 3 || i == 7)
 								Talk(talk2[i], "  나  ");
 							else
-								Talk(talk2[i], "Mr.Ham");
+								Talk(talk2[i], "김덕구");
 						story++;
 					}
-					QuestAdd(2, "치즈");
-				}
-				if (position == 2) {
-					QuestAdd(3, "리본");
-				}
-				if (position == 13) {
 					QuestAdd(4, "도서");
 				}
 			}
@@ -681,9 +770,11 @@ public:
 		bool answer = true;
 		if (water <= 10 || food <= 10 || energy <= 10) {		// 90% 확률로 사망
 			if ((rand() % 99 + 1) <= 90) answer = false;
+			state = 3;
 		}
 		else if (water <= 20 || food <= 20 || energy <= 20) {	// 50% 확률로 사망
 			if ((rand() % 99 + 1) <= 50) answer = false;
+			state = 3;
 		}
 		else if (water <= 30 || food <= 30 || energy <= 30) {	// 20% 확률로 사망
 			if ((rand() % 99 + 1) <= 20) answer = false;
@@ -704,6 +795,14 @@ public:
 				case 1: item[i] = new Water();
 					break;
 				case 2: item[i] = new Food();
+					break;
+				case 3: item[i] = new Leaf();
+					break;
+				case 4: item[i] = new Ribbon();
+					break;
+				case 5: item[i] = new Cheese();
+					break;
+				case 6: item[i] = new Book();
 					break;
 				}
 				bagpull[i] = true;
@@ -726,17 +825,31 @@ public:
 		} while (k != 89 && k != 78);
 		if (k == 89) {
 			system("cls");
-			cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t   ";
+			cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t   ";
 			switch (item[key]->getId()) {
 			case 1:
-				cout << "수분 25 상승" << endl;
+				cout << "\t수분 25 상승" << endl;
 				water += 25;
 				if (water >= 100) water = 100;
 				break;
 			case 2:
-				cout << "배고픔 30 상승" << endl;
+				cout << "\t배고픔 30 상승" << endl;
 				food += 30;
 				if (food >= 100) food = 100;
+				break;
+			case 3:
+				cout << "왠지 모르게 기분이 좋아진다.";
+				break;
+			case 4:
+				cout << "아까보다는 조금 멋있어진 것 같다.";
+				break;
+			case 5:
+				cout << "상성이 맞지않는 음식 섭취, 배고픔 -10";
+				food -= 10;
+				break;
+			case 6:
+				cout << "평소에 하지 않은 행동, 에너지 -10";
+				energy -= 10;
 				break;
 			}
 			delete item[key];
@@ -923,7 +1036,7 @@ public:
 			cout << "┏━━━━━━━━━━┓		      ┏━━━━━━━━━━┓	  ";
 			textcolor(WHITE, BLACK);
 			cout << "┃" << endl;
-			cout << "		┃     히든 3,000원     ┃		┃     ";
+			cout << "		┃     히든 2,500원     ┃		┃     ";
 			textcolor(CYAN, BLACK);
 			cout << "┃  ┏━━━━┓  ┃		      ┃  ┏━━━━┓  ┃	  ";
 			textcolor(WHITE, BLACK);
@@ -992,8 +1105,8 @@ public:
 					cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t";
 					cout << "생수를 구매하시겠습니까?" << endl;
 					cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-					cout << "												Y : 구매" << endl;
-					cout << "												N : 취소" << endl;
+					cout << "													Y : 구매" << endl;
+					cout << "													N : 취소" << endl;
 					do {
 						k2 = toupper(_getch());
 					} while (k2 != 89 && k2 != 78);
@@ -1050,31 +1163,105 @@ public:
 						}
 					}
 					break;
+				case 2:
+				case 3:
+					cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t";
+					cout << "랜덤을 구매하시겠습니까?" << endl;
+					cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+					cout << "													Y : 구매" << endl;
+					cout << "													N : 취소" << endl;
+					do {
+						k2 = toupper(_getch());
+					} while (k2 != 89 && k2 != 78);
+					if (k2 == 89) {
+						if (ItemAdd(2) && money >= 2500) {
+							money -= 2500;
+							system("cls");
+							// 랜덤 모션 구현
+							Sleep(1500);
+						}
+						else if (money < 2500) {
+							cout << "보유 금액이 부족합니다." << endl;
+							system("pause");
+						}
+						else {
+							cout << "가방 공간이 가득찼습니다. 더 이상 구매할 수 없습니다." << endl;
+							system("pause");
+						}
+					}
+					break;
 				}
 			}
 			system("cls");
 		}
 		system("cls");
 	}
-	void QuestRead(int idx) {
-		cout << quest[idx]->getName() << endl;
-		cout << quest[idx]->getText() << endl;
-		// 퀘스트에 필요한 아이템 보유 현황 출력 구현
-		cout << quest[idx]->getItem() << " : 0/" << quest[idx]->getNum() << endl;
-		_getch();
+	void QuestUse(int idx) {
+		int check = 0;
+		for (int i = 0; i < 12; i++) {
+			if(bagpull[i])
+				if (quest[idx]->getItem() == item[i]->getName())
+					check++;
+		}
+		if (quest[idx]->getNum() <= check) {
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t    ";
+			cout << "Quest Cleear!!" << endl;
+			cout << "\n\t\t\t\t\t\t    보상 : " << 5000 * quest[idx]->getNum() << endl;
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+			int cnt = quest[idx]->getNum();
+			for (int j = 0; j < 12; j++) {
+				if (bagpull[j]) {
+					if (cnt != 0 && quest[idx]->getItem() == item[j]->getName()) {
+						cnt--;
+						delete item[j];
+						bagpull[j] = false;
+					}
+				}
+			}
+			money += 5000 * quest[idx]->getNum();
+			delete quest[idx];
+			q_pull[idx] = false;
+			Sleep(2000);
+		} else {
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t";
+			cout << "퀘스트 완료에 필요한 아이템이 부족합니다." << endl;
+			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+			Sleep(2000);
+		}
 	}
 	void QuestAdd(int id, string item) {
-		for (int i = 0; i < 8; i++) {
-			if (!q_pull[i]) {
-				quest[i] = new Quests(id, item);
-				q_pull[i] = true;
-				break;
+		string name;
+		switch (id) {
+		case 1: name = "고영희";
+			break;
+		case 2:  name = "나  비";
+			break;
+		case 3:  name = "Mr.Ham";
+			break;
+		case 4:  name = "김덕구";
+			break;
+		}
+		int check = 0;
+		for (int i = 0; i < Quests::cnt; i++) {
+			if (q_pull[i]) {
+				if (quest[i]->getName() == name)
+					check++;
+			}
+		}
+		if (check == 0) {
+			for (int i = 0; i < 8; i++) {
+				if (!q_pull[i]) {
+					if (story >= id)
+						quest[i] = new Quests(id, item, name);
+					q_pull[i] = true;
+					break;
+				}
 			}
 		}
 	}
 	void Quest() {
 		if (Quests::cnt != 0) {
-			string check[8] = { "■", "□", "□", "□", "□", "□", "□", "□" };
+			bool check[8] = { true, false, false, false, false, false, false, false };
 			int key = 0, k = 0;
 			while (Quests::cnt != 0 && k != 88) {
 				system("cls");
@@ -1092,12 +1279,36 @@ public:
 							if (p != 0)
 								cout << "				|	__________________________________________	|" << endl;
 							cout << "				|							|" << endl;
-							cout << "				|	" << quest[i]->getName() << " 					" << check[p] << "	|" << endl;
+							cout << "				|	" << quest[i]->getName() << " 						|" << endl;
+							cout << "				|	" << quest[i]->getItem() << " : ";
+							int cnt = 0;
+							for (int j = 0; j < 12; j++) {
+								if (bagpull[j])
+									if (quest[i]->getItem() == item[j]->getName())
+										cnt++;
+							}
+							cout << cnt << "/" << quest[i]->getNum() << "			";
+							if (check[p]) textcolor(LIGHTGREEN, BLACK);
+							cout << "     완료";
+							textcolor(WHITE, BLACK); 
+							cout << "	|" << endl;
 						}
 						else {
-							cout << "				|	__________________________________________	|		Enter : 선택" << endl;
-							cout << "				|							|		↑,↓ : 이동" << endl;
-							cout << "				|	" << quest[i]->getName() << " 				" << check[p] << "	|			X : 종료" << endl;
+							cout << "				|	__________________________________________	|" << endl;
+							cout << "				|							|		Enter : 선택" << endl;
+							cout << "				|	" << quest[i]->getName() << " 				" << check[p] << "	|		↑,↓ : 이동" << endl;
+							cout << "				|	" << quest[i]->getItem() << " : ";
+							int cnt = 0;
+							for (int j = 0; j < 12; j++) {
+								if(bagpull[j])
+									if (quest[i]->getItem() == item[j]->getName())
+										cnt++;
+							}	
+							cout << cnt << "/" << quest[i]->getNum() << "			";
+							if (check[p]) textcolor(LIGHTGREEN, BLACK);
+							cout << "     완료";
+							textcolor(WHITE, BLACK);
+							cout << "	|			X : 종료" << endl;
 						}
 						ps[p] = i;
 					}
@@ -1118,19 +1329,19 @@ public:
 					k = toupper(_getch());
 				} while (k != 13 && k != 72 && k != 80 && k != 88);
 				if (key != (Quests::cnt - 1) && k == 80) {
-					check[key] = "□";
-					check[++key] = "■";
+					check[key] = false;
+					check[++key] = true;
 				}
 				else if (key != 0 && k == 72) {
-					check[key] = "□";
-					check[--key] = "■";
+					check[key] = false;
+					check[--key] = true;
 				}
 				else if (k == 13) {
 					system("cls");
-					QuestRead(ps[key]);
-					check[key] = "□";
+					QuestUse(ps[key]);
+					check[key] = false;
 					key = 0;
-					check[0] = "■";
+					check[0] = true;
 				}
 			}
 		}
@@ -1185,6 +1396,18 @@ public:
 			cout << "						　　　　  　　　　　　 ,:'　　　　　　　    : :::::::::::::" << endl;
 			cout << "						　　　　　　　 　　 ,:'　　　　　　　　        : : ::::::::::" << endl;
 		}
+		else if (name == "나  비") {
+			cout << endl;
+			cout << "									　　　　  　　　　　　     .／＞　　フ" << endl;
+			cout << "									　　　　  　　　　　　     |   _　 _ l" << endl;
+			cout << "									　　　　  　　　　　　    ／` ミ＿Yノ" << endl;
+			cout << "									　　　　  　　　　　　   /　　　  　 |" << endl;
+			cout << "									　　　　  　　　　　　  /　 ＼ 　　 /" << endl;
+			cout << "									　　　　  　　　　　　 │　    |　|　|" << endl;
+			cout << "									　　　　  　　　　　　 ／￣|　|　|　|" << endl;
+			cout << "									　　　　  　　　　　　 | (￣＼＿＼_)__)" << endl;
+			cout << "									　　　　  　　　　　　 ＼二つ" << endl;
+		}
 		else if (name == "Mr.Ham") {
 			cout << endl << endl << endl;
 			cout << "						　　　　　　　　　　　  　 　 　|``--,...　　　　　``　＊ |" << endl;
@@ -1229,7 +1452,7 @@ public:
 		cout << "|															|" << endl;
 		cout << "|															|" << endl;
 		cout << "|															|" << endl;
-		cout << "|															|" << endl;
+		cout << "|													Enter >>	|" << endl;
 		cout << "|______________________________________________________________________________________________________________________|" << endl;
 		char yn;
 		do {
