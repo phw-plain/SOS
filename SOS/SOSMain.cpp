@@ -32,36 +32,12 @@ void GameClear(User a);
 int Menu();
 
 int main() {
-	// 파일 입출력
-	//FILE* pFile = fopen("Jumsu.txt", "r");
-	// 파일이 존재하지 않는 경우
-
-
-	//char str[50];
-	//fgets(str, 50, pFile);
-	//fclose(pFile);
-	//cout << str << endl;
-	
-
-	//ifstream write("Jumsu.txt");
-	//ofstream read("Jumsu.txt");
-
-	//// 파일이 없는 경우 새로 파일 생성
-	//if (write.fail()) {
-	//	ofstream WriteFile("Jumsu.txt");
-	//}
-	//ofstream WriteFile("Jumsu.txt"); // 파일 생성
-	//WriteFile << "test	300" << endl;
-	//WriteFile.close();
-	//string Jumsu; // 파일 내용
-	//ifstream ReadFile("Jumsu.txt");
-	//cout << "현재 점수 : ";
-	//while (getline(ReadFile, Jumsu)) {
-	//	cout << Jumsu << endl; // 파일 라인 단위로 출력
-
-	//}
-	/*system("pause");
-	system("cls");*/
+	User test;
+	for (int i = 0; i < 5; i++)
+		if (i == 2 || i == 4)
+			test.Talk(test.talk4[i], "  나  ");
+		else
+			test.Talk(test.talk4[i], "김덕구");
 
 	/*User test;
 	if (test.play()) {
@@ -321,22 +297,27 @@ void Rule() {
 	cout << "		== 게임 플레이 방법 ==" << endl;
 	cout << endl;
 	cout << "▶ 배고픔과 수분 에너지가 떨어지지 않게 잘 유지해야 합니다." << endl;
-	cout << "▶ 위 세가지는 쾌적(초록), 양호(노랑), 최악(빨강)으로 분류됩니다." << endl;
-	cout << "▶ 상태가 최악인 경우에는 이동하기 기능을 사용할 수 없습니다." << endl;
-	cout << "▶ 또한 확률적으로 사망하며 게임 오버 됩니다." << endl;
+	cout << "▶ 위 세가지는 쾌적(초록), 위험(노랑), 최악(빨강)으로 분류됩니다." << endl;
+	cout << "▶ 상태가 쾌적이 아닌 경우에는 이동하기 기능을 사용할 수 없습니다." << endl;
+	cout << "▶ 상태가 위험, 최악인 경우 확률적으로 사망하며 게임 오버 됩니다." << endl;
 	cout << endl;
 	cout << "<이동하기>" << endl;
 	cout << "▶ 이동하기를 통해서 다른 역으로 이동할 수 있습니다." << endl;
-	cout << "▶ 난이도에 따라서 역을 이동할 수 있는 간격이 정해집니다." << endl;
-	cout << "▶ 한 번 방문한 역은 다시 돌아갈 수 없습니다." << endl;
+	cout << "▶ 한번에 5개의 역을 이동할 수 있습니다." << endl;
+	cout << "▶ 특정 역에 도착할 경우 퀘스트를 받을 수 있습니다." << endl;
+	cout << endl;
+	cout << "<SHOP>" << endl;
+	cout << "▶ 생존하기와 퀘스트에 필요한 물품을 구매할 수 있습니다." << endl;
 	cout << endl;
 	cout << "<조작키>" << endl;
 	cout << "Enter, 다음 장면으로 넘어갈 수 있다." << endl;
 	cout << "S, 인트로 진행 도중 스킵할 수 있다." << endl;
-	cout << "1, 취침하기 : 다음날로 넘어갈 수 있다." << endl;
-	cout << "2, 문자보기 : 도착한 메세지를 확인할 수 있다." << endl;
-	cout << "Q, 가방 : 아이템을 확인할 수 있다." << endl;
-	cout << "W, 지도 : 지하철 노선을 볼 수 있다." << endl;
+	cout << "1, 취침 하기" << endl;
+	cout << "2, 문자 읽기" << endl;
+	cout << "3, 상점 가기" << endl;
+	cout << "Q, 퀘스트 보기" << endl;
+	cout << "W, 지도 열기"  << endl;
+	cout << "E, 가방 열기" << endl;
 	_getch();
 }
 
@@ -386,11 +367,11 @@ void Rank() {
 		}
 	}
 	for (i = cnt-1; i >= 0; i--) {
-		cout << cnt - i << ".   " << name[i] << "\t" << rank[rank[i][0]-1][1] << endl;
+		cout << "						" << cnt - i << ".   " << name[i] << "\t" << rank[rank[i][0]-1][1] << "초" << endl;
 	}
 	cout << "\n					     ________________________" << endl;
 	textcolor(WHITE, BLACK);
-	system("pause");
+	_getch();
 	system("cls");
 }
 void GameOver(User a) {

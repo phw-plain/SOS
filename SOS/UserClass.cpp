@@ -196,7 +196,7 @@ private:
 	int position;	// 현재 역 위치
 	string map[16] = {
 		"국화역", "장미역", "난초역", "동백역", "매화역",
-		"모란역", "별꽃역", "수련역", "안개역", "연꽃역",
+		"모란역", "벚꽃역", "수련역", "안개역", "연꽃역",
 		"팬지역", "백합역", "철쭉역", "수국역", "카라역",
 		"박하역"
 	};
@@ -232,7 +232,14 @@ private:
 		, "치즈를 얻게 된다면 꼭 나에게 가져오도록 해 그에 대한 대가는 충분히 치를테니 말이야				"
 		, "그래 알겠어													"
 	};
-
+	// 김덕구 대화 내용
+	string talk4[5] = {
+	"안녕? 난 김덕구야												"
+	, "혹시 내가 필요한 것도 가져다 줄 수 있을까?									"
+	, "뭐가 필요한데??													"
+	, "나는 책을 읽는걸 좋아해서 혹시 도서를 발견한다면 나에게 가져다 줘!						"
+	, "그래 알겠어													"
+	};
 public:
 	static bool bagpull[12];
 	static bool m_pull[8];
@@ -555,61 +562,73 @@ public:
 		return check;
 	}
 	void NextDay() {
-		survive++;
-		day++;
-		switch (month) {
-		case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-			if (day > 31) {
-				month++;
-				day = 1;
-			}
-			break;
-		case 4: case 6: case 9: case 11:
-			if (day > 30) {
-				month++;
-				day = 1;
-			}
-			break;
-		default:
-			if (day > 28) {
-				month++;
-				day = 1;
-			}
-		}
-		// 수분 배고픔 10~20 사이의 감소(rand이용)
-		food -= (rand() % 11 + 10);
-		water -= (rand() % 11 + 10);
-		energy += 30;
-		// 에너지 증가
-		if (energy > 100) energy = 100;
-		// 상점 초기화
-		s_cnt = 0;
-		// 생존 여부
-		life = DieCheck();
-		// 화면에 보여지는 그림
-		cout << "\n\n\n\n\n\n";
-		PlaySound(TEXT("sleep.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
-		cout << "\t\t\t\t\t\t∩――――∩" << endl;
-		cout << "\t\t\t\t\t\t|| ∧ ∧　||" << endl;
-		cout << "\t\t\t\t\t\t||(*´ -`)//" << endl;
-		cout << "\t\t\t\t\t\t| / ^ ⌒⌒づ`￣＼" << endl;
-		cout << "\t\t\t\t\t\t   (ノ　　⌒  ＼ ＼" << endl;
-		cout << "\t\t\t\t\t\t ＼　　 || ￣￣￣￣￣ ||" << endl;
-		cout << "\t\t\t\t\t\t   ＼, /|| ――――― ||" << endl;
-		cout << "\n\n\t\t\t\t\t\t     ";
-		const char* a = "휴 식 중 . . .";
-		textcolor(LIGHTGREEN, BLACK);
-		for (int j = 0; j < strlen(a); j++) {
-			Sleep(300);
-			cout << a[j];
-		}
-		textcolor(WHITE, BLACK);
-		Sleep(1000);
-		PlaySound(NULL, 0, 0);
-		cout << "\n\n\n\n\n\n\n\n\n\n\n";
-		cout << "													휴식 완료!!" << endl;
-		Sleep(1000);
+		int yn; system("cls");
+		cout << "\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t";
+		cout << "취침 하시겠습니까?" << endl;
+		cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+		cout << "													Y : 시작" << endl;
+		cout << "													N : 취소" << endl;
+		do {
+			yn = tolower(_getch());
+		} while (yn != 121 && yn != 110);
 		system("cls");
+		if (yn == 121) {
+			survive++;
+			day++;
+			switch (month) {
+			case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+				if (day > 31) {
+					month++;
+					day = 1;
+				}
+				break;
+			case 4: case 6: case 9: case 11:
+				if (day > 30) {
+					month++;
+					day = 1;
+				}
+				break;
+			default:
+				if (day > 28) {
+					month++;
+					day = 1;
+				}
+			}
+			// 수분 배고픔 10~20 사이의 감소(rand이용)
+			food -= (rand() % 11 + 10);
+			water -= (rand() % 11 + 10);
+			energy += 30;
+			// 에너지 증가
+			if (energy > 100) energy = 100;
+			// 상점 초기화
+			s_cnt = 0;
+			// 생존 여부
+			life = DieCheck();
+			// 화면에 보여지는 그림
+			cout << "\n\n\n\n\n\n";
+			PlaySound(TEXT("sleep.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
+			cout << "\t\t\t\t\t\t∩――――∩" << endl;
+			cout << "\t\t\t\t\t\t|| ∧ ∧　||" << endl;
+			cout << "\t\t\t\t\t\t||(*´ -`)//" << endl;
+			cout << "\t\t\t\t\t\t| / ^ ⌒⌒づ`￣＼" << endl;
+			cout << "\t\t\t\t\t\t   (ノ　　⌒  ＼ ＼" << endl;
+			cout << "\t\t\t\t\t\t ＼　　 || ￣￣￣￣￣ ||" << endl;
+			cout << "\t\t\t\t\t\t   ＼, /|| ――――― ||" << endl;
+			cout << "\n\n\t\t\t\t\t\t     ";
+			const char* a = "휴 식 중 . . .";
+			textcolor(LIGHTGREEN, BLACK);
+			for (int j = 0; j < strlen(a); j++) {
+				Sleep(300);
+				cout << a[j];
+			}
+			textcolor(WHITE, BLACK);
+			Sleep(1000);
+			PlaySound(NULL, 0, 0);
+			cout << "\n\n\n\n\n\n\n\n\n\n\n";
+			cout << "													휴식 완료!!" << endl;
+			Sleep(1000);
+			system("cls");
+		}
 	}
 	void Move(string map, int k) {
 		int cnt1 = 0, cnt2 = 0;
@@ -728,8 +747,8 @@ public:
 					}
 					if (position == 13) {
 						if (story == 3) {
-							for (int i = 0; i < 8; i++)
-								if (i == 3 || i == 7)
+							for (int i = 0; i < 5; i++)
+								if (i == 2 || i == 4)
 									Talk(talk2[i], "  나  ");
 								else
 									Talk(talk2[i], "김덕구");
@@ -1424,6 +1443,19 @@ public:
 			textcolor(WHITE, BLACK);
 			cout << "⌒　　        :I," << endl;
 		}
+		else if (name == "김덕구") {
+			cout << endl;
+			cout << "											      / ＼　　　 ／∧" << endl;
+			cout << "											     / ∧ ＞―＜/　 |" << endl;
+			cout << "											    /／　´ 　　｀  `" << endl;
+			cout << "											   ｜ u　 ○　　○　 |" << endl;
+			cout << "											   /　　　　 ▼      ＼" << endl;
+			cout << "											  ｜　  　( _人_ )　　|" << endl;
+			cout << "											   (        |＿|     )" << endl;
+			cout << "											    / ＼ 　　　 　／ ＼" << endl;
+			cout << "											   /   ＼二二つ⊂二    ＼" << endl;
+		}
+
 		else if (name == "  나  ") {
 			cout << "	　  　,;'':;, 　　　　       ,;'':;," << endl;
 			cout << "	　　 ;'　　 ':;,.,.,.,.,.,,,;'　　 ';," << endl;
