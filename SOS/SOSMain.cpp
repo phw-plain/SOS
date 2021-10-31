@@ -32,20 +32,6 @@ void GameClear(User a);
 int Menu();
 
 int main() {
-	User test;
-	for (int i = 0; i < 5; i++)
-		if (i == 2 || i == 4)
-			test.Talk(test.talk4[i], "  나  ");
-		else
-			test.Talk(test.talk4[i], "김덕구");
-
-	/*User test;
-	if (test.play()) {
-		GameOver(test);
-	}
-	else {
-		GameClear(test);
-	}*/
 	srand((unsigned)time(NULL));
 	int num = 0;
 	PlaySound(TEXT("main.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
