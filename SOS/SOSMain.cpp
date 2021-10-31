@@ -11,7 +11,7 @@
 #pragma comment(lib,"winmm.lib")
 using namespace std;
 
-
+#define MAX_DIGITS 10
 bool User::bagpull[12] = { false, false, false, false, false, false, false, false, false, false, false, false };
 bool User::m_pull[8] = { false, false, false, false, false, false, false, false };
 bool User::q_pull[8] = { false, false, false, false };
@@ -26,32 +26,19 @@ int Quests::cnt = 0;
 void Intro();
 void Rule();
 void Rank();
-void GameOver();
-void GameClear();
+void GameOver(User a);
+void GameSad(User a);
+void GameClear(User a);
 int Menu();
-//int Level();
 
 int main() {
-	// 파일 입출력
-	//ofstream WriteFile("Jumsu.txt"); // 파일 생성
-	//WriteFile << "300" << endl;
-	//WriteFile.close();
-	//string Jumsu; // 파일 내용
-	//ifstream ReadFile("Jumsu.txt");
-	//cout << "현재 점수 : ";
-	//while (getline(ReadFile, Jumsu)) {
-	//	cout << Jumsu << endl; // 파일 라인 단위로 출력
-
-	//}
-	//system("pause");
-	//system("cls");
-
+	// 테스트 계정
 	User test;
 	if (test.play()) {
-		GameOver();
+		GameOver(test);
 	}
 	else {
-		GameClear();
+		GameClear(test);
 	}
 	srand((unsigned)time(NULL));
 	int num = 0;
@@ -63,15 +50,14 @@ int main() {
 			PlaySound(NULL, 0, 0);
 			system("cls");
 			Intro();
-			//int level = Level();
-			//User u(level);
-			User u;
-			if (u.play()) {
-				GameOver();
+			User *u = new User();
+			if (u->play()) {
+				GameOver(*u);
 			}
 			else {
-				GameClear();
+				GameClear(*u);
 			}
+			delete u;
 			break;
 			PlaySound(TEXT("main.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
 		}
@@ -301,21 +287,6 @@ int Menu() {
 	return num;
 }
 
-//int Level() {
-//	int level;
-//	cout << "\n\n\n\n\n\n\n";
-//	cout << "					           난이도 설정 " << endl;
-//	cout << "					                   " << endl;
-//	cout << "					            1. 쉬움    " << endl;
-//	cout << "					            2. 보통    " << endl;
-//	cout << "					            3. 어려움  " << endl;
-//	cout << "					                   " << endl;
-//	cout << "\n\n\n					         ☞  ";
-//	cin >> level;
-//	system("cls");
-//	return level;
-//}
-
 void Rule() {
 	cout << "		== 게임 플레이 방법 ==" << endl;
 	cout << endl;
@@ -360,7 +331,7 @@ void Rank() {
 	system("pause");
 	system("cls");
 }
-void GameOver() {
+void GameOver(User a) {
 	textcolor(RED, BLACK);
 	cout << endl << endl;
 	cout << "               ■■■■■■■■          ■■■■■	      ■■    ■■         ■■■■■■■■" << endl;
@@ -378,12 +349,15 @@ void GameOver() {
 	cout << "               ■            ■       ■            ■      ■                     ■            ■" << endl;
 	cout << "               ■            ■         ■        ■        ■                     ■            ■" << endl;
 	cout << "               ■■■■■■■■           ■■■■          ■■■■■■■■       ■            ■" << endl;
-	cout << endl << endl << endl << endl << endl << endl << endl << endl;
 	textcolor(WHITE, BLACK);
+	cout << endl << endl;
+	cout << "               생존        : " << a.getSurvive() << "일" << endl << endl;
+	cout << "               플레이 타임 : " << a.getPlaytime() << "초" << endl << endl;
+	cout << endl << endl << endl << endl << endl;
 	system("pause");
 	system("cls");
 }
-void GameClear () {
+void GameClear (User a) {
 	textcolor(LIGHTGREEN, BLACK);
 	cout << endl << endl;
 	cout << "               ■■■■■■■■         ■■■■■           ■■    ■■         ■■■■■■■" << endl;
@@ -401,8 +375,52 @@ void GameClear () {
 	cout << "               ■               ■               ■               ■          ■   ■          ■" << endl;
 	cout << "               ■               ■               ■               ■          ■   ■          ■" << endl;
 	cout << "               ■■■■■■■   ■■■■■■■   ■■■■■■■   ■          ■   ■          ■" << endl;
-	cout << endl << endl << endl << endl << endl << endl << endl << endl;
 	textcolor(WHITE, BLACK);
+	cout << endl << endl;
+	cout << "               생존        : " << a.getSurvive() << "일" << endl << endl;
+	cout << "               플레이 타임 : " << a.getPlaytime() << "초" << endl << endl;
+	cout << "               이름 입력   : ";
+	char username[10];
+	cin >> username;
+	cout << endl << endl << endl << endl << endl;
+	// 게임 기록 저장
+	char buf[256];
+	sprintf_s(buf, "%d", a.getPlaytime());
+	strcat(username, "\t");
+	strcat(username, buf);
+	char result[100];
+	strcpy(result, "\n");
+	strcat(result, username);
+	FILE* pFile = fopen("Jumsu.txt", "a");
+	fputs(result, pFile);
+	fclose(pFile);
+	system("pause");
+	system("cls");
+}
+void GameSad (User a) {
+	textcolor(CYAN, BLACK);
+	cout << endl << endl; //ending
+	cout << "               ■■■■■■■      ■■■■■■■      ■■■■■■" << endl;
+	cout << "               ■                  ■          ■      ■          ■" << endl;
+	cout << "               ■                  ■          ■      ■          ■" << endl;
+	cout << "               ■■■■■■■      ■■■■■■■      ■          ■" << endl;
+	cout << "                           ■      ■          ■      ■          ■" << endl;
+	cout << "                           ■      ■          ■      ■          ■" << endl;
+	cout << "               ■■■■■■■      ■          ■      ■■■■■■" << endl;
+	cout << endl << endl;
+	cout << "               ■■■■■■■    ■        ■■    ■■■■■■     ■■■■■■    ■       ■■    ■■■■■■■" << endl;
+	cout << "               ■                ■       ■ ■    ■          ■       ■■        ■      ■ ■    ■" << endl;
+	cout << "               ■                ■     ■   ■    ■          ■       ■■        ■     ■  ■    ■" << endl;
+	cout << "               ■■■■■■■    ■    ■    ■    ■          ■       ■■        ■    ■   ■    ■    ■■■■" << endl;
+	cout << "               ■                ■   ■     ■    ■          ■       ■■        ■   ■    ■    ■          ■" << endl;
+	cout << "               ■                ■  ■      ■    ■          ■       ■■        ■  ■     ■    ■          ■" << endl;
+	cout << "               ■■■■■■■    ■■        ■    ■■■■■■     ■■■■■■    ■■       ■    ■■■■■■■" << endl;
+	textcolor(WHITE, BLACK);
+	cout << endl << endl;
+	cout << "               생존 : " << a.getSurvive() << "일" << endl << endl;
+	cout << "               플레이 타임 : " << a.getPlaytime() << "초" << endl << endl;
+	cout << "               => 클리어 조건을 만족하지 못하였습니다.";
+	cout << endl << endl << endl << endl;
 	system("pause");
 	system("cls");
 }

@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <Windows.h>
 #include <conio.h>
+#include <time.h> 
 #include "TextColor.h"		// 텍스트 컬러 소스 파일
 using namespace std;
 
@@ -187,6 +188,7 @@ private:
 	int state;		// 상태
 	int s_cnt;		// 상점 이용 제한
 	int story;		// 스토리 확인 갯수
+	int playtime;	// 플레이 타임
 	Quests* quest[8];	// 메세지
 	Messages* message[8];	// 메세지
 	Item* item[12];			// 아이템
@@ -235,7 +237,6 @@ public:
 	static bool bagpull[12];
 	static bool m_pull[8];
 	static bool q_pull[8];
-	//User(int level) {
 	User() {
 		MessageAdd("SOS 운영자", "SOS 게임에 오신 것을 환영합니다.\n기본적으로 지급되는 생수와 식량 외에 더 많은 것을 얻고 싶다면 다른 곳으로 움직여야 할 것 입니다.\n그럼 행운을 빕니다.\n\n※ 한번 본 메세지는 더 이상 확인할 수 없습니다.");
 		MessageAdd("고영희	", "안녕? 혹시 시간이 된다면 동백역으로 와줘 너에게도 도움이 될 거야");
@@ -253,15 +254,17 @@ public:
 		month = 5;							// 월
 		day = 25;							// 일
 		money = 30000;						// 보유 돈
-		//quest = false;
 		position = 0;
 		state = 1;
 		s_cnt = 0;
 		story = 0;
+		playtime = time(NULL);
 	}
 	bool play() {
 		while (s_day > 0) {
 			PlaySound(TEXT("playbgm.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
+			if (survive == 10) MessageAdd("긴급 상황 문자", "현재 지하철역이 대대적으로 붕괴되어 구조에 많은 시간이 소요되고 있습니다.\n현 정부는 현재 대비하지 못한 시민 여러분들의 최선을 다해 빠르게 구조를 마칠 계획입니다.\n");
+			if (survive == 20) MessageAdd("긴급 상황 문자", "열흘 뒤 11호선의 구조를 시작할 계획입니다.\n해당 역에 계신 분들은 국화역으로 모여주시기 바랍니다.\n");
 			char check = Phone();
 			system("cls");
 			PlaySound(NULL, 0, 0);
@@ -274,19 +277,12 @@ public:
 				case '3': if (s_cnt == 0) Shop();
 						else ClossShop();
 						break;
-				/*case '9': 
-					Talk("아...안녕??						", "햄스타");
-					for(int i=0; i<7; i++)
-						if (i == 1 || i == 6) 
-							Talk(talk1[i], "  나  ");
-						else 
-							Talk(talk1[i], "고영희");
-					break;*/
 			}
 			if (!life) {
 				break;
 			}
 		}
+		playtime = (double)(time(NULL) - playtime);
 		if (survive == day) return false;
 		else return true;
 	}
@@ -305,7 +301,7 @@ public:
 				if (bagpull[i])
 					cout << "     " << item[i]->getName();
 				else
-					cout << "        ";
+					cout << "         ";
 			}
 			cout << "\t|" << endl;
 			// 아이템 선택 창
@@ -321,7 +317,7 @@ public:
 				if (bagpull[i])
 					cout << "     " << item[i]->getName();
 				else
-					cout << "        ";
+					cout << "         ";
 			}
 			cout << "\t|" << endl;
 			cout << "					|      ";
@@ -336,7 +332,7 @@ public:
 				if (bagpull[i])
 					cout << "     " << item[i]->getName();
 				else
-					cout << "        ";
+					cout << "         ";
 			}
 			cout << "\t|" << endl;
 			cout << "					|      ";
@@ -351,7 +347,7 @@ public:
 				if (bagpull[i])
 					cout << "     " << item[i]->getName();
 				else
-					cout << "        ";
+					cout << "         ";
 			}
 			cout << "\t|" << endl;
 			cout << "					|      ";
@@ -434,7 +430,6 @@ public:
 			cout << "													Enter : 선택" << endl;
 			cout << "													←,→ : 이동" << endl;
 			cout << "													    X : 종료" << endl;
-			// 75 left 77 right
 			do {
 				k = toupper(_getch());
 			} while (k != 13 && k != 75 && k != 77 && k != 88);
@@ -626,14 +621,13 @@ public:
 			if (i == 0) i = 16;
 			cnt2++;
 		}
-		if (/*(cnt1 <= 5 || cnt2 <= 5) &&*/ state != 2 && k != position) {
+		if ((cnt1 <= 5 || cnt2 <= 5) && state != 2 && k != position) {
 			int yn; system("cls");
 			cout << "\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t";
 			cout << map << " 으로 이동하시겠습니까?" << endl;
 			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 			cout << "													Y : 시작" << endl;
 			cout << "													N : 취소" << endl;
-			// 이동 yn 구현 필요 
 			do {
 				yn = tolower(_getch());
 			} while (yn != 121 && yn != 110);
@@ -698,49 +692,51 @@ public:
 				Sleep(1000);
 				system("cls");
 				// 특정 역 이동시 퀘스트 생성
-				if (position == 3) {
-					if (story == 0) {
-						for(int i=0; i < 7; i++)
-							if (i == 1 || i == 6)
-								Talk(talk1[i], "  나  ");
-							else
-								Talk(talk1[i], "고영희");
-						story++;
+				if (life) {
+					if (position == 3) {
+						if (story == 0) {
+							for (int i = 0; i < 7; i++)
+								if (i == 1 || i == 6)
+									Talk(talk1[i], "  나  ");
+								else
+									Talk(talk1[i], "고영희");
+							story++;
+						}
+						QuestAdd(1, "캣잎");
 					}
-					QuestAdd(1, "캣잎");
-				}
-				if (position == 2) {
-					if (story == 1) {
-						for (int i = 0; i < 7; i++)
-							if (i == 1 || i == 3 || i == 6)
-								Talk(talk2[i], "  나  ");
-							else
-								Talk(talk2[i], "나  비");
-						story++;
+					if (position == 2) {
+						if (story == 1) {
+							for (int i = 0; i < 7; i++)
+								if (i == 1 || i == 3 || i == 6)
+									Talk(talk2[i], "  나  ");
+								else
+									Talk(talk2[i], "나  비");
+							story++;
+						}
+						QuestAdd(2, "리본");
 					}
-					QuestAdd(2, "리본");
-				}
-				if (position == 10) {
-					if (story == 2) {
-						for (int i = 0; i < 8; i++)
-							if (i == 3 || i == 7)
-								Talk(talk3[i], "  나  ");
-							else
-								Talk(talk3[i], "Mr.Ham");
-						story++;
+					if (position == 10) {
+						if (story == 2) {
+							for (int i = 0; i < 8; i++)
+								if (i == 3 || i == 7)
+									Talk(talk3[i], "  나  ");
+								else
+									Talk(talk3[i], "Mr.Ham");
+							story++;
+						}
+						QuestAdd(3, "치즈");
 					}
-					QuestAdd(3, "치즈");
-				}
-				if (position == 13) {
-					if (story == 3) {
-						for (int i = 0; i < 8; i++)
-							if (i == 3 || i == 7)
-								Talk(talk2[i], "  나  ");
-							else
-								Talk(talk2[i], "김덕구");
-						story++;
+					if (position == 13) {
+						if (story == 3) {
+							for (int i = 0; i < 8; i++)
+								if (i == 3 || i == 7)
+									Talk(talk2[i], "  나  ");
+								else
+									Talk(talk2[i], "김덕구");
+							story++;
+						}
+						QuestAdd(4, "도서");
 					}
-					QuestAdd(4, "도서");
 				}
 			}
 			else {
@@ -814,7 +810,7 @@ public:
 	}
 	void ItemUse(int key) {
 		system("cls");
-		cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t";
+		cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t";
 		cout << item[key]->getName() << "아이템 사용하시겠습니까?" << endl;
 		cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 		cout << "													Y : 사용" << endl;
@@ -825,37 +821,41 @@ public:
 		} while (k != 89 && k != 78);
 		if (k == 89) {
 			system("cls");
-			cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t   ";
+			cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t";
 			switch (item[key]->getId()) {
 			case 1:
-				cout << "\t수분 25 상승" << endl;
+				cout << "\t              수분 25 상승" << endl;
 				water += 25;
 				if (water >= 100) water = 100;
 				break;
 			case 2:
-				cout << "\t배고픔 30 상승" << endl;
+				cout << "\t              배고픔 30 상승" << endl;
 				food += 30;
 				if (food >= 100) food = 100;
 				break;
 			case 3:
-				cout << "왠지 모르게 기분이 좋아진다.";
+				cout << "\t왠지 모르게 기분이 좋아진다.\n\n";
+				Sleep(1000);
+				cout << "\t\t\t\t\t              상태 변화 없음";
 				break;
 			case 4:
-				cout << "아까보다는 조금 멋있어진 것 같다.";
+				cout << "\t아까보다는 조금 멋있어진 것 같다.\n\n";
+				Sleep(1000);
+				cout << "\t\t\t\t\t              상태 변화 없음";
 				break;
 			case 5:
-				cout << "상성이 맞지않는 음식 섭취, 배고픔 -10";
+				cout << "\t상성이 맞지않는 음식 섭취, 배고픔 -10";
 				food -= 10;
 				break;
 			case 6:
-				cout << "평소에 하지 않은 행동, 에너지 -10";
+				cout << "\t평소에 하지 않은 행동, 에너지 -10";
 				energy -= 10;
 				break;
 			}
 			delete item[key];
 			bagpull[key] = false;
 			DieCheck();
-			Sleep(1000);
+			Sleep(2000);
 		}
 	}
 	void MessageAdd(string name, string text) {
@@ -867,7 +867,6 @@ public:
 				break;
 			}
 		}
-		// 메시지 함이 꽉 찼다는 경고 문구를 출력하는 부분 만들기
 	}
 	void MessageUse(int idx) {
 		cout << message[idx]->getText() << endl;
@@ -1218,6 +1217,9 @@ public:
 					}
 				}
 			}
+			if (story != 2 && quest[idx]->getName() == "고영희") MessageAdd("나  비	", "시간 있으면 난초역으로 와줘...");
+			else if (story != 3 && quest[idx]->getName() == "나  비") MessageAdd("Mr.Ham	", "너라면 내 부탁도 들어줄 수 있겠군.\n팬지역에서 기다리고 있겠다.");
+			else if (story != 4 && quest[idx]->getName() == "Mr.Ham") MessageAdd("김덕구	", "혹시 이 것 너한테도 있을까?\n나는 카라역에 있어!");
 			money += 5000 * quest[idx]->getNum();
 			delete quest[idx];
 			q_pull[idx] = false;
@@ -1459,5 +1461,11 @@ public:
 			yn = tolower(_getch());
 		} while (yn != 13); // 13은 Enter 
 		system("cls");
+	}
+	int getSurvive() {
+		return survive;
+	}
+	int getPlaytime() {
+		return playtime;
 	}
 };
