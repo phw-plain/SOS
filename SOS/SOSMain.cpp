@@ -70,7 +70,7 @@ int main() {
 
 void Intro() {
 	const char* story[5];
-	story[0] = "20XX년 2월 13일, 핸드폰으로 문자가 왔다.";
+	story[0] = "20XX년 5월 25일, 핸드폰으로 문자가 왔다.";
 	story[1] = "앞으로 당신은 외부와의 연결이 끊긴 지하철에서 생존해야 합니다.";
 	story[2] = "배고픔, 수분, 에너지가 일정 범위로 내려가면 당신은 사망합니다.";
 
@@ -310,53 +310,77 @@ void Rule() {
 void Rank() {
 	textcolor(LIGHTGREEN, BLACK);
 	cout << endl << endl << endl;
-	cout << "		   ■■■■■■          ■■■■■        ■■        ■      ■          ■" << endl;
-	cout << "		   ■          ■      ■          ■      ■  ■      ■      ■          ■" << endl;
-	cout << "		   ■          ■      ■          ■      ■   ■     ■      ■        ■" << endl;
-	cout << "		   ■■■■■■        ■■■■■■■      ■    ■    ■      ■■■■■" << endl;
-	cout << "		   ■          ■      ■          ■      ■     ■   ■      ■        ■" << endl;
-	cout << "		   ■          ■      ■          ■      ■      ■  ■      ■          ■" << endl;
-	cout << "		   ■          ■      ■          ■      ■        ■■      ■          ■" << endl;
+	cout << "			■■■■■■          ■■■■■        ■■        ■      ■          ■" << endl;
+	cout << "			■          ■      ■          ■      ■  ■      ■      ■          ■" << endl;
+	cout << "			■          ■      ■          ■      ■   ■     ■      ■        ■" << endl;
+	cout << "			■■■■■■        ■■■■■■■      ■    ■    ■      ■■■■■" << endl;
+	cout << "			■          ■      ■          ■      ■     ■   ■      ■        ■" << endl;
+	cout << "			■          ■      ■          ■      ■      ■  ■      ■          ■" << endl;
+	cout << "			■          ■      ■          ■      ■        ■■      ■          ■" << endl;
 	cout << endl << endl << endl;
-	cout << "					     ________________________" << endl;
-	cout << "					       		" << endl;
+	cout << "\t\t\t\t\t     __________________________________\n\n";
 	// 랭킹 계산
-	FILE* pFile = fopen("Jumsu.txt", "r");
-	int cnt = -1;
-	int rank[10][2];
-	char* name[10];
-	char arr[10][100];
-	int i = 0;
-	while (true)
-	{
-		char* pStr = fgets(arr[i++], 100, pFile);
-		cnt++;
-		if (pStr == NULL) {
-			break;
+	ifstream fin("Jumsu.txt");
+	if (!fin) {
+		cout << "파일 오픈 실패" << endl;
+		exit(1);
+	}
+	string name[11];
+	int score[11];
+	int rank[11];
+	score[0] = 0;
+	for (int i = 0; !fin.eof(); i++) {
+		fin >> name[i] >> score[i];
+	}
+	for (int i = 0; i < 11; i++) {
+		rank[i] = 0;
+		if (score[i] < 0) {
+			rank[i] = -1;
+			continue;
 		}
-		strcpy(arr[i], pStr);
-	}
-	for (i = 0; i < cnt; i++) {
-		char* temp = strtok(arr[i], " ");
-		name[i] = temp;
-		temp = strtok(NULL, " ");
-		rank[i][0] = i+1;
-		rank[i][1] = atoi(temp);
-	}
-	for (i = 0; i < cnt - 1; i++) {
-		for (int j = 0; j < cnt; j++) {
-			if (rank[i][1] > rank[j][1]) {
-				int temp = rank[i][0];
-				rank[i][0] = rank[j][0];
-				rank[j][0] = temp;
+		for (int j = 0; j < 11; j++) {
+			if (score[j] < 0) continue;
+			if (score[i] > score[j]) {
+				rank[i]++;
 			}
 		}
 	}
-	for (i = cnt-1; i >= 0; i--) {
-		cout << "						" << cnt - i << ".   " << name[i] << "\t" << rank[rank[i][0]-1][1] << "초" << endl;
+	int cnt = 1;
+	for (int i = 0; i < 11; i++) {
+		for (int j = 0; j < 11; j++) {
+			if (score[i] < 0) continue;
+			if (rank[j] == i) {
+				switch (cnt){
+				case 1:	textcolor(LIGHTBLUE, BLACK); break;
+				case 2:	textcolor(CYAN, BLACK); break;
+				case 3:	textcolor(LIGHTCYAN, BLACK); break;
+				default:textcolor(DARKGRAY, BLACK); break;
+				}
+				cout << "\t\t\t\t\t\t" << cnt++ << ".\t" << name[j];
+				if (name[j].length() <= 6) cout << "\t";
+				cout << "\t" << score[j] << "초" << endl;
+			}
+		}
 	}
-	cout << "\n					     ________________________" << endl;
+	textcolor(LIGHTGREEN, BLACK);
+	cout << "\n\t\t\t\t\t     __________________________________\n\n";
 	textcolor(WHITE, BLACK);
+	fin.close();
+	// 게임 기록 저장
+	ofstream fout("Jumsu.txt");
+	if (!fout) {
+		cout << "파일 오픈 실패" << endl;
+		exit(1);
+	}
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 11; j++) {
+			if (score[i] < 0) continue;
+			if (rank[j] == i) {
+				fout << name[j] << " " << score[j] << endl;
+			}
+		}
+	}
+	fout.close();
 	_getch();
 	system("cls");
 }
@@ -383,10 +407,21 @@ void GameOver(User a) {
 	cout << "               생존        : " << a.getSurvive() << "일" << endl << endl;
 	cout << "               플레이 타임 : " << a.getPlaytime() << "초" << endl << endl;
 	cout << endl << endl << endl << endl << endl;
+	ofstream fout("Jumsu.txt", ios::app);
+	if (!fout) {
+		cout << "파일 오픈 실패" << endl;
+		exit(1);
+	}
+	char name[20];
+	int score;
+	cin >> name;
+	score = a.getPlaytime();
+	fout << name << " " << score << endl;
+	fout.close();
 	system("pause");
 	system("cls");
 }
-void GameClear (User a) {
+void GameClear(User a) {
 	textcolor(LIGHTGREEN, BLACK);
 	cout << endl << endl;
 	cout << "               ■■■■■■■■         ■■■■■           ■■    ■■         ■■■■■■■" << endl;
@@ -413,16 +448,17 @@ void GameClear (User a) {
 	cin >> username;
 	cout << endl << endl << endl << endl << endl;
 	// 게임 기록 저장
-	char buf[256];
-	sprintf_s(buf, "%d", a.getPlaytime());
-	strcat(username, "\t");
-	strcat(username, buf);
-	char result[100];
-	strcpy(result, "\n");
-	strcat(result, username);
-	FILE* pFile = fopen("Jumsu.txt", "a");
-	fputs(result, pFile);
-	fclose(pFile);
+	ofstream fout("Jumsu.txt", ios::app);
+	if (!fout) {
+		cout << "파일 오픈 실패" << endl;
+		exit(1);
+	}
+	char name[20];
+	int score;
+	cin >> name;
+	score = a.getPlaytime();
+	fout << name << " " << score << endl;
+	fout.close();
 	system("pause");
 	system("cls");
 }
