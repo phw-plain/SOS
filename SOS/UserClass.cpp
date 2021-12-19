@@ -640,7 +640,7 @@ public:
 			if (i == 0) i = 16;
 			cnt2++;
 		}
-		if ((cnt1 <= 5 || cnt2 <= 5) && state != 2 && k != position) {
+		if ((cnt1 <= 5 || cnt2 <= 5) && state < 2 && k != position) {
 			int yn; system("cls");
 			cout << "\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t";
 			cout << map << " 으로 이동하시겠습니까?" << endl;
@@ -768,7 +768,7 @@ public:
 			system("cls");
 			Map();
 		}
-		else if (state == 2) {
+		else if (state >= 2) {
 			cout << "현재 이동하기를 사용할 수 있는 상태가 아닙니다." << endl;
 			system("pause");
 			system("cls");
@@ -1054,7 +1054,7 @@ public:
 			cout << "┏━━━━━━━━━━┓		      ┏━━━━━━━━━━┓	  ";
 			textcolor(WHITE, BLACK);
 			cout << "┃" << endl;
-			cout << "		┃     히든 2,500원     ┃		┃     ";
+			cout << "		┃     히든 3,000원     ┃		┃     ";
 			textcolor(CYAN, BLACK);
 			cout << "┃  ┏━━━━┓  ┃		      ┃  ┏━━━━┓  ┃	  ";
 			textcolor(WHITE, BLACK);
@@ -1192,10 +1192,25 @@ public:
 						k2 = toupper(_getch());
 					} while (k2 != 89 && k2 != 78);
 					if (k2 == 89) {
-						if (ItemAdd(2) && money >= 2500) {
-							money -= 2500;
+						int ra = rand() % 4 + 3;
+						if (ItemAdd(ra) && money >= 3000) {
+							money -= 3000;
 							system("cls");
-							// 랜덤 모션 구현
+							cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t";
+							cout << "랜덤을 구매하시겠습니까?" << endl;
+							cout << "\n\t\t\t\t\t\t       ";
+							// 랜덤 모션
+							switch (ra) {
+							case 3: cout << "캣잎";
+								break;
+							case 4: cout << "리본";
+								break;
+							case 5: cout << "치즈";
+								break;
+							case 6: cout << "책";
+							}
+							cout << " 획득!!" << endl;
+							cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 							Sleep(1500);
 						}
 						else if (money < 2500) {

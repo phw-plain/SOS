@@ -407,17 +407,6 @@ void GameOver(User a) {
 	cout << "               생존        : " << a.getSurvive() << "일" << endl << endl;
 	cout << "               플레이 타임 : " << a.getPlaytime() << "초" << endl << endl;
 	cout << endl << endl << endl << endl << endl;
-	ofstream fout("Jumsu.txt", ios::app);
-	if (!fout) {
-		cout << "파일 오픈 실패" << endl;
-		exit(1);
-	}
-	char name[20];
-	int score;
-	cin >> name;
-	score = a.getPlaytime();
-	fout << name << " " << score << endl;
-	fout.close();
 	system("pause");
 	system("cls");
 }
