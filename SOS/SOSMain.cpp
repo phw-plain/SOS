@@ -345,7 +345,7 @@ void Rank() {
 			}
 		}
 	}
-	int cnt = 1;
+	int cnt = 1, m, s;
 	for (int i = 0; i < 11; i++) {
 		for (int j = 0; j < 11; j++) {
 			if (score[i] < 0) continue;
@@ -358,7 +358,14 @@ void Rank() {
 				}
 				cout << "\t\t\t\t\t\t" << cnt++ << ".\t" << name[j];
 				if (name[j].length() <= 6) cout << "\t";
-				cout << "\t" << score[j] << "초" << endl;
+				cout << "\t";
+				s = score[j] % 60;
+				m = score[j] / 60;
+				if (m > 10) cout << m << "분 ";
+				else if(m != 0) cout << " " << m << "분 ";
+				if (s != 0) cout << s;
+				else  cout << "00";
+				cout << "초" << endl;
 			}
 		}
 	}
