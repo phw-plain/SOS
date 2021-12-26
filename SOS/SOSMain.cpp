@@ -32,6 +32,9 @@ void GameClear(User a);
 int Menu();
 
 int main() {
+	// system("mode con:cols=150 lines=40");
+	system("mode con:cols=120 lines=30");
+	system("title Survival Of Subway");
 	srand((unsigned)time(NULL));
 	int num = 0;
 	PlaySound(TEXT("main.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
@@ -306,7 +309,6 @@ void Rule() {
 	cout << "E, 가방 열기" << endl;
 	_getch();
 }
-
 void Rank() {
 	textcolor(LIGHTGREEN, BLACK);
 	cout << endl << endl << endl;

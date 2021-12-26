@@ -154,8 +154,8 @@ public:
 	static int cnt;
 	Quests(int id, string item, string name) : item(item), num(num), name(name) {
 		cnt++;
-		num = rand() % 2 + 1;
-		reward = 5000 * num;
+		num = 1;
+		reward = 10000;
 	}
 	string getName() {
 		return name;
@@ -168,6 +168,9 @@ public:
 	}
 	int getNum() {
 		return num;
+	}
+	int getReward() {
+		return reward;
 	}
 	~Quests() {
 		cnt--;
@@ -270,8 +273,6 @@ public:
 	bool play() {
 		while (s_day > 0) {
 			PlaySound(TEXT("playbgm.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
-			if (survive == 10) MessageAdd("긴급 상황 문자", "현재 지하철역이 대대적으로 붕괴되어 구조에 많은 시간이 소요되고 있습니다.\n현 정부는 현재 대비하지 못한 시민 여러분들의 최선을 다해 빠르게 구조를 마칠 계획입니다.\n");
-			if (survive == 20) MessageAdd("긴급 상황 문자", "열흘 뒤 11호선의 구조를 시작할 계획입니다.\n해당 역에 계신 분들은 국화역으로 모여주시기 바랍니다.\n");
 			char check = Phone();
 			system("cls");
 			PlaySound(NULL, 0, 0);
@@ -604,6 +605,9 @@ public:
 			s_cnt = 0;
 			// 생존 여부
 			life = DieCheck();
+			// 정부 메세지
+			if (survive == 10) MessageAdd("긴급 상황 문자", "현재 지하철역이 대대적으로 붕괴되어 구조에 많은 시간이 소요되고 있습니다.\n현 정부는 현재 대비하지 못한 시민 여러분들의 최선을 다해 빠르게 구조를 마칠 계획입니다.\n");
+			if (survive == 20) MessageAdd("긴급 상황 문자", "열흘 뒤 11호선의 구조를 시작할 계획입니다.\n해당 역에 계신 분들은 국화역으로 모여주시기 바랍니다.\n");
 			// 화면에 보여지는 그림
 			cout << "\n\n\n\n\n\n";
 			PlaySound(TEXT("sleep.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
@@ -676,14 +680,17 @@ public:
 					}
 				}
 				// 이동하기를 누를 시 에너지 절반 감소
-				// 수분 배고픔 20~40 감소, 에너지 30~40 감소(rand이용) 
-				food -= (rand() % 21 + 20);
-				water -= (rand() % 21 + 20);
-				energy -= (rand() % 11 + 30);
+				// 수분 배고픔 에너지 20~30 감소(rand이용) 
+				food -= (rand() % 11 + 20);
+				water -= (rand() % 11 + 20);
+				energy -= (rand() % 11 + 20);
 				// 생존 여부
 				life = DieCheck();
 				// 상점 초기화
 				s_cnt = 0;
+				// 정부 메세지
+				if (survive == 10) MessageAdd("긴급 상황 문자", "현재 지하철역이 대대적으로 붕괴되어 구조에 많은 시간이 소요되고 있습니다.\n현 정부는 현재 대비하지 못한 시민 여러분들의 최선을 다해 빠르게 구조를 마칠 계획입니다.\n");
+				if (survive == 20) MessageAdd("긴급 상황 문자", "열흘 뒤 11호선의 구조를 시작할 계획입니다.\n해당 역에 계신 분들은 국화역으로 모여주시기 바랍니다.\n");
 				// 화면에 보여지는 그림
 				cout << "\n\n\n\n\n\n";
 				PlaySound(TEXT("subway.wav"), 0, SND_FILENAME | SND_ASYNC | SND_LOOP);
@@ -745,7 +752,7 @@ public:
 						}
 						QuestAdd(3, "치즈");
 					}
-					if (position == 13) {
+					if (position == 14) {
 						if (story == 3) {
 							for (int i = 0; i < 5; i++)
 								if (i == 2 || i == 4)
@@ -1048,13 +1055,13 @@ public:
 			cout << " ]	  ┃" << endl;
 			cout << "		  ┗┛　　 ('ω')　   ┗┛			┃							  ┃" << endl;
 			cout << "		┏━━━━━━━━━━━━━━━━━━━━━━┓		┃    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━	  ┃" << endl;
-			cout << "		┃     식량 5,000원     ┃		┃							  ┃" << endl;
-			cout << "		┃     생수 4,500원     ┃		┃     ";
+			cout << "		┃     식량 4,000원     ┃		┃							  ┃" << endl;
+			cout << "		┃     생수 3,500원     ┃		┃     ";
 			textcolor(CYAN, BLACK);
 			cout << "┏━━━━━━━━━━┓		      ┏━━━━━━━━━━┓	  ";
 			textcolor(WHITE, BLACK);
 			cout << "┃" << endl;
-			cout << "		┃     히든 3,000원     ┃		┃     ";
+			cout << "		┃     히든 2,000원     ┃		┃     ";
 			textcolor(CYAN, BLACK);
 			cout << "┃  ┏━━━━┓  ┃		      ┃  ┏━━━━┓  ┃	  ";
 			textcolor(WHITE, BLACK);
@@ -1129,8 +1136,8 @@ public:
 						k2 = toupper(_getch());
 					} while (k2 != 89 && k2 != 78);
 					if (k2 == 89) {
-						if (ItemAdd(1) && money >= 4500) {
-							money -= 4500;
+						if (ItemAdd(1) && money >= 3500) {
+							money -= 3500;
 							system("cls");
 							cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t";
 							cout << "생수를 구매하시겠습니까?" << endl;
@@ -1140,7 +1147,7 @@ public:
 							cout << "													N : 취소" << endl;
 							Sleep(1500);
 						}
-						else if (money < 4500) {
+						else if (money < 3500) {
 							cout << "보유 금액이 부족합니다." << endl;
 							system("pause");
 						}
@@ -1160,8 +1167,8 @@ public:
 						k2 = toupper(_getch());
 					} while (k2 != 89 && k2 != 78);
 					if (k2 == 89) {
-						if (ItemAdd(2) && money >= 5000) {
-							money -= 5000;
+						if (ItemAdd(2) && money >= 4000) {
+							money -= 4000;
 							system("cls");
 							cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t";
 							cout << "식량를 구매하시겠습니까?" << endl;
@@ -1171,7 +1178,7 @@ public:
 							cout << "													N : 취소" << endl;
 							Sleep(1500);
 						}
-						else if (money < 5000) {
+						else if (money < 4000) {
 							cout << "보유 금액이 부족합니다." << endl;
 							system("pause");
 						}
@@ -1193,8 +1200,8 @@ public:
 					} while (k2 != 89 && k2 != 78);
 					if (k2 == 89) {
 						int ra = rand() % 4 + 3;
-						if (ItemAdd(ra) && money >= 3000) {
-							money -= 3000;
+						if (ItemAdd(ra) && money >= 2000) {
+							money -= 2000;
 							system("cls");
 							cout << "\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t";
 							cout << "랜덤을 구매하시겠습니까?" << endl;
@@ -1213,7 +1220,7 @@ public:
 							cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 							Sleep(1500);
 						}
-						else if (money < 2500) {
+						else if (money < 2000) {
 							cout << "보유 금액이 부족합니다." << endl;
 							system("pause");
 						}
@@ -1239,7 +1246,7 @@ public:
 		if (quest[idx]->getNum() <= check) {
 			cout << "\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t    ";
 			cout << "Quest Cleear!!" << endl;
-			cout << "\n\t\t\t\t\t\t    보상 : " << 5000 * quest[idx]->getNum() << endl;
+			cout << "\n\t\t\t\t\t\t    보상 : " << quest[idx]->getNum() * quest[idx]->getReward() << endl;
 			cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 			int cnt = quest[idx]->getNum();
 			for (int j = 0; j < 12; j++) {
@@ -1254,7 +1261,7 @@ public:
 			if (story != 2 && quest[idx]->getName() == "고영희") MessageAdd("나  비	", "시간 있으면 난초역으로 와줘...");
 			else if (story != 3 && quest[idx]->getName() == "나  비") MessageAdd("Mr.Ham	", "너라면 내 부탁도 들어줄 수 있겠군.\n팬지역에서 기다리고 있겠다.");
 			else if (story != 4 && quest[idx]->getName() == "Mr.Ham") MessageAdd("김덕구	", "혹시 이 것 너한테도 있을까?\n나는 카라역에 있어!");
-			money += 5000 * quest[idx]->getNum();
+			money += quest[idx]->getNum()* quest[idx]->getReward();
 			delete quest[idx];
 			q_pull[idx] = false;
 			Sleep(2000);
