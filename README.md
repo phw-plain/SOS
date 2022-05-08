@@ -16,8 +16,11 @@
 * <img src="https://img.shields.io/badge/C++-00599C?style=flat-square&logo=C%2B%2B&logoColor=white"/></a>
 
 ### SCREENSHOT
+``` 시작화면 ```
 ![sos](https://user-images.githubusercontent.com/79081836/146772899-0fffe15c-1f74-48c3-8d21-20d66df7a9a8.PNG)
+``` 메인화면```
 ![sos_main](https://user-images.githubusercontent.com/79081836/146773083-7b91f5f7-0f1f-479e-8ed9-8fb57146b6b1.PNG)
+``` 상점 ```
 ![Shop](https://user-images.githubusercontent.com/79081836/147649045-779b4a46-c747-4f56-90f1-45815264582c.PNG)
 
 
